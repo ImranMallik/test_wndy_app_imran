@@ -1,0 +1,1 @@
+<script src="templates/upcoming-pickups/controller.js?v=<?php echo $version; ?>"></script>

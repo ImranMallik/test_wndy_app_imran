@@ -1,0 +1,1 @@
+<script src="templates/credit_history/controller.js?v=<?php echo $version; ?>"></script>

@@ -1,0 +1,1 @@
+<title>User Activity | <?php echo $system_name; ?></title>

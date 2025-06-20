@@ -1,0 +1,1 @@
+<title>About Us, Terms & Conditions, Privacy Policy, Shipping, Returns, and Refund Policy | <?php echo $system_name; ?></title>

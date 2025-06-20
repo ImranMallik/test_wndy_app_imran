@@ -1,0 +1,1 @@
+<title>Manage Buyers Addresses</title>

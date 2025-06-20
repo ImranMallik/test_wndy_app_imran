@@ -1,0 +1,26 @@
+Received Credit: 1500
+INSERT Query: INSERT INTO tbl_credit_trans (
+            user_id, in_credit, purchase_amount, trans_date, trans_type, status, entry_user_code, entry_timestamp
+        ) VALUES (
+            '4', '1500', '0', '2025-03-03', 'Credit Purchase', 'In', '4', '2025-03-03 14:04:58'
+        )
+INSERT Query: INSERT INTO tbl_credit_trans (
+            user_id, in_credit, purchase_amount, trans_date, trans_type, status, entry_user_code, entry_timestamp
+        ) VALUES (
+            '4', '1000', '0', '2025-03-03', 'Credit Purchase', 'In', '4', '2025-03-03 14:18:18'
+        )
+INSERT Query: INSERT INTO tbl_credit_trans (
+            user_id, in_credit, purchase_amount, trans_date, trans_type, status, entry_user_code, entry_timestamp
+        ) VALUES (
+            '4', '1000', '0', '2025-03-03', 'Credit Purchase', 'In', '4', '2025-03-03 14:21:03'
+        )
+INSERT Query: INSERT INTO tbl_credit_trans (
+            user_id, in_credit, purchase_amount, trans_date, trans_type, status, entry_user_code, entry_timestamp
+        ) VALUES (
+            '4', '500', '0', '2025-03-03', 'Credit Purchase', 'In', '4', '2025-03-03 14:21:23'
+        )
+INSERT Query: INSERT INTO tbl_credit_trans (
+            user_id, in_credit, purchase_amount, trans_date, trans_type, status, entry_user_code, entry_timestamp
+        ) VALUES (
+            '4', '1500', '0', '2025-03-03', 'Credit Purchase', 'In', '4', '2025-03-03 14:21:29'
+        )

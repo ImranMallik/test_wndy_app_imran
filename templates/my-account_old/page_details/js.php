@@ -1,0 +1,1 @@
+<script src="templates/my-account/controller.js?v=<?php echo $version; ?>"></script>

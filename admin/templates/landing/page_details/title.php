@@ -1,0 +1,1 @@
+<title><?php echo $system_name; ?></title>

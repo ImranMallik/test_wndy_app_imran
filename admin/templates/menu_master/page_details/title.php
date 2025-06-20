@@ -1,0 +1,1 @@
+<title>Manage Menu | <?php echo $system_name; ?></title>

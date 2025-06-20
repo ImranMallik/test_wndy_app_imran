@@ -1,0 +1,1 @@
+<script src="templates/contact/controller.js?v=<?php echo $version; ?>"></script>

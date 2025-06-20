@@ -1,0 +1,1 @@
+<title>Manage Collectors | <?php echo $system_name; ?></title>

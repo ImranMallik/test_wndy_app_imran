@@ -1,0 +1,1 @@
+<script src="templates/product_list/controller.js?v=<?php echo $version; ?>"></script>

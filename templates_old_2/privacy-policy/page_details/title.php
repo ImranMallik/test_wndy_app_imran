@@ -1,0 +1,1 @@
+<title>Privacy Policy | <?php echo $system_name; ?></title>

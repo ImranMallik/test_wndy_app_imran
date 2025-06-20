@@ -1,0 +1,1 @@
+<title>Manage Category | <?php echo $system_name; ?></title>

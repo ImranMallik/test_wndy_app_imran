@@ -1,0 +1,1 @@
+<title>Manage Buyers Wishlist</title>

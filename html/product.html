@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            z-index: 1000;
+            color: #000;
+            font-size: 20px;
+        }
+
+        .image-counter {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 14px;
+        }
+
+        .carousel-item img {
+            height: 300px;
+            object-fit: cover;
+        }
+
+        .price {
+            color: #C17533;
+            font-weight: bold;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 480px;
+            margin: 0 auto;
+        }
+
+        .nav-item {
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            color: #666;
+        }
+
+        .add-button {
+            width: 50px;
+            height: 50px;
+            background: #C17533;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            margin: -25px auto 0;
+        }
+
+        .seller-info {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+
+        .view-seller-btn {
+            background: #C17533;
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <a href="#" class="back-button">
+        <i class="fas fa-arrow-left"></i>
+    </a>
+
+    <div id="productCarousel" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-inner">
+            <div class="image-counter">
+                <span id="currentSlide">1</span>/5
+            </div>
+            <div class="carousel-item active">
+                <img src="https://static.vecteezy.com/ti/photos-gratuite/p1/29360891-une-petit-vert-lezard-seance-sur-haut-de-une-arbre-bifurquer-generatif-ai-gratuit-photo.jpg"
+                    class="d-block w-100" alt="Water Bottle">
+            </div>
+            <div class="carousel-item active">
+                <img src="https://letsenhance.io/static/73136da51c245e80edc6ccfe44888a99/1015f/MainBefore.jpg"
+                    class="d-block w-100" alt="Water Bottle">
+            </div>
+
+            <!-- Add more carousel items as needed -->
+        </div>
+    </div>
+
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-start">
+            <h4>PET Water Bottle</h4>
+            <h4 class="price">Rs 200.00/-</h4>
+        </div>
+
+        <div class="mt-3">
+            <p><strong>Category:</strong> Plastics</p>
+            <p><strong>Brand/Manufacture:</strong> Bisleri</p>
+            <p><strong>Quantity:</strong> 10</p>
+            <p class="mt-3">PET plastic (polyethylene terephthalate) is the plastic most commonly used in single-use
+                plastic water bottles. It is BPA-free, but PET is also associated with many of the same health risks
+                such as stunted growth, reproduction issues, low energy levels, body balance issues, and inability to
+                process stress</p>
+            <p><strong>Location:</strong> Delhi NCR</p>
+        </div>
+
+        <div class="seller-info">
+            <h5>Seller Contact Info</h5>
+            <p>Name : xxx</p>
+            <p>Number : 999 xxxx</p>
+            <p>Address: 2nd flxxx</p>
+            <button class="view-seller-btn">Use Credits to view Seller Info</button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="row">
+            <div class="col nav-item">
+                <i class="fas fa-home"></i>
+                <div>Home</div>
+            </div>
+            <div class="col nav-item">
+                <i class="fas fa-box"></i>
+                <div>My Items</div>
+            </div>
+            <div class="col">
+                <div class="add-button">+</div>
+            </div>
+            <div class="col nav-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <div>Addresses</div>
+            </div>
+            <div class="col nav-item">
+                <i class="fas fa-user"></i>
+                <div>My Profile</div>
+            </div>
+        </div>
+    </nav>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Initialize carousel
+        const carousel = new bootstrap.Carousel(document.getElementById('productCarousel'), {
+            interval: 3000
+        });
+
+        // Update slide counter
+        const carouselElement = document.getElementById('productCarousel');
+        const currentSlideElement = document.getElementById('currentSlide');
+
+        carouselElement.addEventListener('slid.bs.carousel', function (event) {
+            const activeSlide = event.to + 1;
+            currentSlideElement.textContent = activeSlide;
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+<title>Manage Credit | <?php echo $system_name; ?></title>

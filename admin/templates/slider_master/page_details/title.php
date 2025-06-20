@@ -1,0 +1,1 @@
+<title>Manage Home Slider</title>

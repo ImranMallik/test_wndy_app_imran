@@ -1,0 +1,1 @@
+<title>Notifications | <?php echo $system_name; ?></title>

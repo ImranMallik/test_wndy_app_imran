@@ -1,0 +1,1 @@
+<title>Manage SEO Deatils | <?php echo $system_name; ?></title>

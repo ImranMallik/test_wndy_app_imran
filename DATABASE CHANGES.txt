@@ -1,0 +1,7 @@
+
+14-Nov-2024
+* columns add on tbl_user_master
+* column add on tbl_user_product_view (pickup_time)
+* new table add one tbl_ratings
+* sub_menu_master data change
+* tbl_product_master & tbl_user_product_view status ENUM value changed

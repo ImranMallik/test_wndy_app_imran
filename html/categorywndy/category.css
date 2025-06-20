@@ -1,0 +1,112 @@
+:root {
+  --primary-color: #b5753e;
+  --secondary-color: #969696;
+  --border-color: #e4e4e4;
+}
+
+body {
+  background-color: white;
+  min-height: 100vh;
+}
+
+/* Progress Steps */
+.progress-steps {
+  display: flex;
+  align-items: center;
+}
+
+.step {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--border-color);
+  color: var(--secondary-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.step.active {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.step-line {
+  width: 48px;
+  height: 2px;
+  background-color: var(--border-color);
+}
+
+/* Categories */
+.categories-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.category-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  background-color: white;
+  text-align: left;
+  transition: all 0.3s ease;
+}
+
+.category-item:hover {
+  border-color: var(--primary-color);
+}
+
+.category-item.active {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.category-item i {
+  font-size: 1.5rem;
+  color: var(--primary-color);
+}
+
+.category-item.active i {
+  color: white;
+}
+
+.radio-circle {
+  width: 16px;
+  height: 16px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+}
+
+.category-item.active .radio-circle {
+  border-color: white;
+  background-color: white;
+}
+
+/* Bootstrap Overrides */
+.btn-primary {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  border-radius: 12px;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #96602f;
+  border-color: #96602f;
+}
+
+.text-primary {
+  color: var(--primary-color) !important;
+}
+
+.text-secondary {
+  color: var(--secondary-color) !important;
+}
+

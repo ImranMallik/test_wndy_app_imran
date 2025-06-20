@@ -1,0 +1,1 @@
+<script src="templates/create_post_deal_items/controller.js?v=<?php echo $version; ?>"></script>

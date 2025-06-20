@@ -1,0 +1,1 @@
+<script src="templates/transferred_products/controller.js?v=<?php echo $version; ?>"></script>

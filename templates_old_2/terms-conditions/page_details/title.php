@@ -1,0 +1,1 @@
+<title>Terms & Conditions | <?php echo $system_name; ?></title>

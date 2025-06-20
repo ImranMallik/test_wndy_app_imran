@@ -1,0 +1,1 @@
+<title>Dashboard | <?php echo $system_name; ?></title>

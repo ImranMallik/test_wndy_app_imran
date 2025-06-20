@@ -1,0 +1,1 @@
+<script src="templates/login/login.js"></script>

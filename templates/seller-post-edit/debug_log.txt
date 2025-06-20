@@ -1,0 +1,52 @@
+Script started
+Received image_name: product_image_573_15-4-2025-67fe19dc0eba3.jpg
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_668_29-4-2025-681061a3012e5.jpg
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_681_30-4-2025-68111ecb76fe5.jpeg
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_716_11-5-2025-68205448f179d.png
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_716_11-5-2025-68205448f1aa7.png
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_716_11-5-2025-68205448f1a63.png
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_896_16-5-2025-682748c0a0413.jpg
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_896_16-5-2025-682748c090462.jpg
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_906_16-5-2025-682758b22ee8a.jpeg
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_945_20-5-2025-682c362220723.webp
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_955_20-5-2025-682c5cf3dae17.jpg
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_958_20-5-2025-682c75b2e7c16.jpeg
+Image found in DB
+Deleted from DB successfully
+Script started
+Received image_name: product_image_966_21-5-2025-682d814f7e758.jpg
+Image found in DB
+Deleted from DB successfully

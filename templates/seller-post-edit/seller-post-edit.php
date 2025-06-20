@@ -1,0 +1,439 @@
+<?php
+include("../db/db.php");
+
+// Get the full request URI
+$requestUri = $_SERVER['REQUEST_URI'];
+
+// Extract the product_id from the last segment of the URL
+$segments = explode("/", trim($requestUri, "/"));
+$product_id = end($segments);
+
+// Ensure it is a valid integer
+$product_id = intval($product_id);
+
+if ($product_id <= 0) {
+  die("Invalid Product ID");
+}
+
+// Fetch product details from the database
+$query = mysqli_query($con, "SELECT * FROM tbl_product_master WHERE product_id = $product_id");
+$productData = mysqli_fetch_assoc($query);
+
+if (!$productData) {
+  echo "<script>alert('Product not found'); window.location.href='/dashboard.php';</script>";
+  exit;
+}
+
+// Get the selected category ID
+$selectedCategoryId = $productData['category_id'] ?? null;
+
+// Fetch all categories
+$category_dataget = mysqli_query($con, "SELECT category_id, category_img, category_name FROM tbl_category_master WHERE active='Yes' ORDER BY order_number ASC");
+
+// Fetch product images from tbl_product_file
+$imageQuery = mysqli_query($con, "SELECT file_name FROM tbl_product_file WHERE product_id = $product_id");
+$productImages = [];
+
+while ($row = mysqli_fetch_assoc($imageQuery)) {
+  $productImages[] = $row['file_name'];
+}
+// echo "<pre>";
+// print_r($productImages);
+// echo "</pre>";
+
+$address_id_query = mysqli_query($con,"
+    SELECT a.address_id 
+    FROM tbl_product_master p 
+    LEFT JOIN tbl_address_master a ON p.address_id = a.address_id  
+    WHERE p.product_id = $product_id
+");
+
+$address_row = mysqli_fetch_assoc($address_id_query);
+$address_id = $address_row['address_id']; 
+?>
+
+
+
+
+
+<div class="category-body" id="step1">
+  <div class="container-fluid px-4 pt-2 pb-3">
+
+        <div class="d-flex align-items-center mb-4">
+          <a href="<?php echo $baseUrl . '/product_list'; ?>" > <i class="bi bi-arrow-left fs-4"></i>&nbsp; &nbsp;</a>
+            <h1 class="fs-6 fw-semibold mb-0">Choose a Category</h1>
+            <!-- <i class="bi bi-search fs-4"></i> -->
+        </div>
+
+
+    <input type="hidden" id="selectedCategory" name="category_id" value="<?php echo htmlspecialchars($selectedCategoryId ?? ''); ?>">
+    <input type="hidden" id="product_id" name="product_id" value="<?php echo htmlspecialchars($product_id); ?>">
+       <input type="hidden" id="address_id" name="address_id" value="<?php echo htmlspecialchars($address_id); ?>">
+    
+    <div class="d-flex justify-content-center mb-4">
+            <div class="progress-steps">
+                <div class="step active">1</div>
+                <div class="step-line"></div>
+                <div class="step">2</div>
+                <div class="step-line"></div>
+                <div class="step">3</div>
+            </div>
+        </div>
+
+
+    <div class="categories-list mb-4">
+      <?php while ($rw = mysqli_fetch_array($category_dataget)) {
+        // Loose comparison without (int) conversion
+        $isSelected = ($rw['category_id'] === $selectedCategoryId) ? 'active' : '';
+      ?>
+        <button class="category-item <?php echo $isSelected; ?>" data-category="<?php echo $rw['category_id']; ?>">
+          <div class="d-flex align-items-center gap-2">
+            <div class="radio-circle <?php echo $isSelected; ?>"></div>
+            <span><?php echo $rw['category_name']; ?></span>
+          </div>
+          <span>
+            <img src="./upload_content/upload_img/category_img/<?php echo empty($rw['category_img']) ? "no_image.png" : $rw['category_img']; ?>"
+              alt="<?php echo $rw['category_name']; ?>" width="40" height="40" />
+          </span>
+        </button>
+      <?php } ?>
+    </div>
+
+
+    <div style="width: 100%; background-color: #fff; z-index: 999; position: fixed;
+        bottom: 10px;
+        width: 90% !important;
+        right: 50px;
+        left: 17px;">
+      <button id="continueStep1"
+        class="btn btn-primary w-100 py-3 fw-medium seller-post-continue">Continue</button>
+    </div>
+  </div>
+</div>
+
+
+<div id="step2" class="container-fluid px-0 seeler-item-details-bg d-none">
+    <header class="header px-3" style="border-bottom: 1px solid #fff !important;">
+        <div class="d-flex align-items-center">
+            <a href="#" id="backToStep1" class="btn btn-link text-dark p-0">
+                <i class="bi bi-arrow-left fs-4"></i>
+            </a>&nbsp; &nbsp;
+            <h1 class="h5 mb-0 fs-6">Item Details</h1>
+        </div>
+    </header>
+    
+                <div class="progress-steps d-flex justify-content-center align-items-center gap-2">
+                <div class="step-circle completed">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+                <div class="step-line completed"></div>
+                <div class="step-circle active">2</div>
+                <div class="step-line"></div>
+                <div class="step-circle">3</div>
+            </div>
+
+
+  <main class="px-3 pb-4 mt-2">
+    <form id="itemDetailsForm">
+      <div class="mb-3">
+        <label for="postName" class="form-label">Item Name<span class="text-danger">*</span></label>
+        <input type="text" value="<?php echo htmlspecialchars($productData['product_name'] ?? ''); ?>" class="form-control" id="postName" placeholder="e.g: Laptop,TV,Washing Machine">
+
+      </div>
+
+      <div class="mb-3">
+        <span class="info-container d-flex"><label for="description" class="form-label">
+            Description<span class="text-danger">*</span></label>&nbsp;&nbsp;
+
+        </span>
+
+<textarea class="form-control" id="description" placeholder="e.g: Enter details about your item and its condition" rows="2"><?php echo htmlspecialchars($productData['description'] ?? ''); ?></textarea>
+
+      </div>
+
+      <div class="mb-3">
+        <label for="brand" class="form-label">Brand</label>
+        <input type="text" class="form-control" value="<?php echo htmlspecialchars($productData['brand'] ?? ''); ?>" id="brand" placeholder="e.g: Samsung,LG,Dell">
+      </div>
+
+<!--<div class="mb-3">-->
+<!--    <label for="quantity" class="form-label">Quantity</label>-->
+<!--    <input type="text" class="form-control" -->
+<!--           value="<?php echo htmlspecialchars($quantity_value); ?>" -->
+<!--           id="quantity" -->
+<!--           placeholder="e.g: 1, 2.5">-->
+<!--</div>-->
+      <!--<div class="mb-3">-->
+      <!--  <label class="form-label">Select Unit:</label>-->
+      <!--  <div class="d-flex">-->
+      <!--    <div class="form-check" style="padding-left:0px !important">-->
+      <!--      <input class="form-check-input" type="radio" name="unit" id="quantityRadio" value="kg"-->
+      <!--        style="width:16px;height:16px;"-->
+      <!--        <?php echo (isset($productData['quantity_unit']) && $productData['quantity_unit'] == 'kg') ? 'checked' : ''; ?>>-->
+      <!--      <span>Kg</span>-->
+      <!--    </div>-->
+      <!--    <div class="form-check">-->
+      <!--      <input class="form-check-input" type="radio" name="unit" id="pcsRadio" value="pcs"-->
+      <!--        style="width:16px;height:16px;"-->
+      <!--        <?php echo (isset($productData['quantity_unit']) && $productData['quantity_unit'] == 'pcs') ? 'checked' : ''; ?>>-->
+      <!--      <span>Pcs</span>-->
+      <!--    </div>-->
+      <!--  </div>-->
+      <!--</div>-->
+<div class="mb-3">
+    <label for="quantityPcs" class="form-label">Quantity (in pieces)</label>
+    <input type="text" class="form-control" 
+           id="quantityPcs" 
+           placeholder="e.g: 1, 2, 3"
+           value="<?php echo (!empty($productData['quantity_pcs']) && $productData['quantity_pcs'] != 0) ? htmlspecialchars($productData['quantity_pcs']) : ''; ?>">
+</div>
+
+<div class="mb-3">
+    <label for="quantityKg" class="form-label">Quantity (in kgs)<span class="text-danger">*</span></label>
+    <input type="text" class="form-control" 
+           id="quantityKg" 
+           placeholder="e.g: 0.5, 1, 1.5"
+           value="<?php echo (!empty($productData['quantity_kg']) && $productData['quantity_kg'] != 0) ? htmlspecialchars($productData['quantity_kg']) : ''; ?>">
+</div>
+
+
+
+
+<div class="mb-3">
+    <label for="price" class="form-label">Expected Price<span class="text-danger">*</span></label>
+    <div class="position-relative">
+        <input type="text" class="form-control"
+            id="price"
+            placeholder="Eg - 2000"
+            value="<?php
+                echo (!empty($productData['sale_price']) && $productData['sale_price'] != 0)
+                    ? htmlspecialchars(number_format((float)$productData['sale_price'], 0, '', ''))
+                    : '';
+            ?>">
+    </div>
+</div>
+
+
+      <button id="viewRateListBtn" style="background-color: #b5753e; padding: 4px 8px; color: white; border:none;"
+        class="btn mb-3">
+        VIEW RATE LIST
+      </button>
+
+      <div class="mb-4">
+        <label class="form-label d-flex">Add Item Images <span class="text-danger">*</span></label>
+
+        <div class="d-flex gap-3 image-upload-container">
+          <!-- Display Existing Images from Database -->
+<div id="imagePreviewContainer" class="d-flex gap-2">
+  <?php if (!empty($productImages)) { ?>
+    <?php foreach ($productImages as $index => $file_name) { ?>
+      <div class="position-relative image-preview">
+        <img src="./upload_content/upload_img/product_img/<?php echo htmlspecialchars($file_name); ?>"
+             class="img-fluid rounded-15" style="max-width: 80px; height: 80px;">
+
+<span class="remove-image btn-sm position-absolute top-0 end-0 m-1 p-1 rounded-circle" data-index="<?php echo $index; ?>" data-image="<?php echo htmlspecialchars($file_name); ?>">
+  <i class="bi bi-x"></i>
+</span>
+
+
+      </div>
+    <?php } ?>
+  <?php } else { ?>
+    <p>No images uploaded yet.</p>
+  <?php } ?>
+</div>
+
+
+          <!-- Dynamic Image Upload Inputs -->
+          <div id="image-upload-wrapper">
+            <input type="file" id="imageUploadInput" class="d-none" accept="image/*" multiple>
+            <button type="button" class="btn btn-outline-secondary upload-btn"
+              onclick="document.getElementById('imageUploadInput').click();">
+              <i class="bi bi-plus-lg"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+
+      <button id="continueStep2" class="btn btn-primary w-100 py-3 fw-medium">Continue</button>
+    </form>
+  </main>
+</div>
+
+
+<style>
+.progress-steps-address {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 2rem;
+            margin-top: 20px;
+        }
+.step-address {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex: 1;
+        }
+
+        .step-icon-address {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-bottom: 8px;
+        }
+
+        .step-text-address {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .step-line-address {
+            height: 2px;
+            background-color: var(--primary-color);
+            width: 60px;
+            margin: 0 -10px;
+            margin-top: 16px;
+        }
+
+</style>
+
+
+<div id="step3" class="container py-4 d-none">
+    <div class="address-container" style="background-color: transparent !important;">
+        <div class="mb-4">
+            <div class="d-flex align-items-center">
+                <a href="#" id="backToStep2" class="back-button "><i class="bi bi-arrow-left fs-4"></i></a>
+                <h1 class="h4 mb-0 fs-6">Manage Address</h1>
+            </div>
+<div class="progress-steps-address">
+        <div class="step-address">
+            <div class="step-icon-address">✓</div>
+            <span class="step-text-address">Choose Category</span>
+        </div>
+        <div class="step-line-address"></div>
+        <div class="step-address">
+            <div class="step-icon-address">✓</div>
+            <span class="step-text-address">Item details</span>
+        </div>
+        <div class="step-line-address"></div>
+        <div class="step-address">
+            <div class="step-icon-address">3</div>
+            <span class="step-text-address">Address Details</span>
+        </div>
+    </div>
+
+
+<button type="button" class="edit btn-sm addAddress" data-bs-toggle="modal" data-bs-target="#addNewModal"  style="background-color:#c17f59; right:10px; position:absolute;">
+    <img src="frontend_assets/img-icon/add-location.png" height="24" width="24" />
+</button>
+    </div>
+
+        <div id="addressList" style="margin-top: 80px;">
+        
+        </div>
+  </div>
+
+
+
+
+  <input type="hidden" id="selected_address_id" name="selected_address_id" value="">
+
+  <button class="add-address-btn " id="updateAllData">Save</button>
+</div>
+
+
+<!-- Edit and Add Modal -->
+
+<div class="modal fade" id="editAddressModal" tabindex="-1" aria-labelledby="editAddressModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editAddressModalLabel"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editAddressForm">
+                    <input type="hidden" id="edit_address_id">
+
+                    <div class="mb-3">
+                        <label for="edit_address_name" class="form-label">Address Name</label>
+                        <input type="text" placeholder="e.g: Home Address Or, Office Address" class="form-control" id="edit_address_name" required>
+                    </div>
+
+
+                    <div class="mb-3">
+                        <label for="edit_contact_name" class="form-label">Contact Name</label>
+                        <input type="text" placeholder="e.g: John Doe" class="form-control" id="edit_contact_name" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_contact_phone" class="form-label">Contact Phone</label>
+                        <input placeholder="e.g: 7896541230" type="text" class="form-control" id="edit_contact_phone" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_country" class="form-label">Country</label>
+                        <input type="text" placeholder="e.g: India" class="form-control" id="edit_country" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_state" class="form-label">State</label>
+                        <input type="text" placeholder="e.g: WB" class="form-control" id="edit_state" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_city" class="form-label">City</label>
+                        <input type="text" placeholder="e.g: Kolkata" class="form-control" id="edit_city" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_pincode" class="form-label">Pincode</label>
+                        <input type="text" placeholder="e.g: 785421" class="form-control" id="edit_pincode" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_landmark" class="form-label">Landmark</label>
+                        <input type="text" placeholder="e.g: Saltlake" class="form-control" id="edit_landmark" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="edit_address_line" class="form-label">Address Line</label>
+                        <input type="text" placeholder="e.g: 38, Sector 1, AB Block, Saltlake, 700125" class="form-control" id="edit_address_line" required>
+                    </div>
+                    
+                </form>
+            </div>
+             <div class="modal-footer justify-content-center">
+                                           <button type="submit" class="btn btn-primary w-100" id="saveAddressBtn"></button>
+                                        </div>
+        </div>
+    </div>
+</div>
+
+<!-- Start rate list modal -->
+<div class="modal fade catgory-rate-list-div" id="exampleModal" tabindex="-1" role="dialog"
+  aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h5 class="modal-title">Category Rate List</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+
+      </div>
+    </div>
+  </div>
+</div>

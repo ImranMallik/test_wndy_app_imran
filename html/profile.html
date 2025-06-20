@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Profile</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        .header-bg {
+            background: linear-gradient(135deg, #e0c29d 0%, #b5753e 100%);
+            height: 280px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-pattern {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: repeating-linear-gradient(45deg,
+                    rgba(255, 255, 255, 0.1) 0px,
+                    rgba(255, 255, 255, 0.1) 20px,
+                    transparent 20px,
+                    transparent 40px);
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            margin: 0 auto;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-avatar i {
+            font-size: 60px;
+            color: #ccc;
+        }
+
+        .seller-badge {
+            background: #b5753e;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 14px;
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+        }
+
+        .info-label {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .info-value {
+            color: #000;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        .share-button {
+            background: #b5753e;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            padding: 15px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .share-button i {
+            margin-right: 10px;
+        }
+
+        .header-icon {
+            color: white;
+            font-size: 24px;
+            position: absolute;
+            top: 20px;
+            z-index: 1;
+        }
+
+        .back-icon {
+            left: 20px;
+        }
+
+        .edit-icon {
+            right: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container px-0" style="max-width: 480px;">
+        <!-- Header with pattern -->
+        <div class="header-bg mb-4">
+            <div class="header-pattern"></div>
+            <a href="#" class="header-icon back-icon">
+                <i class="bi bi-arrow-left"></i>
+            </a>
+            <a href="#" class="header-icon edit-icon">
+                <i class="bi bi-pencil-square"></i>
+            </a>
+
+            <!-- Profile Avatar -->
+            <div class="d-flex flex-column align-items-center pt-5">
+                <div class="profile-avatar">
+                    <i class="bi bi-person"></i>
+                    <div class="seller-badge">Seller</div>
+                </div>
+                <h1 class="text-white h4 mt-3 mb-1">Nanditha N</h1>
+                <p class="text-white-50 mb-0">Karnataka</p>
+            </div>
+        </div>
+
+        <!-- Profile Information -->
+        <div class="container px-4">
+            <div class="info-section">
+                <div class="info-label">Phone Number</div>
+                <div class="info-value">999 9999 999</div>
+
+                <div class="info-label">Email Address</div>
+                <div class="info-value">nanditha@gmail.com</div>
+
+                <div class="info-label">Seller Type</div>
+                <div class="info-value">Individual</div>
+
+                <div class="info-label">Referral Code</div>
+                <div class="info-value">RC51594546WEXF2324</div>
+            </div>
+
+            <button class="share-button">
+                <i class="bi bi-share"></i>
+                Share Your Referral Link
+            </button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Share button functionality
+        document.querySelector('.share-button').addEventListener('click', async () => {
+            try {
+                await navigator.share({
+                    title: 'My Referral Link',
+                    text: 'Use my referral code: RC51594546WEXF2324',
+                    url: window.location.href
+                });
+            } catch (err) {
+                console.log('Share failed:', err.message);
+                // Fallback copy to clipboard
+                navigator.clipboard.writeText('RC51594546WEXF2324')
+                    .then(() => alert('Referral code copied to clipboard!'))
+                    .catch(err => console.error('Failed to copy:', err));
+            }
+        });
+    </script>
+</body>
+
+</html>

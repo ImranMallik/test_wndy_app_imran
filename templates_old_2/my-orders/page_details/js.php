@@ -1,0 +1,1 @@
+<script src="templates/my-orders/controller.js?v=<?php echo $version; ?>"></script>

@@ -1,0 +1,1 @@
+<title>Manage Transactional Details | <?php echo $system_name; ?></title>

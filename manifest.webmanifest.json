@@ -1,0 +1,25 @@
+{
+  "short_name": "WNDY",
+  "name": "WNDY",
+  "description": "Step into WNDY, derived from the Sanskrit word for ‘circular’, reflects our endeavour to connect the stakeholders in the Waste management cycle. Our aim is to build an ecosystem that delivers Social, Environmental and Economic value for everyone.",
+  "icons": [
+    {
+      "src": "pwa-images/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "pwa-images/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": ".",
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "scope": "/",
+  "theme_color": "#49ceff",
+  "orientation": "portrait"
+}

@@ -1,0 +1,1 @@
+<title>Manage Profile | <?php echo $system_name; ?></title>

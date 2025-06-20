@@ -1,0 +1,1 @@
+<title>Home | <?php echo $system_name; ?></title>

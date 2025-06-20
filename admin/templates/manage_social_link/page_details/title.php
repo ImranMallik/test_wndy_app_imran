@@ -1,0 +1,1 @@
+<title>Manage Social link | <?php echo $system_name; ?></title>

@@ -1,0 +1,1 @@
+<title>Manage User | <?php echo $system_name; ?></title>

@@ -1,0 +1,1 @@
+<title>Manage Sellers | <?php echo $system_name; ?></title>

@@ -1,0 +1,1 @@
+<script src="templates/credit_addon/controller.js?v=<?php echo $version; ?>"></script>

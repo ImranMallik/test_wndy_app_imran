@@ -1,0 +1,1 @@
+<title>Whatsapp Logs | <?php echo $system_name; ?></title>

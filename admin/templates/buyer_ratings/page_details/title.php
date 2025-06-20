@@ -1,0 +1,1 @@
+<title>Buyers Ratings | <?php echo $system_name; ?></title>

@@ -1,0 +1,1 @@
+<title>Category Catalogue | <?php echo $system_name; ?></title>

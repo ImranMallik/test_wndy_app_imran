@@ -1,0 +1,1 @@
+<title>Rate List Manage | <?php echo $system_name; ?></title>

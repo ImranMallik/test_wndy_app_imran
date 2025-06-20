@@ -1,0 +1,1 @@
+<title>Add Collector | <?php echo $system_name; ?></title>
