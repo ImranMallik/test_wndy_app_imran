@@ -12,9 +12,9 @@ $category_dataget = mysqli_query($con, "SELECT category_id,category_img, categor
     <div class="container-fluid px-4 pt-2 pb-3">
 
         <div class="d-flex align-items-center mb-4">
-          <a href="<?php echo $baseUrl . '/dashboard'; ?>" > <i class="bi bi-arrow-left fs-4"></i>&nbsp; &nbsp;</a>
+            <a href="<?php echo $baseUrl . '/manage_demand_post'; ?>"> <i class="bi bi-arrow-left fs-4"></i>&nbsp; &nbsp;</a>
             <h1 class="fs-6 fw-semibold mb-0">Choose a Category</h1>
-      
+
         </div>
 
 
@@ -23,7 +23,7 @@ $category_dataget = mysqli_query($con, "SELECT category_id,category_img, categor
                 <div class="step active">1</div>
                 <div class="step-line"></div>
                 <div class="step">2</div>
-             
+
             </div>
         </div>
         <div class="categories-list mb-4">
@@ -62,14 +62,14 @@ $category_dataget = mysqli_query($con, "SELECT category_id,category_img, categor
             <h1 class="h5 mb-0 fs-6">Demand Your Post</h1>
         </div>
     </header>
-<!-- Progress Steps -->
-            <div class="progress-steps d-flex justify-content-center align-items-center gap-2">
-                <div class="step-circle completed">
-                    <i class="bi bi-check-lg"></i>
-                </div>
-                <div class="step-line completed"></div>
-                <div class="step-circle active">2</div>
-            </div>
+    <!-- Progress Steps -->
+    <div class="progress-steps d-flex justify-content-center align-items-center gap-2">
+        <div class="step-circle completed">
+            <i class="bi bi-check-lg"></i>
+        </div>
+        <div class="step-line completed"></div>
+        <div class="step-circle active">2</div>
+    </div>
 
     <main class="px-3 pb-4 mt-2">
         <form id="itemDetailsForm">
@@ -94,15 +94,15 @@ $category_dataget = mysqli_query($con, "SELECT category_id,category_img, categor
                 <input type="hidden" class="form-control" id="user_id" value="<?php echo $session_user_code  ?>">
             </div>
 
-<div class="mb-3">
-    <label for="quantityPcs" class="form-label">Quantity(Pieces)</label>
-    <input type="text" class="form-control" id="quantityPcs" placeholder="e.g: 1,2,3">
-</div>
+            <div class="mb-3">
+                <label for="quantityPcs" class="form-label">Quantity(Pieces)</label>
+                <input type="text" class="form-control" id="quantityPcs" placeholder="e.g: 1,2,3">
+            </div>
 
-<div class="mb-3">
-    <label for="quantityKg" class="form-label">Quantity(Kg)<span class="text-danger">*</span></label>
-    <input type="text" class="form-control" id="quantityKg" placeholder="e.g: 0.5, 1, 1.5">
-</div>
+            <div class="mb-3">
+                <label for="quantityKg" class="form-label">Quantity(Kg)<span class="text-danger">*</span></label>
+                <input type="text" class="form-control" id="quantityKg" placeholder="e.g: 0.5, 1, 1.5">
+            </div>
 
             <div class="mb-3">
                 <label for="price" class="form-label">Price<span class="text-danger">*</span></label>
@@ -122,11 +122,3 @@ $category_dataget = mysqli_query($con, "SELECT category_id,category_img, categor
 
 
 </style>
-
-
-
-
-
-
-
-            

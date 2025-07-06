@@ -134,91 +134,91 @@ $seller_ph_num = $seller_data['ph_num'];
                         </select>
                     </div>
                 </div>
-               <div class="col-md-3">
-            <div class="form-group">
-        <label class="control-label"><strong>Buyer Name:</strong></label>
-        <select id="buyer_id" class="select2 form-control" data-placeholder="Choose Buyer" onchange="reload_table()">
-            <option value="">-- Select Buyer --</option>
-            <?php
-            while ($buyer_data = mysqli_fetch_assoc($buyer_name_list)) {
-            ?>
-                <option value="<?php echo $buyer_data['user_id']; ?>">
-                    <?php echo htmlspecialchars($buyer_data['name']); ?>
-                </option>
-            <?php
-            }
-            ?>
-        </select>
-      </div>
-      </div>
-              <div class="col-md-3">
-    <div class="form-group">
-        <label class="control-label"><strong>Seller PinCode:</strong></label>
-        <select id="filter_seller_pincode" class="select2 form-control" data-placeholder="Choose Pincode" onchange="reload_table()">
-            <option value="">-- Select Seller Pincode --</option>
-            <?php
-            while ($row = mysqli_fetch_assoc($seller_pin_list)) {
-                echo '<option value="' . $row['user_id'] . '">' . htmlspecialchars($row['pincode']) . '</option>';
-            }
-            ?>
-        </select>
-    </div>
-</div>
-              <div class="col-md-3">
-    <div class="form-group">
-        <label class="control-label"><strong>Buyer PinCode:</strong></label>
-        <select id="filter_buyer_pincode" class="select2 form-control" data-placeholder="Choose Pincode" onchange="reload_table()">
-            <option value="">-- Select Buyer Pincode --</option>
-            <?php
-            while ($row = mysqli_fetch_assoc($buyer_pin_list)) {
-                echo '<option value="' . $row['user_id'] . '">' . htmlspecialchars($row['pincode']) . '</option>';
-            }
-            ?>
-        </select>
-    </div>
-</div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label"><strong>Buyer Name:</strong></label>
+                        <select id="buyer_id" class="select2 form-control" data-placeholder="Choose Buyer" onchange="reload_table()">
+                            <option value="">-- Select Buyer --</option>
+                            <?php
+                            while ($buyer_data = mysqli_fetch_assoc($buyer_name_list)) {
+                            ?>
+                                <option value="<?php echo $buyer_data['user_id']; ?>">
+                                    <?php echo htmlspecialchars($buyer_data['name']); ?>
+                                </option>
+                            <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label"><strong>Seller PinCode:</strong></label>
+                        <select id="filter_seller_pincode" class="select2 form-control" data-placeholder="Choose Pincode" onchange="reload_table()">
+                            <option value="">-- Select Seller Pincode --</option>
+                            <?php
+                            while ($row = mysqli_fetch_assoc($seller_pin_list)) {
+                                echo '<option value="' . $row['user_id'] . '">' . htmlspecialchars($row['pincode']) . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label"><strong>Buyer PinCode:</strong></label>
+                        <select id="filter_buyer_pincode" class="select2 form-control" data-placeholder="Choose Pincode" onchange="reload_table()">
+                            <option value="">-- Select Buyer Pincode --</option>
+                            <?php
+                            while ($row = mysqli_fetch_assoc($buyer_pin_list)) {
+                                echo '<option value="' . $row['user_id'] . '">' . htmlspecialchars($row['pincode']) . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
 
 
-   <div class="col-md-3">
-    <div class="form-group">
-        <label class="control-label"><strong>Product Status:</strong></label>
-        <select id="seller_post_status" class="select2 form-control" data-placeholder="Choose Product Status" onchange="reload_table()">
-            <option value="">-- Select Product Status --</option>
-            <?php
-            while ($row = mysqli_fetch_assoc($seller_product_status_list)) {
-                echo '<option value="' . htmlspecialchars($row['product_status']) . '">' . htmlspecialchars($row['product_status']) . '</option>';
-            }
-            ?>
-        </select>
-    </div>
-</div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label"><strong>Product Status:</strong></label>
+                        <select id="seller_post_status" class="select2 form-control" data-placeholder="Choose Product Status" onchange="reload_table()">
+                            <option value="">-- Select Product Status --</option>
+                            <?php
+                            while ($row = mysqli_fetch_assoc($seller_product_status_list)) {
+                                echo '<option value="' . htmlspecialchars($row['product_status']) . '">' . htmlspecialchars($row['product_status']) . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
 
 
-   <div class="col-md-3">
-    <div class="form-group">
-        <label class="control-label"><strong>Deal Status:</strong></label>
-        <select id="product_status" class="select2 form-control" data-placeholder="Choose Product Status" onchange="reload_table()">
-            <option value="">-- Select Deal Status --</option>
-            <?php
-            while ($row = mysqli_fetch_assoc($product_status_list)) {
-                echo '<option value="' . htmlspecialchars($row['deal_status']) . '">' . htmlspecialchars($row['deal_status']) . '</option>';
-            }
-            ?>
-        </select>
-    </div>
-</div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="control-label"><strong>Deal Status:</strong></label>
+                        <select id="product_status" class="select2 form-control" data-placeholder="Choose Product Status" onchange="reload_table()">
+                            <option value="">-- Select Deal Status --</option>
+                            <?php
+                            while ($row = mysqli_fetch_assoc($product_status_list)) {
+                                echo '<option value="' . htmlspecialchars($row['deal_status']) . '">' . htmlspecialchars($row['deal_status']) . '</option>';
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
 
 
 
-<div class="col-md-3 mb-3">
-    <label><strong>Date Range:</strong></label>
-    <div style="display: flex; gap: 5px; align-items: center;">
-        <input type="date" id="start_date" class="form-control" onchange="onStartDateChange()" />
-        <span id="to_label" style="display: none;">to</span>
-        <input type="date" id="end_date" class="form-control" style="display: none;" onchange="onEndDateChange()" />
-    </div>
-    <input type="hidden" id="custom_date_range" />
-</div>
+                <div class="col-md-3 mb-3">
+                    <label><strong>Date Range:</strong></label>
+                    <div style="display: flex; gap: 5px; align-items: center;">
+                        <input type="date" id="start_date" class="form-control" onchange="onStartDateChange()" />
+                        <span id="to_label" style="display: none;">to</span>
+                        <input type="date" id="end_date" class="form-control" style="display: none;" onchange="onEndDateChange()" />
+                    </div>
+                    <input type="hidden" id="custom_date_range" />
+                </div>
 
 
 
@@ -227,54 +227,54 @@ $seller_ph_num = $seller_data['ph_num'];
             </div>
 
             <div class="show_record_div">
-                             <table class="table table-bordered table-hover" id="data_table">
+                <table class="table table-bordered table-hover" id="data_table">
                     <thead>
-                    <tr>
-                    <th>Action Timestamp</th>           
-                    <th>Post ID</th>                   
-                    <th>Seller</th>                    
-                    <th>Seller Number</th>             
-                    <th>Seller Address</th>            
-                    <th>Seller Pincode</th>                   
-                    <th>Category</th>                   
-                    <th>Product</th>
-                    <th>Image</th>                
-                    <th>Description</th>               
-                    <th>Brand</th>                   
-                    <th>Quantity(kgs)</th>              
-                    <th>Quantity(pieces)</th>
-                    <th>Expected Price</th>            
-                    <th>Product Status</th> 
-                    <th>Closer Remark</th>             
-                    <th>Withdrawn Date</th>            
-                    <th>Withdrawn Reason</th>          
-                    <th>No Of Post</th>
-                    <th>Buyer Action Time</th>        
-                    <th>Status Update Date</th>       
-                    <th>Buyer</th>      
-                    <th>Buyer Number</th>              
-                    <th>Buyer Address</th>
-                    <th>Buyer Pincode</th>
-                    <th>Transaction ID</th>            
-                    <th>Deal Status</th>               
-                    <th>Used Credits</th>              
-                    <th>Purchased Price</th>           
-                    <th>Negotiation Price</th>        
-                    <th>Message</th>                   
-                    <th>Message History</th>                   
-                    <th>Negotiation Price History</th>                   
-                    <th>Negotiation By</th>       
-                    <th>Negotiation Date</th>          
-                    <th>Accepted Date</th>             
-                    <th>Pickup Date</th>
-                    <th>Completed Date</th>
-                    <th>Duration for post completion </th>
-                    <th>Collector</th> 
-                    <th>Assigned date for collector</th>             
-                    <th>View Date</th>                 
-                    <th>Seller Rating For Buyer</th>
-                    <th>Buyer Rating For Seller</th>
-                    <th class="nosort">Action</th>      
+                        <tr>
+                            <th>Action Timestamp</th>
+                            <th>Post ID</th>
+                            <th>Seller</th>
+                            <th>Seller Number</th>
+                            <th>Seller Address</th>
+                            <th>Seller Pincode</th>
+                            <th>Category</th>
+                            <th>Product</th>
+                            <th>Image</th>
+                            <th>Description</th>
+                            <th>Brand</th>
+                            <th>Quantity(kgs)</th>
+                            <th>Quantity(pieces)</th>
+                            <th>Expected Price</th>
+                            <th>Product Status</th>
+                            <th>Closer Remark</th>
+                            <th>Withdrawn Date</th>
+                            <th>Withdrawn Reason</th>
+                            <th>No Of Post</th>
+                            <th>Buyer Action Time</th>
+                            <th>Status Update Date</th>
+                            <th>Buyer</th>
+                            <th>Buyer Number</th>
+                            <th>Buyer Address</th>
+                            <th>Buyer Pincode</th>
+                            <th>Transaction ID</th>
+                            <th>Deal Status</th>
+                            <th>Used Credits</th>
+                            <th>Purchased Price</th>
+                            <th>Negotiation Price</th>
+                            <th>Message</th>
+                            <th>Message History</th>
+                            <th>Negotiation Price History</th>
+                            <th>Negotiation By</th>
+                            <th>Negotiation Date</th>
+                            <th>Accepted Date</th>
+                            <th>Pickup Date</th>
+                            <th>Completed Date</th>
+                            <th>Duration for post completion </th>
+                            <th>Collector</th>
+                            <th>Assigned date for collector</th>
+                            <th>View Date</th>
+                            <th>Seller Rating For Buyer</th>
+                            <th>Buyer Rating For Seller</th>
+                            <th class="nosort">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -434,36 +434,36 @@ $seller_ph_num = $seller_data['ph_num'];
                             </div>
                         </div>
 
-                          <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Quantity(in kgs)
-                                                                            <span class="req-label-btn" data-container="body" data-toggle="tooltip"
-                                            data-placement="top" title="This Field is Required">
-                                            *
-                                        </span>
-                                        <button type="button" class="info-label-btn btn btn-secondary"
-                                            data-container="body" data-toggle="tooltip" data-placement="top"
-                                            title="Your Product Quantity(in kgs)">
-                                            <i class="fas fa-info"></i>
-                                        </button>
-                                    </label>
-                                    <input type="number" id="quantity_kg" class="form-control" placeholder="e.g: 0.5, 1,1.5,..." />
-                                    <label data-default-mssg="" class="input_alert quantity-inp-alert"></label>
-                                </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Quantity(in kgs)
+                                    <span class="req-label-btn" data-container="body" data-toggle="tooltip"
+                                        data-placement="top" title="This Field is Required">
+                                        *
+                                    </span>
+                                    <button type="button" class="info-label-btn btn btn-secondary"
+                                        data-container="body" data-toggle="tooltip" data-placement="top"
+                                        title="Your Product Quantity(in kgs)">
+                                        <i class="fas fa-info"></i>
+                                    </button>
+                                </label>
+                                <input type="number" id="quantity_kg" class="form-control" placeholder="e.g: 0.5, 1,1.5,..." />
+                                <label data-default-mssg="" class="input_alert quantity-inp-alert"></label>
                             </div>
-                                <div class="col-md-3">
-                                <div class="form-group">
-                                    <label class="control-label">Quantity(in pieces)
-                                        <button type="button" class="info-label-btn btn btn-secondary"
-                                            data-container="body" data-toggle="tooltip" data-placement="top"
-                                            title="Your Product Quantity(in pieces)">
-                                            <i class="fas fa-info"></i>
-                                        </button>
-                                    </label>
-                                    <input type="number" id="quantity_pcs" class="form-control" placeholder="e.g: 1, 2,..." />
-                                    <label data-default-mssg="" class="input_alert quantity-inp-alert"></label>
-                                </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Quantity(in pieces)
+                                    <button type="button" class="info-label-btn btn btn-secondary"
+                                        data-container="body" data-toggle="tooltip" data-placement="top"
+                                        title="Your Product Quantity(in pieces)">
+                                        <i class="fas fa-info"></i>
+                                    </button>
+                                </label>
+                                <input type="number" id="quantity_pcs" class="form-control" placeholder="e.g: 1, 2,..." />
+                                <label data-default-mssg="" class="input_alert quantity-inp-alert"></label>
                             </div>
+                        </div>
 
                         <div class="col-md-3">
                             <div class="form-group">

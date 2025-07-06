@@ -40,7 +40,7 @@ if ($session_user_type == "Seller") {
         if ($product_status == "Active") {
             $where .= " AND p.product_status IN ('Active', 'Post Viewed')";
         } elseif ($product_status == "Completed") {
-            $where .= " AND p.product_status IN ('Completed', 'Withdraw')";  
+            $where .= " AND p.product_status IN ('Completed', 'Withdraw')";
         } elseif ($product_status == "in-process") {
             $where .= " AND p.product_status IN ('Under Negotiation', 'Pickup Scheduled','Offer Accepted')";
         } elseif ($product_status == "Third-Party Transaction") {
@@ -56,56 +56,48 @@ if ($session_user_type == "Seller") {
     }
 
     $query = "SELECT $select_fields $base_from $where";
-
-
-}  elseif ($session_user_type == "Buyer") {
+} elseif ($session_user_type == "Buyer") {
 
 
 
- if ($product_status == "in-process") {
-     $select_fields .= ", upv.buyer_id, upv.seller_id, upv.deal_status";
-    $join = "
+    if ($product_status == "in-process") {
+        $select_fields .= ", upv.buyer_id, upv.seller_id, upv.deal_status";
+        $join = "
         INNER JOIN tbl_user_product_view upv ON upv.product_id = p.product_id
     ";
-    $where .= " AND upv.buyer_id = '$session_user_code' AND upv.deal_status IN ('Under Negotiation','Pickup Scheduled','Offer Accepted')";
-} elseif ($product_status == "Completed") {
-         $select_fields .= ", upv.buyer_id, upv.seller_id, upv.deal_status";
-    $join = "
+        $where .= " AND upv.buyer_id = '$session_user_code' AND upv.deal_status IN ('Under Negotiation','Pickup Scheduled','Offer Accepted')";
+    } elseif ($product_status == "Completed") {
+        $select_fields .= ", upv.buyer_id, upv.seller_id, upv.deal_status";
+        $join = "
         INNER JOIN tbl_user_product_view upv ON upv.product_id = p.product_id
     ";
-     $where .= " AND upv.buyer_id = '$session_user_code' 
+        $where .= " AND upv.buyer_id = '$session_user_code' 
                 AND upv.deal_status = 'Completed' 
                 AND p.is_draft = 0";
-} elseif ($product_status == "Active") {
-    $where .= " AND p.is_draft = 0 AND p.active = 'Yes' AND p.product_status IN ('Active', 'Post Viewed', 'Under Negotiation')";
-}
-
-elseif ($product_status == "Pickup Scheduled") {
-             $select_fields .= ", upv.buyer_id, upv.seller_id, upv.deal_status";
-    $join = "
+    } elseif ($product_status == "Active") {
+        $where .= " AND p.is_draft = 0 AND p.active = 'Yes' AND p.product_status IN ('Active', 'Post Viewed', 'Under Negotiation')";
+    } elseif ($product_status == "Pickup Scheduled") {
+        $select_fields .= ", upv.buyer_id, upv.seller_id, upv.deal_status";
+        $join = "
         INNER JOIN tbl_user_product_view upv ON upv.product_id = p.product_id
     ";
-    $where .= " AND upv.buyer_id = '$session_user_code' AND upv.deal_status = 'Pickup Scheduled'";
-} elseif ($product_status == "all") {
-    $where .= " AND p.product_status NOT IN ('Completed', 'Third-Party Transaction', 'Pickup Scheduled','Withdraw')";
-    $where .= " AND p.is_draft = 0";
+        $where .= " AND upv.buyer_id = '$session_user_code' AND upv.deal_status = 'Pickup Scheduled'";
+    } elseif ($product_status == "all") {
+        $where .= " AND p.product_status NOT IN ('Completed', 'Third-Party Transaction', 'Pickup Scheduled','Withdraw')";
+        $where .= " AND p.is_draft = 0";
+    } else {
+        $where .= " AND p.product_status != 'Completed'";
+    }
 
 
-} else {
-    $where .= " AND p.product_status != 'Completed'";
-}
-
-
-    if($product_status != "all" && $product_status != "Active"){
-   $where .= " AND upv.deal_status != 'Third-Party Transaction'";
-        
+    if ($product_status != "all" && $product_status != "Active") {
+        $where .= " AND upv.deal_status != 'Third-Party Transaction'";
     }
 
 
 
-  $query = "SELECT $select_fields $base_from $join $where";
-
-} 
+    $query = "SELECT $select_fields $base_from $join $where";
+}
 
 
 
@@ -137,63 +129,62 @@ while ($rw = mysqli_fetch_assoc($product_dataget)) {
     $file_data = isset($file_dataget['file_name']) ? $file_dataget['file_name'] : 'default.jpg';
 
     // Status label
-// if ($rw['product_status'] === "Active" || (isset($rw['product_status']) && $rw['product_status'] === "Post Viewed") || (isset($rw['deal_status']) && $rw['deal_status'] === "Credit Used") ) {
-//     $statusLabel = "Open";
+    // if ($rw['product_status'] === "Active" || (isset($rw['product_status']) && $rw['product_status'] === "Post Viewed") || (isset($rw['deal_status']) && $rw['deal_status'] === "Credit Used") ) {
+    //     $statusLabel = "Open";
 
-// } elseif ($rw['product_status'] === "Completed") {
-//     $statusLabel = "Closed";
+    // } elseif ($rw['product_status'] === "Completed") {
+    //     $statusLabel = "Closed";
 
-// } elseif (isset($rw['deal_status']) && $rw['deal_status'] === "Offer Accepted") {
-//     $statusLabel = "Offer Accepted";
-// } elseif ($rw['product_status'] === "Under Negotiation" || (isset($rw['deal_status']) && $rw['deal_status'] === "Under Negotiation") || $rw['product_status'] === "Pickup Scheduled") {
-//     $statusLabel = "In Process";
-// }  elseif ($rw['product_status'] === "Third-Party Transaction" || isset($rw['deal_status']) && $rw['deal_status'] === "Third-Party Transaction") {
-//     $statusLabel = "Not Sold";
-// }else{
-//     $statusLabel = " ";
-// }
+    // } elseif (isset($rw['deal_status']) && $rw['deal_status'] === "Offer Accepted") {
+    //     $statusLabel = "Offer Accepted";
+    // } elseif ($rw['product_status'] === "Under Negotiation" || (isset($rw['deal_status']) && $rw['deal_status'] === "Under Negotiation") || $rw['product_status'] === "Pickup Scheduled") {
+    //     $statusLabel = "In Process";
+    // }  elseif ($rw['product_status'] === "Third-Party Transaction" || isset($rw['deal_status']) && $rw['deal_status'] === "Third-Party Transaction") {
+    //     $statusLabel = "Not Sold";
+    // }else{
+    //     $statusLabel = " ";
+    // }
 
-if ($session_user_type === "Buyer") {
-    if (
-        $rw['deal_status'] === "Credit Used" || 
-        $rw['deal_status'] === "Post Viewed" || 
-        $rw['product_status'] === "Active" || 
-        $rw['product_status'] === "Post Viewed"
-    ) {
-        $statusLabel = "Open";
-    } elseif ($rw['deal_status'] === 'Completed') {
-        $statusLabel = "Closed";
-    } elseif (in_array($rw['deal_status'], ['Under Negotiation', 'Pickup Scheduled', 'Offer Accepted'])) {
-        $statusLabel = "In Process";
-    } elseif (in_array($rw['product_status'], ['Under Negotiation', 'Pickup Scheduled', 'Offer Accepted'])) {
-        $statusLabel = "Open";
-    } else {
-        $statusLabel = "";
+    if ($session_user_type === "Buyer") {
+        if (
+            $rw['deal_status'] === "Credit Used" ||
+            $rw['deal_status'] === "Post Viewed" ||
+            $rw['product_status'] === "Active" ||
+            $rw['product_status'] === "Post Viewed"
+        ) {
+            $statusLabel = "Open";
+        } elseif ($rw['deal_status'] === 'Completed') {
+            $statusLabel = "Closed";
+        } elseif (in_array($rw['deal_status'], ['Under Negotiation', 'Pickup Scheduled', 'Offer Accepted'])) {
+            $statusLabel = "In Process";
+        } elseif (in_array($rw['product_status'], ['Under Negotiation', 'Pickup Scheduled', 'Offer Accepted'])) {
+            $statusLabel = "Open";
+        } else {
+            $statusLabel = "";
+        }
+    } elseif ($session_user_type === "Seller") {
+        if ((int)$rw['is_draft'] === 1) {
+            $statusLabel = "Draft";
+        } elseif ($rw['product_status'] === "Active" || $rw['product_status'] === "Post Viewed") {
+            $statusLabel = "Open";
+        } elseif ($rw['product_status'] === "Completed" || $rw['product_status'] === "Withdraw") {
+            $statusLabel = "Closed";
+        } elseif (in_array($rw['product_status'], ['Under Negotiation', 'Pickup Scheduled', 'Offer Accepted'])) {
+            $statusLabel = "In Process";
+        } elseif ($rw['product_status'] === "Third-Party Transaction") {
+            $statusLabel = "Not Sold";
+        } else {
+            $statusLabel = "";
+        }
     }
-}
- elseif ($session_user_type === "Seller") {
-    if ((int)$rw['is_draft'] === 1) {
-        $statusLabel = "Draft";
-    } elseif ($rw['product_status'] === "Active" || $rw['product_status'] === "Post Viewed") {
-        $statusLabel = "Open";
-    } elseif ($rw['product_status'] === "Completed" || $rw['product_status'] === "Withdraw") {
-        $statusLabel = "Closed";
-    
-    } elseif (in_array($rw['product_status'], ['Under Negotiation', 'Pickup Scheduled', 'Offer Accepted'])) {
-        $statusLabel = "In Process";
-    } elseif ($rw['product_status'] === "Third-Party Transaction") {
-        $statusLabel = "Not Sold";
-    } else {
-        $statusLabel = "";
-    }
-    
-}
 
 
 
 
 
-echo '<div class="list-item d-flex gap-3">
+    echo '<div class="list-item d-flex gap-3" ' .
+        ($session_user_type === 'Buyer' ? 'onclick="userViewSellerDetails(event, \'' . $rw['product_id'] . '\')"' : '') .
+        '>
         <a href="./product-details/' . $rw['product_id'] . '" class="product-img rounded-0">
             <img src="upload_content/upload_img/product_img/' . $file_data . '" alt="product_img" class="flex-shrink-0 lazyload">
         </a>
@@ -201,21 +192,21 @@ echo '<div class="list-item d-flex gap-3">
         <div class="flex-grow-1">
             <div class="d-flex justify-content-between align-items-center">
                 <a class="product-name h5 mb-1" href="./product-details/' . $rw['product_id'] . '">
-                    <h3 class="h5 mb-1">' . $rw['product_name'] . '</h3>
+                    <h3 class="h5 mb-1">' . htmlspecialchars($rw['product_name']) . '</h3>
                 </a>
                 <span class="fw-bold mb-0" style="text-align: end !important;">
                     <span class="status">' . $statusLabel . '</span><br><br>
                     ₹' . $rw['sale_price'] . '
                 </span>
             </div>
-            <span class="text-secondary">' . $rw['category_name'] . '</span><br>'
-            . (
-                (float)$rw['quantity_kg'] > 0
-                    ? '<span class="text-secondary">' . htmlspecialchars($rw['quantity_kg']) . ' (kg)</span>'
-                    : '<span class="text-secondary">' . htmlspecialchars($rw['quantity']) . (!empty($rw['quantity_unit']) ? ' (' . htmlspecialchars($rw['quantity_unit']) . ')' : '') . '</span>'
-            ) .
-        '</div>
+            <span class="text-secondary">' . htmlspecialchars($rw['category_name']) . '</span><br>' .
+        (
+            (float)$rw['quantity_kg'] > 0
+            ? '<span class="text-secondary">' . htmlspecialchars($rw['quantity_kg']) . ' (kg)</span>'
+            : '<span class="text-secondary">' . htmlspecialchars($rw['quantity']) .
+            (!empty($rw['quantity_unit']) ? ' (' . htmlspecialchars($rw['quantity_unit']) . ')' : '') .
+            '</span>'
+        ) . '
+        </div>
     </div>';
-
 }
-?>

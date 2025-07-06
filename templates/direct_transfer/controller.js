@@ -167,8 +167,8 @@ function getAllProductIds() {
     })
     .get();
 
- 
-  const categoryId = $("#category_id").val() || $(".category_id").text(); 
+
+  const categoryId = $("#category_id").val() || $(".category_id").text();
 
   const data = new FormData();
   data.append("sendDataIDs", JSON.stringify({ product_id: productIds }));
@@ -182,7 +182,7 @@ function getAllProductIds() {
     if (xhr.readyState === 4 && xhr.status === 200) {
       console.log("Server Response:", xhr.responseText);
 
-    
+
       try {
         const response = JSON.parse(xhr.responseText);
         console.log("Server Response:", response);
@@ -395,7 +395,7 @@ function DirectButton() {
     return; // Exit function early
   }
 
-  
+
   const selectedValues = $(".product_id:checked").map(function () {
     return $(this).val();
   }).get();
@@ -726,34 +726,34 @@ function save_details() {
   }
   if (!_("#description").checkValidity()) {
     toastr["warning"](
-        "Description: " + _("#description").validationMessage,
-        "WARNING"
+      "Description: " + _("#description").validationMessage,
+      "WARNING"
     );
     showInputAlert(
-        "description",
-        "warning",
-        _("#description").validationMessage
+      "description",
+      "warning",
+      _("#description").validationMessage
     );
     _("#description").focus();
     save_no = 0;
     return false;
-}
+  }
 
 
-if (!/^[a-zA-Z0-9,\.\s]+$/.test(_("#description").value)) {
+  if (!/^[a-zA-Z0-9,\.\s]+$/.test(_("#description").value)) {
     toastr["warning"](
-        "Description : " + "Description should only contain letters, numbers, spaces, commas, and dots",
-        "WARNING"
+      "Description : " + "Description should only contain letters, numbers, spaces, commas, and dots",
+      "WARNING"
     );
     showInputAlert(
-        "description",
-        "warning",
-        "Description should only contain letters, numbers, spaces, commas, and dots"
+      "description",
+      "warning",
+      "Description should only contain letters, numbers, spaces, commas, and dots"
     );
     _("#description").focus();
     save_no = 0;
     return false;
-}
+  }
 
 
   product_img_array = [];

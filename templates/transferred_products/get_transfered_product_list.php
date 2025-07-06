@@ -69,52 +69,47 @@ $totalItems = mysqli_num_rows($result);
 <?php } else { ?>
     <?php while ($row = mysqli_fetch_assoc($result)) { ?>
         <!-- Card for each product -->
-        <div class="card"
-            style="
-        border: none; 
-        border-radius: 15px; 
-        overflow: hidden; 
-        position: relative; 
-        max-width: 100px; 
-    ">
-            <!-- Product Image -->
-            <div class="product-image"
-                data-bs-toggle="modal"
-                data-bs-target="#productModal<?php echo $row['product_id']; ?>"
+        <div class="col-6 col-sm-4 col-md-3 col-lg-2"> <!-- Wrap this around every card -->
+            <div class="card shadow-sm"
                 style="
-            height: 130px; /* Adjusted height */
-            background-image: url('upload_content/upload_img/product_img/<?php echo $row['product_image'] ?: 'no_image.png'; ?>'); 
-            background-repeat: no-repeat; 
-            background-position: center; 
-            background-size: cover; 
-            border-radius: 15px 15px 0 0;
-            background-color: #e0e0e0;
-        ">
-            </div>
-            <!-- Product Details -->
-            <div class="card-body text-center"
-                style="
-            background-color: #2f415d; 
-            color: #fff; 
-            padding: 5px; 
-            position: absolute; 
-            bottom: 0; 
-            left: 5%; 
-            width: 90%; 
-            border-radius: 0 0 15px 15px;
-        ">
-                <p class="card-text text-truncate"
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        "
+                onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.1)'"
+                onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.05)'">
+                <!-- Product Image -->
+                <div class="product-image"
+                    data-bs-toggle="modal"
+                    data-bs-target="#productModal<?php echo $row['product_id']; ?>"
                     style="
-                font-size: 12px; 
-                font-weight: 500; 
-                margin: 0; 
-                line-height: 1.4;
+                height: 130px;
+                background-image: url('upload_content/upload_img/product_img/<?php echo $row['product_image'] ?: 'no_image.png'; ?>');
+                background-repeat: no-repeat;
+                background-position: center;
+                background-size: cover;
+                border-radius: 15px 15px 0 0;
+                background-color: #e0e0e0;
             ">
-                    <?php echo htmlspecialchars($row['category_name']); ?>
-                </p>
+                </div>
+
+                <!-- Product Details -->
+                <div class="card-body text-center"
+                    style="
+                background-color: #2f415d;
+                color: #fff;
+                padding: 5px 8px;
+                border-radius: 0 0 15px 15px;
+        ">
+                    <p class="card-text text-truncate"
+                        style="font-size: 12px; font-weight: 500; margin: 0;">
+                        <?php echo htmlspecialchars($row['category_name']); ?>
+                    </p>
+                </div>
             </div>
         </div>
-
 
 
 

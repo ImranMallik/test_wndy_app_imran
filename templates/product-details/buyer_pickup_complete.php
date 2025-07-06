@@ -31,31 +31,31 @@ if ($login == "No") {
 
     if ($execute == 1) {
 
-// Fetch existing deal_status_history
-$history_res_buyer = mysqli_query($con, "SELECT deal_status_history FROM tbl_user_product_view WHERE product_id = '$product_id' AND buyer_id = '$session_user_code'");
-$history_row_buyer = mysqli_fetch_assoc($history_res_buyer);
+        // Fetch existing deal_status_history
+        $history_res_buyer = mysqli_query($con, "SELECT deal_status_history FROM tbl_user_product_view WHERE product_id = '$product_id' AND buyer_id = '$session_user_code'");
+        $history_row_buyer = mysqli_fetch_assoc($history_res_buyer);
 
-$current_history_buyer = [];
-if (!empty($history_row_buyer['deal_status_history'])) {
-    $current_history_buyer = json_decode($history_row_buyer['deal_status_history'], true);
-    if (!is_array($current_history_buyer)) {
-        $current_history_buyer = [];  // Handle malformed history
-    }
-}
+        $current_history_buyer = [];
+        if (!empty($history_row_buyer['deal_status_history'])) {
+            $current_history_buyer = json_decode($history_row_buyer['deal_status_history'], true);
+            if (!is_array($current_history_buyer)) {
+                $current_history_buyer = [];  // Handle malformed history
+            }
+        }
 
-// Append new status to the history
-$current_history_buyer[] = [
-    'status' => 'Completed',
-    'time' => $timestamp
-];
+        // Append new status to the history
+        $current_history_buyer[] = [
+            'status' => 'Completed',
+            'time' => $timestamp
+        ];
 
-// Encode the updated history back to JSON
-$new_json = mysqli_real_escape_string($con, json_encode($current_history_buyer));
+        // Encode the updated history back to JSON
+        $new_json = mysqli_real_escape_string($con, json_encode($current_history_buyer));
 
-// Update the deal_status_history in tbl_user_product_view without removing previous data
-mysqli_query($con, "UPDATE tbl_user_product_view SET 
+        // Update the deal_status_history in tbl_user_product_view without removing previous data
+        mysqli_query($con, "UPDATE tbl_user_product_view SET 
     deal_status = 'Completed',
-    complete_date = '" . $complete_date . "',
+    duration_close_time='" . $complete_date . "',
     deal_status_history = '" . $new_json . "',
     entry_timestamp = '$timestamp'
     WHERE view_id = '$view_id'");
@@ -113,7 +113,7 @@ $rating_buyer_id = $buyerData['buyer_id'];
 $response[] = [
     'status' => $status,
     'status_text' => $status_text,
-        'rating_buyer_id' => $rating_buyer_id,
+    'rating_buyer_id' => $rating_buyer_id,
     'rating_view_id' => $view_id
 
 ];

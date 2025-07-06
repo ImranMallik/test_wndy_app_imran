@@ -66,7 +66,7 @@ function viewConfirmation(params) {
 // }
 function checkCredits() {
   let user_id = $("#user_id").val();
-//   alert(user_id);
+  //   alert(user_id);
   $.ajax({
     url: "templates/product-details/check_credits.php",
     type: "POST",
@@ -117,6 +117,7 @@ function userViewSellerDetails(params) {
       baseUrl: baseUrl,
     };
     data.append("sendData", JSON.stringify(sendData));
+    console.log(sendData);
 
     let viewXhr = new XMLHttpRequest();
     viewXhr.onreadystatechange = function () {
@@ -163,10 +164,14 @@ function userViewSellerDetails(params) {
         }
       }
     };
-    viewXhr.open("POST", "templates/product-details/buyer_view_product.php", true);
+    // viewXhr.open("POST", "templates/product-details/buyer_view_product.php", true);
     viewXhr.send(data);
   }
 }
+
+// function userViewSellerDetails() {
+//     alert();
+// }
 
 
 function sellerNegotiate(view_id) {
@@ -659,8 +664,8 @@ function ratingStar(starNum) {
 // Buyer ----------------
 // Buyer send Negotiation request
 function buyerSendRequest(e) {
-     e.preventDefault();
-    // alert();
+  e.preventDefault();
+  // alert();
   let execute = 1;
   clearInputAleart();
 
@@ -702,7 +707,7 @@ function buyerSendRequest(e) {
       negotiation_amount: _("#negotiation_amount").value,
       mssg: _("#mssg").value,
     };
-    
+
     // console.log(data);
     data.append("sendData", JSON.stringify(sendData));
 
@@ -925,8 +930,8 @@ function buyerPickupComplete(view_id) {
             }
             else {
               toastr["success"](status_text, "SUCCESS!!");
-                 document.getElementById("rating_buyer_id").value = response[0].rating_buyer_id;
-                document.getElementById("rating_view_id").value = response[0].rating_view_id;
+              document.getElementById("rating_buyer_id").value = response[0].rating_buyer_id;
+              document.getElementById("rating_view_id").value = response[0].rating_view_id;
               setTimeout(function () {
                 window.location.reload();
               }, 1500);
@@ -1015,64 +1020,64 @@ function buyerSaveRatings() {
 
 // Close modal
 $('input[name="closeReason"]').on('change', function () {
-    if ($('#otherReason').is(':checked')) {
-        $('#otherReasonText').show();
-    } else {
-        $('#otherReasonText').hide();
-    }
+  if ($('#otherReason').is(':checked')) {
+    $('#otherReasonText').show();
+  } else {
+    $('#otherReasonText').hide();
+  }
 });
 
 
 // Close product
 function colse_product() {
-    const modalDiv = $('[data-product-id]');
-    const product_id = modalDiv.data('product-id');
-    const selectedReason = $('input[name="closeReason"]:checked');
+  const modalDiv = $('[data-product-id]');
+  const product_id = modalDiv.data('product-id');
+  const selectedReason = $('input[name="closeReason"]:checked');
 
-    if (selectedReason.length === 0) {
-        toastr["warning"]("Please select a reason.", "Warning");
-        return;
+  if (selectedReason.length === 0) {
+    toastr["warning"]("Please select a reason.", "Warning");
+    return;
+  }
+
+  let reason = selectedReason.val();
+
+  if (reason === "Other") {
+    const otherReason = $('#otherReasonInput').val().trim();
+    if (!otherReason) {
+      toastr["warning"]("Please specify your reason.", "Warning");
+      return;
     }
+    reason = otherReason;
+  }
 
-    let reason = selectedReason.val();
-
-    if (reason === "Other") {
-        const otherReason = $('#otherReasonInput').val().trim();
-        if (!otherReason) {
-            toastr["warning"]("Please specify your reason.", "Warning");
-            return;
+  // ✅ Use standard key-value object instead of FormData for better compatibility
+  $.ajax({
+    url: "templates/product-details/close_product.php",
+    method: "POST",
+    data: {
+      product_id: product_id,
+      reason: reason
+    },
+    success: function (response) {
+      try {
+        const res = typeof response === 'object' ? response : JSON.parse(response);
+        if (res[0].status === "success") {
+          toastr["success"](res[0].message, "Success");
+          setTimeout(() => location.reload(), 1000);
+        } else {
+          toastr["error"](res[0].message || "Something went wrong.", "Error");
         }
-        reason = otherReason;
+      } catch (e) {
+        console.error("JSON Parse Error", e);
+        toastr["error"]("Server error occurred", "Error");
+      }
+    },
+    error: function (xhr, status, error) {
+      console.error("AJAX Error:", status, error);
+      console.log("Server Response:", xhr.responseText); // Debug if needed
+      toastr["error"]("Failed to communicate with server", "Error");
     }
-
-    // ✅ Use standard key-value object instead of FormData for better compatibility
-    $.ajax({
-        url: "templates/product-details/close_product.php",
-        method: "POST",
-        data: {
-            product_id: product_id,
-            reason: reason
-        },
-        success: function (response) {
-            try {
-                const res = typeof response === 'object' ? response : JSON.parse(response);
-                if (res[0].status === "success") {
-                    toastr["success"](res[0].message, "Success");
-                    setTimeout(() => location.reload(), 1000);
-                } else {
-                    toastr["error"](res[0].message || "Something went wrong.", "Error");
-                }
-            } catch (e) {
-                console.error("JSON Parse Error", e);
-                toastr["error"]("Server error occurred", "Error");
-            }
-        },
-        error: function (xhr, status, error) {
-            console.error("AJAX Error:", status, error);
-            console.log("Server Response:", xhr.responseText); // Debug if needed
-            toastr["error"]("Failed to communicate with server", "Error");
-        }
-    });
+  });
 }
 
 

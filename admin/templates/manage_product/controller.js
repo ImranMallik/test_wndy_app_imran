@@ -12,15 +12,15 @@ $(document).ready(function () {
 
 	statusField.addEventListener("change", function () {
 		const selectedValue = this.value;
-const showRemarkStatuses = [
-	"Active",
-	"Post Viewed",
-	"Under Negotiation",
-	"Offer Accepted",
-	"Pickup Scheduled",
-	"Completed",
-	"Third-Party Transaction"
-];
+		const showRemarkStatuses = [
+			"Active",
+			"Post Viewed",
+			"Under Negotiation",
+			"Offer Accepted",
+			"Pickup Scheduled",
+			"Completed",
+			"Third-Party Transaction"
+		];
 
 
 		if (showRemarkStatuses.includes(selectedValue)) {
@@ -51,7 +51,7 @@ function clear_input() {
 
 	_("#description").value = "";
 	_("#brand").value = "";
-// 	_("#quantity").value = "";
+	// 	_("#quantity").value = "";
 	_("#sale_price").value = "";
 	_("#product_status").value = "";
 	_("#active").value = "Yes";
@@ -129,37 +129,37 @@ function make_select2_ajx(id) {
 }
 
 function onStartDateChange() {
-    const startInput = document.getElementById('start_date');
-    const endInput = document.getElementById('end_date');
-    const toLabel = document.getElementById('to_label');
+	const startInput = document.getElementById('start_date');
+	const endInput = document.getElementById('end_date');
+	const toLabel = document.getElementById('to_label');
 
-    if (startInput.value) {
-        toLabel.style.display = 'inline';
-        endInput.style.display = 'inline';
-        endInput.min = startInput.value; 
-    } else {
-        toLabel.style.display = 'none';
-        endInput.style.display = 'none';
-        endInput.value = '';
-        document.getElementById('custom_date_range').value = '';
-    }
+	if (startInput.value) {
+		toLabel.style.display = 'inline';
+		endInput.style.display = 'inline';
+		endInput.min = startInput.value;
+	} else {
+		toLabel.style.display = 'none';
+		endInput.style.display = 'none';
+		endInput.value = '';
+		document.getElementById('custom_date_range').value = '';
+	}
 }
 
 function onEndDateChange() {
-    const start = document.getElementById('start_date').value;
-    const end = document.getElementById('end_date').value;
-    const hiddenField = document.getElementById('custom_date_range');
+	const start = document.getElementById('start_date').value;
+	const end = document.getElementById('end_date').value;
+	const hiddenField = document.getElementById('custom_date_range');
 
-    if (!start || !end) return;
+	if (!start || !end) return;
 
-    if (start > end) {
-        toastr.warning("End date cannot be before start date", "Date Range Error");
-        hiddenField.value = '';
-        return;
-    }
+	if (start > end) {
+		toastr.warning("End date cannot be before start date", "Date Range Error");
+		hiddenField.value = '';
+		return;
+	}
 
-    hiddenField.value = `${start} to ${end}`;
-    reload_table();
+	hiddenField.value = `${start} to ${end}`;
+	reload_table();
 }
 
 
@@ -172,12 +172,12 @@ function show_list() {
 			'ajax': {
 				'url': 'templates/manage_product/list.php',
 				'data': function (d) {
-					  const range = $('#custom_date_range').val();
-                    if (range.includes(' to ')) {
-                        const [from, to] = range.split(' to ');
-                        d.from_date = from.trim();
-                        d.to_date = to.trim();
-                    }
+					const range = $('#custom_date_range').val();
+					if (range.includes(' to ')) {
+						const [from, to] = range.split(' to ');
+						d.from_date = from.trim();
+						d.to_date = to.trim();
+					}
 				},
 			},
 			'drawCallback': function (data) {
@@ -189,29 +189,30 @@ function show_list() {
 				{ data: 'entry_timestamp' },
 				{ data: 'category_name' },
 				{ data: 'name' },
+				{ data: 'seller_phone_num' },
 				{ data: 'address_line_1' },
+				{ data: 'pincode' },
 				{ data: 'product_name' },
-				{data:'product_image'},
-				{data:'pincode'},
+				{ data: 'product_image' },
 				{ data: 'description' },
 				{ data: 'brand' },
 				{ data: 'quantity_kg' },
 				{ data: 'quantity_pcs' },
 				{ data: 'sale_price' },
 				{ data: 'product_status' },
-				{data:'closure_remark'},
-				{data:'withdrawal_date'},
-				{data:'purchased_price'},
-				{data:'no_of_post'},
-				{data:'duration_days'},
-				{data:'reason'},
+				{ data: 'no_of_post' },
+				{ data: 'closure_remark' },
+				{ data: 'withdrawal_date' },
+				{ data: 'purchased_price' },
+				{ data: 'duration_days' },
+
 				{ data: 'active' },
 				{ data: 'action' }
 			],
 			dom: 'lBfrtip',
 			lengthMenu: [
-				[50, 100, 250, 500,1000, -1],
-				[50, 100, 250, 500,1000, 'All']
+				[50, 100, 250, 500, 1000, -1],
+				[50, 100, 250, 500, 1000, 'All']
 			],
 			buttons: [
 				{ extend: 'print', className: 'btn dark btn-outline' },
@@ -261,13 +262,13 @@ function save_details() {
 		save_no = 0;
 		return false;
 	}
-	if (!_("#seller_num").checkValidity()) {
-		toastr['warning']("Seller Number : " + _("#seller_num").validationMessage, "WARNING");
-		showInputAlert('seller_num', 'warning', _("#seller_num").validationMessage);
-		_("#seller_num").focus();
-		save_no = 0;
-		return false;
-	}
+	// 	if (!_("#seller_num").checkValidity()) {
+	// 		toastr['warning']("Seller Number : " + _("#seller_num").validationMessage, "WARNING");
+	// 		showInputAlert('seller_num', 'warning', _("#seller_num").validationMessage);
+	// 		_("#seller_num").focus();
+	// 		save_no = 0;
+	// 		return false;
+	// 	}
 	if (!_("#address_id").checkValidity()) {
 		toastr['warning']("Address ID: " + _("#address_id").validationMessage, "WARNING");
 		showInputAlert('address_id', 'warning', _("#address_id").validationMessage);
@@ -296,13 +297,13 @@ function save_details() {
 		save_no = 0;
 		return false;
 	}
-	if (!_("#quantity_kg").checkValidity()) {
-		toastr['warning']("Quantity : " + _("#quantity").validationMessage, "WARNING");
-		showInputAlert('quantity', 'warning', _("#quantity").validationMessage);
-		_("#quantity_kg").focus();
-		save_no = 0;
-		return false;
-	}
+	// 	if (!_("#quantity_kg").checkValidity()) {
+	// 		toastr['warning']("Quantity : " + _("#quantity").validationMessage, "WARNING");
+	// 		showInputAlert('quantity', 'warning', _("#quantity").validationMessage);
+	// 		_("#quantity_kg").focus();
+	// 		save_no = 0;
+	// 		return false;
+	// 	}
 	if (!_("#product_status").checkValidity()) {
 		toastr['warning']("Product Status : " + _("#product_status").validationMessage, "WARNING");
 		showInputAlert('product_status', 'warning', _("#product_status").validationMessage);
@@ -343,14 +344,14 @@ function save_details() {
 		const sendData = {
 			category_id: _("#category_id").value,
 			user_id: _("#user_id").value,
-			ph_num: _("#seller_num").value,
+			// 			ph_num: _("#seller_num").value,
 			address_id: _("#address_id").value,
 			product_id: _("#product_id").value,
 			product_name: _("#product_name").value,
 			description: _("#description").value,
 			brand: _("#brand").value,
 			quantity_pcs: _("#quantity_pcs").value,
-            quantity_kg: _("#quantity_kg").value,
+			quantity_kg: _("#quantity_kg").value,
 			sale_price: _("#sale_price").value,
 			product_status: _("#product_status").value,
 			whithdrawl_reson: _("#whithdrawl_reson").value,
@@ -428,13 +429,13 @@ function update_data(product_id) {
 
 					_("#user_id").innerHTML = `<option value="` + response['user_id'] + `" selected>` + response['name'] + `</option>`;
 
-					_("#seller_num").innerHTML = `<option value="` + response['user_id'] + `" selected>` + response['ph_num'] + `</option>`;
+					// 	_("#seller_num").innerHTML = `<option value="` + response['user_id'] + `" selected>` + response['ph_num'] + `</option>`;
 
 					_("#sale_price").value = response["sale_price"];
 					_("#description").value = response["description"];
 					_("#brand").value = response["brand"];
 					_("#quantity_kg").value = response["quantity_kg"];
-                    _("#quantity_pcs").value = response["quantity_pcs"];
+					_("#quantity_pcs").value = response["quantity_pcs"];
 
 					_("#product_status").value = response['product_status'];
 					_("#whithdrawl_reson").value = response['close_reason'];
@@ -445,19 +446,19 @@ function update_data(product_id) {
 
 					let imgElement = _(".image-input-wrapper img.product_image_1");
 					let productImgPath = "../upload_content/upload_img/product_img/" + response["file_name"];
-					
+
 					imgElement.src = productImgPath;
 					imgElement.setAttribute("data-blank-image", productImgPath);
-					
-						const showRemarkStatuses = [
-	"Active",
-	"Post Viewed",
-	"Under Negotiation",
-	"Offer Accepted",
-	"Pickup Scheduled",
-	"Completed",
-	"Third-Party Transaction"
-];
+
+					const showRemarkStatuses = [
+						"Active",
+						"Post Viewed",
+						"Under Negotiation",
+						"Offer Accepted",
+						"Pickup Scheduled",
+						"Completed",
+						"Third-Party Transaction"
+					];
 
 					const closureRemarkContainer = _("#closure_remark_container");
 					const closureRemarkInput = _("#closure_remark");

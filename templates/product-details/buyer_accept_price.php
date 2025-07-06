@@ -41,33 +41,33 @@ if ($login == "No") {
             $purchased_price = $data['negotiation_amount'];
         }
 
-$history_res_buyer = mysqli_query($con, "
+        $history_res_buyer = mysqli_query($con, "
     SELECT deal_status_history 
     FROM tbl_user_product_view 
     WHERE product_id = '$product_id' AND buyer_id = '$session_user_code'
 ");
-$history_row_buyer = mysqli_fetch_assoc($history_res_buyer);
+        $history_row_buyer = mysqli_fetch_assoc($history_res_buyer);
 
-// Decode existing JSON (if any)
-$current_history_buyer = [];
-if (!empty($history_row_buyer['deal_status_history'])) {
-    $current_history_buyer = json_decode($history_row_buyer['deal_status_history'], true);
-    if (!is_array($current_history_buyer)) {
-        $current_history_buyer = []; // fallback if malformed
-    }
-}
+        // Decode existing JSON (if any)
+        $current_history_buyer = [];
+        if (!empty($history_row_buyer['deal_status_history'])) {
+            $current_history_buyer = json_decode($history_row_buyer['deal_status_history'], true);
+            if (!is_array($current_history_buyer)) {
+                $current_history_buyer = []; // fallback if malformed
+            }
+        }
 
-// Append new deal status
-$current_history_buyer[] = [
-    'status' => 'Offer Accepted',
-    'time' => $timestamp
-];
+        // Append new deal status
+        $current_history_buyer[] = [
+            'status' => 'Offer Accepted',
+            'time' => $timestamp
+        ];
 
-// Encode JSON safely
-$new_json_buyer = mysqli_real_escape_string($con, json_encode($current_history_buyer));
+        // Encode JSON safely
+        $new_json_buyer = mysqli_real_escape_string($con, json_encode($current_history_buyer));
 
-// ✅ Corrected SQL without extra comma
-mysqli_query($con, "
+        // ✅ Corrected SQL without extra comma
+        mysqli_query($con, "
     UPDATE tbl_user_product_view SET 
         deal_status = 'Offer Accepted',
         negotiation_amount = '$purchased_price',
@@ -76,36 +76,36 @@ mysqli_query($con, "
     WHERE buyer_id = '$session_user_code' AND product_id = '$product_id'
 ");
 
-         //=========================== INSERT IN product_status_update_tbl TABLE =======================================
-            // mysqli_query($con, "INSERT INTO product_status_update_tbl (
-            // buyer_id,
-            // product_id,
-            // product_update_status
-            // ) VALUES (
-            // '" . $session_user_code . "',
-            // '" . $product_id . "',
-            // 'Offer Accepted'
-            //  )");
+        //=========================== INSERT IN product_status_update_tbl TABLE =======================================
+        // mysqli_query($con, "INSERT INTO product_status_update_tbl (
+        // buyer_id,
+        // product_id,
+        // product_update_status
+        // ) VALUES (
+        // '" . $session_user_code . "',
+        // '" . $product_id . "',
+        // 'Offer Accepted'
+        //  )");
 
-                 $history_res = mysqli_query($con, "SELECT product_status_history FROM tbl_product_master WHERE product_id = '$product_id'");
-     $history_row = mysqli_fetch_assoc($history_res);
+        $history_res = mysqli_query($con, "SELECT product_status_history FROM tbl_product_master WHERE product_id = '$product_id'");
+        $history_row = mysqli_fetch_assoc($history_res);
 
-// Decode existing JSON (if any)
-     $current_history = [];
-     if (!empty($history_row['product_status_history'])) {
-     $current_history = json_decode($history_row['product_status_history'], true);
-     if (!is_array($current_history)) {
-        $current_history = []; // fallback if malformed
-     }
-     }
+        // Decode existing JSON (if any)
+        $current_history = [];
+        if (!empty($history_row['product_status_history'])) {
+            $current_history = json_decode($history_row['product_status_history'], true);
+            if (!is_array($current_history)) {
+                $current_history = []; // fallback if malformed
+            }
+        }
 
-                  $current_history[] = [
-                  'status' => 'Offer Accepted',
-                  'time' => $timestamp
-                   ];
+        $current_history[] = [
+            'status' => 'Offer Accepted',
+            'time' => $timestamp
+        ];
 
-               $new_json = mysqli_real_escape_string($con, json_encode($current_history));
-        
+        $new_json = mysqli_real_escape_string($con, json_encode($current_history));
+
 
         // Update product status
         mysqli_query($con, "UPDATE tbl_product_master SET 

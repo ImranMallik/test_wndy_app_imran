@@ -72,7 +72,6 @@ $totalItems = mysqli_num_rows($productData);
 
 <p class="toolbar-product-count" style="margin-top: 7px; ">
     <span>Showing: <?php echo $totalItems; ?> Purchased Items</span>
-    <!-- <span></span> -->
 
 </p>
 
@@ -85,14 +84,14 @@ $totalItems = mysqli_num_rows($productData);
     <p></p>
 <?php } else { ?>
     <div class="container-fluid">
-        <div class="row">
+        <div class="row g-3">
             <?php while ($row = mysqli_fetch_assoc($productData)) {
 
                 if ($row['transferred_status'] === 'Direct Transfer') {
                     continue;
                 }
             ?>
-                <div class="col-4 col-sm-12 col-md-4 mb-1">
+                <div class="col-4 col-sm-12 col-md-4  product-card-column">
                     <div class="product-box position-relative"
                         style="border-radius: 10px; background-color: #f9f9f9; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden; height:150px;">
                         <!-- Product Image as Background -->
@@ -101,7 +100,7 @@ $totalItems = mysqli_num_rows($productData);
                         </div>
                         <!-- Product Details with Blue Background -->
                         <div class="product-details text-center"
-                            style="background-color: #2f415d; color: #fff; padding: 7px; position: absolute; bottom: 0; width: 100%;">
+                            style="background-color: #845834; color: #fff; padding: 7px; position: absolute; bottom: 0; width: 100%;">
                             <div class="product-name" style="font-size: 14px; font-weight: 500; margin: 0; line-height: 1.5;">
                                 <?php
                                 echo !empty($row['product_name'])
@@ -133,7 +132,7 @@ $totalItems = mysqli_num_rows($productData);
 
         <!-- Next Button Div -->
         <div id="nextButtonDiv"
-            style="display: none; position: fixed; bottom: 80; left: 0; width: 100%; background-color: #cdd3dd; padding: 10px; box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); z-index: 99;">
+            style="display: none; position: fixed; bottom: 80px; left: 0; width: 100%; background-color: #cdd3dd; padding: 10px; box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); z-index: 99;">
             <!-- Create Post Button -->
             <button id="createPostButton" data-bs-toggle="modal" data-bs-target="#createPostModal"
                 style="position:relative; background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 10px 30px; cursor: pointer; margin-right: auto; float: left;">
@@ -141,15 +140,6 @@ $totalItems = mysqli_num_rows($productData);
                 <i class="fa fa-plus-circle"></i>
             </button>
 
-            <!-- Demand post button -->
-            <!-- 
-            <button id="demandPostButton" data-bs-toggle="modal" data-bs-target="#demandPostModal"
-                style="position:relative; background-color:rgb(238, 107, 0); color: white; border: none; border-radius: 5px; padding: 10px 30px; cursor: pointer; margin-right: auto; float: left;">
-                Demand Post
-                <i class="fa fa-plus-circle"></i>
-            </button> -->
-            <!-- Next Button -->
-             
             <button id="nextButton" onclick="nextAction()"
                 style="position:relative; background-color: #0571ae; color: white; border: none; border-radius: 5px; padding: 10px 30px; cursor: pointer; margin-left: auto; float: right;">
                 Next
@@ -215,42 +205,7 @@ $totalItems = mysqli_num_rows($productData);
                                     <label class="input_alert sale_price-inp-alert"></label>
                                 </div>
 
-                                <!-- Product Images
-                                    <div class="col-md-12">
-                                        <div class="input_group_div">
-                                            <div style="width: 226px;" class="input_group_heading">
-                                                <p class="title-text">Item Image <span class="text-danger">*</span></p>
-                                            </div>
-                                            <div style="overflow-x: auto; ">
-                                                <table class="table mb-6 p-4">
-                                                    <tbody class="BusinessImageDetailsEntryTbody">
-                                                        <tr class="tr_busimg tr_busimg_1 " style="align-content: center;">
-                                                            <td scope="row" class="busimg_sl_num" style="text-align: center;">
-                                                                1
-                                                            </td>
-                                                            <td scope="row">
-                                                                <div class="form-group product_img_div">
-                                                                    <input style="display: none;" type="file" onchange="loadFile(this,'preview_img_1'); checkFile(1);" id="busimg_1" class="form-control image" accept="<?php echo $inputAllowedImage; ?>" required />
-                                                                    <img style="max-width: 80px; height: 50px !important;" onclick="chooseImg(1,'gallery')" data-blank-image="../upload_content/upload_img/product_img/no_image.png" src="frontend_assets/img-icon/gallery.png" />
-                                                                    <img style="max-width: 80px; height: 50px !important;" onclick="chooseImg(1,'camera')" data-blank-image="../upload_content/upload_img/product_img/no_image.png" src="frontend_assets/img-icon/camera.png" />
-                                                                    <span class="img_name img_name_1">Choose Image</span> -->
-                                <!-- Placeholder for selected image preview -->
-                                <!-- <img id="preview_img_1" style="max-height: 80px; max-width: 100px; margin-left: 20px;" />
-                                                                </div>
-                                                                <label data-default-mssg="" class="input_alert busimg_1-inp-alert"></label>
-                                                            </td>
 
-                                                            <td class="busimgactionTd_1" style="text-align: center;">
-                                                                <button onclick="createBusimgRow(1)" class="btn btn-icon btn-primary btn-lg mt-2">
-                                                                    <i class="fa fa-plus"></i>
-                                                                </button>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div> -->
 
                                 <?php if ($product_data) { ?>
                                     <div class="scroll-container">
@@ -281,5 +236,4 @@ $totalItems = mysqli_num_rows($productData);
         </div>
     </div>
 
-    <!-- demand post modal starts here -->
     </div>

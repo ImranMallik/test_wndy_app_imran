@@ -44,7 +44,7 @@ if ($login == "No") {
         $execute = 1;
         $withdrawal_date = '';
         if (strtolower($product_status) == 'withdraw') {
-        $withdrawal_date = date('Y-m-d H:i:s'); 
+            $withdrawal_date = date('Y-m-d H:i:s');
         }
 
         // Check file extension
@@ -94,35 +94,38 @@ if ($login == "No") {
         if ($execute == 1) {
             if ($product_id == "") {
                 mysqli_query($con, "INSERT INTO tbl_product_master (
-                    product_name, 
-                    category_id,
-                    user_id, 
-                    sale_price, 
-                    description,
-                    brand,
-                    quantity_pcs,
-                    quantity_kg,
-                    product_status,
-                    close_reason,
-                    address_id,
-                    active,
-                    entry_user_code,
-                    entry_timestamp) VALUES (
-                        '$product_name',
-                        '$category_id',
-                        '$user_id',
-                        '$sale_price',
-                        '$description',
-                        '$brand',
-                         '$quantity_pcs',
-                         '$quantity_kg',
-                        '$product_status',
-                         '$whithdrawl_reson',
-                        '$address_id',
-                        '$active',
-                        " . ($closure_remark !== null ? "'$closure_remark'" : "NULL") . ",
-                        '$session_user_code',
-                        '$timestamp')");
+    product_name, 
+    category_id,
+    user_id, 
+    sale_price, 
+    description,
+    brand,
+    quantity_pcs,
+    quantity_kg,
+    product_status,
+    close_reason,
+    address_id,
+    active,
+    closure_remark,
+    entry_user_code,
+    entry_timestamp) VALUES (
+        '$product_name',
+        '$category_id',
+        '$user_id',
+        '$sale_price',
+        '$description',
+        '$brand',
+        '$quantity_pcs',
+        '$quantity_kg',
+        '$product_status',
+        '$whithdrawl_reson',
+        '$address_id',
+        '$active',
+        " . ($closure_remark !== null ? "'$closure_remark'" : "NULL") . ",
+        '$session_user_code',
+        '$timestamp'
+)");
+
                 $product_id = mysqli_insert_id($con);
 
                 mysqli_query($con, "INSERT INTO tbl_product_file (

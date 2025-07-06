@@ -16,7 +16,6 @@ if ($previous_product_img != "") {
 }
 
 mysqli_query($con, "DELETE FROM tbl_product_master WHERE product_id='" . $product_id . "' ");
-mysqli_query($con, "DELETE FROM tbl_user_product_view  WHERE product_id='" . $product_id . "' ");
 mysqli_query($con, "DELETE FROM tbl_product_file WHERE product_id='" . $product_id . "' ");
 
 $activity_details = "You Delete A Record From Manage Product Details";

@@ -30,28 +30,57 @@ if ($login == "No") {
             $execute = 0;
         }
     }
-
+    //Check for json(imran)
     if ($execute == 1) {
 
-           $history_res_buyer = mysqli_query($con, "SELECT 	deal_status_history FROM tbl_user_product_view WHERE product_id = '$product_id' AND buyer_id='$session_user_code' ");
-     $history_row_buyer = mysqli_fetch_assoc($history_res_buyer);
+        $history_res_buyer = mysqli_query($con, "SELECT deal_status_history, tbl_message_history, tbl_negotation_price_history FROM tbl_user_product_view WHERE product_id = '$product_id' AND buyer_id='$session_user_code'");
+        $history_row_buyer = mysqli_fetch_assoc($history_res_buyer);
 
-// Decode existing JSON (if any)
-     $current_history_buyer = [];
-     if (!empty($history_row_buyer['deal_status_history'])) {
-     $current_history_buyer = json_decode($history_row_buyer['deal_status_history'], true);
-     if (!is_array($current_history_buyer)) {
-        $current_history_buyer = []; // fallback if malformed
-     }
-     }
+        $user_type = $session_user_type;
 
-                $current_history_buyer[] = [
-                  'status' => 'Under Negotiation',
-                  'time' => $timestamp
-                   ];
+        // Decode existing JSON (if any)
+        $current_history_buyer = [];
+        if (!empty($history_row_buyer['deal_status_history'])) {
+            $current_history_buyer = json_decode($history_row_buyer['deal_status_history'], true);
+            if (!is_array($current_history_buyer)) {
+                $current_history_buyer = [];
+            }
+        }
 
-               $new_json_buyer = mysqli_real_escape_string($con, json_encode($current_history_buyer));
-        // UPDATE in tbl_user_product_view
+        $current_history_buyer[] = [
+            'status' => 'Under Negotiation',
+            'time' => $timestamp
+        ];
+
+        $new_json_buyer = mysqli_real_escape_string($con, json_encode($current_history_buyer));
+
+
+
+        // --- Message History ---
+        $msg_history = [];
+        if (!empty($history_row_buyer['tbl_message_history'])) {
+            $msg_history = json_decode($history_row_buyer['tbl_message_history'], true);
+            if (!is_array($msg_history)) $msg_history = [];
+        }
+        $msg_history[] = [
+            $user_type => $mssg,
+            'time' => $timestamp
+        ];
+        $new_msg_history = mysqli_real_escape_string($con, json_encode($msg_history));
+
+        // --- Negotiation Price History ---
+        $price_history = [];
+        if (!empty($history_row_buyer['tbl_negotation_price_history'])) {
+            $price_history = json_decode($history_row_buyer['tbl_negotation_price_history'], true);
+            if (!is_array($price_history)) $price_history = [];
+        }
+        $price_history[] = [
+            $user_type => $negotiation_amount,
+            'time' => $timestamp
+        ];
+        $new_price_history = mysqli_real_escape_string($con, json_encode($price_history));
+
+
         mysqli_query($con, "UPDATE tbl_user_product_view SET 
             deal_status='Under Negotiation',
             negotiation_amount='" . $negotiation_amount . "', 
@@ -59,44 +88,46 @@ if ($login == "No") {
             mssg='$mssg',
             negotiation_date='$date',
             deal_status_history ='$new_json_buyer',
+              tbl_message_history='$new_msg_history',
+        tbl_negotation_price_history='$new_price_history',
             entry_timestamp='$timestamp'
             WHERE buyer_id='$session_user_code' AND product_id='$product_id' ");
 
-         //=========================== INSERT IN product_status_update_tbl TABLE =======================================
-//     mysqli_query($con, "INSERT INTO product_status_update_tbl (
-//     buyer_id,
-//     product_id,
-//     product_update_status
-// ) VALUES (
-//     '" . $session_user_code . "',
-//     '" . $product_id . "',
-//     'Under Negotiation'
-// )");
+        //=========================== INSERT IN product_status_update_tbl TABLE =======================================
+        //     mysqli_query($con, "INSERT INTO product_status_update_tbl (
+        //     buyer_id,
+        //     product_id,
+        //     product_update_status
+        // ) VALUES (
+        //     '" . $session_user_code . "',
+        //     '" . $product_id . "',
+        //     'Under Negotiation'
+        // )");
 
-     $history_res = mysqli_query($con, "SELECT product_status_history FROM tbl_product_master WHERE product_id = '$product_id'");
-     $history_row = mysqli_fetch_assoc($history_res);
+        $history_res = mysqli_query($con, "SELECT product_status_history FROM tbl_product_master WHERE product_id = '$product_id'");
+        $history_row = mysqli_fetch_assoc($history_res);
 
-// Decode existing JSON (if any)
-     $current_history = [];
-     if (!empty($history_row['product_status_history'])) {
-     $current_history = json_decode($history_row['product_status_history'], true);
-     if (!is_array($current_history)) {
-        $current_history = []; // fallback if malformed
-     }
-     }
+        // Decode existing JSON (if any)
+        $current_history = [];
+        if (!empty($history_row['product_status_history'])) {
+            $current_history = json_decode($history_row['product_status_history'], true);
+            if (!is_array($current_history)) {
+                $current_history = []; // fallback if malformed
+            }
+        }
 
-                $current_history[] = [
-                  'status' => 'Under Negotiation',
-                  'time' => $timestamp
-                   ];
+        $current_history[] = [
+            'status' => 'Under Negotiation',
+            'time' => $timestamp
+        ];
 
-               $new_json = mysqli_real_escape_string($con, json_encode($current_history));
-                // Data Insert product_status_history this column 
-            //     mysqli_query($con, "INSERT INTO tbl_product_master product_status_history = '" . $new_json . "'
-            // WHERE product_id='$product_id'");
+        $new_json = mysqli_real_escape_string($con, json_encode($current_history));
+        // Data Insert product_status_history this column 
+        //     mysqli_query($con, "INSERT INTO tbl_product_master product_status_history = '" . $new_json . "'
+        // WHERE product_id='$product_id'");
 
         // UPDATE in tbl_product_master
-       mysqli_query($con, "UPDATE tbl_product_master SET 
+        mysqli_query($con, "UPDATE tbl_product_master SET 
     product_status = 'Under Negotiation',
     product_status_history = '$new_json'
     WHERE product_id = '$product_id'");
@@ -106,7 +137,7 @@ if ($login == "No") {
         // INSERT into message_history
 
 
-      mysqli_query($con, "
+        mysqli_query($con, "
     INSERT INTO message_history (
         user_id,
         product_id,

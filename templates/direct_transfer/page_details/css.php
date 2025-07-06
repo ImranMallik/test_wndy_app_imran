@@ -314,5 +314,67 @@
     .toolbar .view-mode .icon-mode.grid-2.active {
         width: 209px;
     }
+
+    .product-card-column {
+        padding: 10px;
+        /* Horizontal and vertical spacing between cards */
+    }
+
+    .product-box {
+        height: 170px;
+        /* Optional: uniform height */
+    }
+
+    .container-fluid {
+        padding-bottom: 120px;
+    }
+
+    /* Buyer Form Section Styling */
+    #buyer-listview-loadmore {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        /* box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.1); */
+    }
+
+    #buyer-listview-loadmore label {
+        font-weight: 600;
+        color: #2c3e50;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 6px;
+    }
+
+    #buyer-listview-loadmore label img {
+        margin-right: 8px;
+    }
+
+    /* Style only inputs and select inside the form */
+    #buyer-listview-loadmore input,
+    #buyer-listview-loadmore select {
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        padding: 10px 12px;
+        font-size: 14px;
+        width: 100%;
+        transition: border 0.3s ease;
+        background-color: #fff;
+    }
+
+    #buyer-listview-loadmore input:focus,
+    #buyer-listview-loadmore select:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 5px rgba(0, 123, 255, 0.2);
+    }
+
+    /* Error messages */
+    #buyer-listview-loadmore #doneErrorToast,
+    #buyer-listview-loadmore #quantityError,
+    #buyer-listview-loadmore #priceError {
+        color: #e74c3c;
+        font-size: 12px;
+        margin-top: 5px;
+    }
 </style>
-<!--end::Page Vendors Styles-->

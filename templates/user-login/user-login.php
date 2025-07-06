@@ -32,8 +32,7 @@ $user_data = mysqli_fetch_assoc($user_dataget);
 
                         <div class="form-group">
                             <label for="phone">Phone Number</label>
-                            <input  type="text" id="ph_num" placeholder="xxxxx-xxxxx" 
-                            >
+                            <input type="text" id="ph_num" placeholder="xxxxx-xxxxx">
                         </div>
                         <button type="button" onclick="checkPhoneNumber()" id="sendOTPButton">Request OTP</button>
                     </div>
@@ -79,7 +78,7 @@ $user_data = mysqli_fetch_assoc($user_dataget);
 
                                             <label data-default-mssg="" class="input_alert otp-inp-alert"></label>
 
- <button id="SubmitOTP" name="SubmitOTP" class="btn btn-primary button-login w-100 mb-4" onclick="verifyOtp()">NEXT</button>
+                                            <button id="SubmitOTP" name="SubmitOTP" class="btn btn-primary button-login w-100 mb-4" onclick="verifyOtp()">NEXT</button>
 
 
                                             <!-- Footer -->
@@ -177,27 +176,27 @@ $user_data = mysqli_fetch_assoc($user_dataget);
                             <h1 class="display-4 mb-5 user_heading">Who are you?</h1>
                             <div class="row justify-content-center">
                                 <!-- Seller Option -->
-<?php if (!$referral_code): ?>
-<div class="col-md-6 col-lg-5 text-center">
-    <button name="Become a Seller" style="background-color:transparent !important; border:none !important;">
-        <div class="role-card" data-user-type="Seller">
-            <img src="frontend_assets/img-icon/sellae_type.png?v=<?php echo $version; ?>"
-                alt="Garbage truck illustration" class="img-fluid">
-            <!-- <p>I want to sell scrap</p> -->
-        </div>
-    </button>
-</div>
-<?php endif; ?>
+                                <?php if (!$referral_code): ?>
+                                    <div class="col-md-6 col-lg-5 text-center">
+                                        <button name="Become a Seller" style="background-color:transparent !important; border:none !important;">
+                                            <div class="role-card" data-user-type="Seller">
+                                                <img src="frontend_assets/img-icon/sellae_type.png?v=<?php echo $version; ?>"
+                                                    alt="Garbage truck illustration" class="img-fluid">
+                                                <!-- <p>I want to sell scrap</p> -->
+                                            </div>
+                                        </button>
+                                    </div>
+                                <?php endif; ?>
 
 
 
                                 <div class="col-md-6 col-lg-5 text-center">
                                     <button name="Become a Buyer" style="background-color:transparent !important; border:none !important;">
-                                    <div class="role-card" data-user-type="Buyer">
-                                        <img src="frontend_assets/img-icon/saller_type_2.png?v=<?php echo $version; ?>"
-                                            alt="Electronic devices illustration" class="img-fluid">
+                                        <div class="role-card" data-user-type="Buyer">
+                                            <img src="frontend_assets/img-icon/saller_type_2.png?v=<?php echo $version; ?>"
+                                                alt="Electronic devices illustration" class="img-fluid">
 
-                                    </div>
+                                        </div>
                                     </button>
                                 </div>
                             </div>
@@ -274,7 +273,7 @@ $user_data = mysqli_fetch_assoc($user_dataget);
                                     data-type="individual">Individual</button>
                                 <button class="selection-button" value="Corporate"
                                     data-type="corporate">Corporate</button>
-                                <button class="next-button"disabled onclick="save_user_details()">NEXT</button>
+                                <button class="next-button" disabled onclick="save_user_details()">NEXT</button>
                             </div>
                         </div>
                     </div>

@@ -6,13 +6,13 @@ if ($view_permission == "Yes") {
 	## Read value
 	$draw = $_POST['draw'];
 	$row = $_POST['start'];
-	$rowperpage = $_POST['length']; 
-	$columnIndex = $_POST['order'][0]['column']; 
-	$columnName = $_POST['columns'][$columnIndex]['data']; 
-	$columnSortOrder = $_POST['order'][0]['dir']; 
-	$searchValue = mysqli_real_escape_string($con, $_POST['search']['value']); 
-		$from_date = mysqli_real_escape_string($con, $_POST['from_date'] ?? '');
-$to_date = mysqli_real_escape_string($con, $_POST['to_date'] ?? '');
+	$rowperpage = $_POST['length'];
+	$columnIndex = $_POST['order'][0]['column'];
+	$columnName = $_POST['columns'][$columnIndex]['data'];
+	$columnSortOrder = $_POST['order'][0]['dir'];
+	$searchValue = mysqli_real_escape_string($con, $_POST['search']['value']);
+	$from_date = mysqli_real_escape_string($con, $_POST['from_date'] ?? '');
+	$to_date = mysqli_real_escape_string($con, $_POST['to_date'] ?? '');
 
 	## Search 
 	$searchQuery = " ";
@@ -31,11 +31,12 @@ $to_date = mysqli_real_escape_string($con, $_POST['to_date'] ?? '');
 		tbl_product_master.entry_timestamp like'%" . $searchValue . "%' ) ";
 	}
 
-$query = "SELECT
+	$query = "SELECT
 	tbl_category_master.category_name, 
 	tbl_user_master.name,
 	tbl_address_master.address_line_1,
 	tbl_address_master.pincode,
+	tbl_user_master.ph_num,
 	tbl_product_master.product_id,	
 	tbl_product_master.product_name, 
 	tbl_product_master.description, 
@@ -53,24 +54,28 @@ $query = "SELECT
 	tbl_product_master.close_reason,
 	tbl_product_master.entry_timestamp,
 	post_counts.no_of_post,
-(SELECT COALESCE(
-        CASE 
-            WHEN purchased_price IS NOT NULL AND purchased_price != '' AND purchased_price != '0' THEN purchased_price 
-            ELSE NULL 
-        END, 
-        '') 
-     FROM tbl_user_product_view 
-     WHERE product_id = tbl_product_master.product_id 
-     ORDER BY entry_timestamp DESC LIMIT 1) AS purchased_price 
-
+	(
+		SELECT COALESCE(
+			CASE 
+				WHEN purchased_price IS NOT NULL AND purchased_price != '' AND purchased_price != '0' 
+				THEN purchased_price 
+				ELSE NULL 
+			END, 
+			''
+		) 
+		FROM tbl_user_product_view 
+		WHERE product_id = tbl_product_master.product_id 
+		ORDER BY entry_timestamp DESC 
+		LIMIT 1
+	) AS purchased_price
 
 FROM tbl_product_master
-LEFT JOIN tbl_category_master ON tbl_category_master.category_id = tbl_product_master.category_id 
-LEFT JOIN tbl_user_product_view ON tbl_user_product_view.product_id = tbl_product_master.product_id 
-LEFT JOIN tbl_user_master ON tbl_user_master.user_id = tbl_product_master.user_id
-LEFT JOIN tbl_address_master ON tbl_address_master.address_id = tbl_product_master.address_id 
-
--- ✅ Move this JOIN above WHERE
+LEFT JOIN tbl_category_master 
+	ON tbl_category_master.category_id = tbl_product_master.category_id 
+LEFT JOIN tbl_user_master 
+	ON tbl_user_master.user_id = tbl_product_master.user_id
+LEFT JOIN tbl_address_master 
+	ON tbl_address_master.address_id = tbl_product_master.address_id 
 LEFT JOIN (
 	SELECT pf.product_id, pf.file_name
 	FROM tbl_product_file pf
@@ -79,25 +84,29 @@ LEFT JOIN (
 		FROM tbl_product_file
 		WHERE file_type = 'Photo' AND active = 'Yes'
 		GROUP BY product_id
-	) first_photo ON pf.product_id = first_photo.product_id AND pf.product_file_id = first_photo.min_id
-) AS tbl_product_file ON tbl_product_file.product_id = tbl_product_master.product_id
+	) first_photo 
+	ON pf.product_id = first_photo.product_id 
+	AND pf.product_file_id = first_photo.min_id
+) AS tbl_product_file 
+	ON tbl_product_file.product_id = tbl_product_master.product_id
 LEFT JOIN (
 	SELECT user_id, COUNT(*) AS no_of_post
 	FROM tbl_product_master
 	GROUP BY user_id
-) AS post_counts ON post_counts.user_id = tbl_product_master.user_id
+) AS post_counts 
+	ON post_counts.user_id = tbl_product_master.user_id
 
-WHERE tbl_user_master.user_type = 'Seller'
-";
+WHERE tbl_user_master.user_type = 'Seller'";
 
 
-if ($from_date && $to_date) {
-    $query .= " AND DATE(tbl_product_master.entry_timestamp) BETWEEN '$from_date' AND '$to_date'";
-} elseif ($from_date) {
-    $query .= " AND DATE(tbl_product_master.entry_timestamp) >= '$from_date'";
-} elseif ($to_date) {
-    $query .= " AND DATE(tbl_product_master.entry_timestamp) <= '$to_date'";
-}
+
+	if ($from_date && $to_date) {
+		$query .= " AND DATE(tbl_product_master.entry_timestamp) BETWEEN '$from_date' AND '$to_date'";
+	} elseif ($from_date) {
+		$query .= " AND DATE(tbl_product_master.entry_timestamp) >= '$from_date'";
+	} elseif ($to_date) {
+		$query .= " AND DATE(tbl_product_master.entry_timestamp) <= '$to_date'";
+	}
 
 
 
@@ -129,7 +138,7 @@ if ($from_date && $to_date) {
 			break;
 	}
 
-if ($rowperpage == -1) {
+	if ($rowperpage == -1) {
 		$empQuery = $query . $searchQuery . " " . $orderBy . " " . $columnSortOrder;
 	} else {
 		$empQuery = $query . $searchQuery . " " . $orderBy . " " . $columnSortOrder . " limit " . $row . "," . $rowperpage;
@@ -144,80 +153,80 @@ if ($rowperpage == -1) {
 			$active = '<span class="label font-weight-bold label-lg  label-light-success label-inline">Yes</span>';
 		}
 
-$product_status = '';
+		$product_status = '';
 
-if ($row['is_draft'] == 1) {
-    $product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #6c757d; color: white;">Draft Post</span>';
-} else {
-    if (!empty($row['close_reason'])) {
-        $product_status = '<span class="label font-weight-bold label-lg label-inline bg-danger" style="color: white;">Withdrawal</span>';
-    } else {
-        switch ($row['product_status']) {
-            case "Active":
-                $product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #FFD700; color: white;">Active</span>';
-                break;
-            case "Post Viewed":
-                $product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: grey; color: white;">Post Viewed</span>';
-                break;
-            case "Under Negotiation":
-                $product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: orange; color: white;">Under Negotiation</span>';
-                break;
-            case "Offer Accepted":
-                $product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #006400; color: white;">Offer Accepted</span>';
-                break;
-            case "Pickup Scheduled":
-                $product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: blue; color: white;">Pickup Scheduled</span>';
-                break;
-            case "Completed":
-                $product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: green; color: white;">Completed</span>';
-                break;
-            case "Third-Party Transaction":
-                $product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color:rgb(61, 10, 179); color: white;">Third-Party Transaction</span>';
-                break;
-            case "Withdraw":
-               $product_status = '<span class="label font-weight-bold label-lg label-inline bg-danger" style="color: white;">Withdrawal</span>';
-                // Optional update if needed
-                $product_id = $row['product_id'];
-                $updateQuery = "UPDATE tbl_user_product_view SET deal_status = 'Third-Party Transaction' WHERE product_id='" . $product_id . "'";
-                mysqli_query($con, $updateQuery);
-                break;
-        }
-    }
-}
+		if ($row['is_draft'] == 1) {
+			$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #6c757d; color: white;">Draft Post</span>';
+		} else {
+			if (!empty($row['close_reason'])) {
+				$product_status = '<span class="label font-weight-bold label-lg label-inline bg-danger" style="color: white;">Withdrawal</span>';
+			} else {
+				switch ($row['product_status']) {
+					case "Active":
+						$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #FFD700; color: white;">Active</span>';
+						break;
+					case "Post Viewed":
+						$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #B17F4A; color: white;">Post Viewed</span>';
+						break;
+					case "Under Negotiation":
+						$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: orange; color: white;">Under Negotiation</span>';
+						break;
+					case "Offer Accepted":
+						$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #006400; color: white;">Offer Accepted</span>';
+						break;
+					case "Pickup Scheduled":
+						$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: blue; color: white;">Pickup Scheduled</span>';
+						break;
+					case "Completed":
+						$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: green; color: white;">Completed</span>';
+						break;
+					case "Third-Party Transaction":
+						$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color:rgb(61, 10, 179); color: white;">Third-Party Transaction</span>';
+						break;
+					case "Withdraw":
+						$product_status = '<span class="label font-weight-bold label-lg label-inline bg-danger" style="color: white;">Withdrawal</span>';
+						// Optional update if needed
+						$product_id = $row['product_id'];
+						$updateQuery = "UPDATE tbl_user_product_view SET deal_status = 'Third-Party Transaction' WHERE product_id='" . $product_id . "'";
+						mysqli_query($con, $updateQuery);
+						break;
+				}
+			}
+		}
 
 
-$duration_days = '';
-$product_id = $row['product_id'];
+		$duration_days = '';
+		$product_id = $row['product_id'];
 
-$duration_sql = mysqli_query($con, "
-    SELECT view_date, complete_date 
+		$duration_sql = mysqli_query($con, "
+    SELECT view_date, duration_close_time 
     FROM tbl_user_product_view 
     WHERE product_id = '$product_id' 
       AND view_date IS NOT NULL AND view_date != '0000-00-00 00:00:00'
-      AND complete_date IS NOT NULL AND complete_date != '0000-00-00 00:00:00'
+      AND complete_date IS NOT NULL AND duration_close_time != '0000-00-00 00:00:00'
     ORDER BY complete_date DESC LIMIT 1
 ");
 
-if ($duration_data = mysqli_fetch_assoc($duration_sql)) {
-    $viewDate = strtotime($duration_data['view_date']);
-    $completeDate = strtotime($duration_data['complete_date']);
+		if ($duration_data = mysqli_fetch_assoc($duration_sql)) {
+			$viewDate = strtotime($duration_data['view_date']);
+			$completeDate = strtotime($duration_data['duration_close_time']);
 
-    if ($completeDate > $viewDate) {
-        $diffInSeconds = $completeDate - $viewDate;
+			if ($completeDate > $viewDate) {
+				$diffInSeconds = $completeDate - $viewDate;
 
-        $days = floor($diffInSeconds / (60 * 60 * 24));
-        $hours = floor(($diffInSeconds % (60 * 60 * 24)) / (60 * 60));
-        $minutes = floor(($diffInSeconds % (60 * 60)) / 60);
+				$days = floor($diffInSeconds / (60 * 60 * 24));
+				$hours = floor(($diffInSeconds % (60 * 60 * 24)) / (60 * 60));
+				$minutes = floor(($diffInSeconds % (60 * 60)) / 60);
 
-        if ($days > 0) {
-            $duration_days = $days . " days " . $hours . " hrs " . $minutes . " min";
-        } elseif ($hours > 0) {
-            $duration_days = $hours . " hrs " . $minutes . " min";
-        } else {
-            $duration_days = $minutes . " min";
-        }
-    }
-}
+				if ($days > 0) {
+					$duration_days = $days . " days " . $hours . " hrs " . $minutes . " min";
+				} elseif ($hours > 0) {
+					$duration_days = $hours . " hrs " . $minutes . " min";
+				} else {
+					$duration_days = $minutes . " min";
+				}
+			}
+		}
 
 
 		$edit = '';
@@ -260,23 +269,24 @@ if ($duration_data = mysqli_fetch_assoc($duration_sql)) {
 			"entry_timestamp" => $row['entry_timestamp'],
 			"category_name" => $row['category_name'],
 			'name' => $row['name'],
+			'seller_phone_num' => $row['ph_num'],
 			'address_line_1' => $row['address_line_1'],
 			"pincode" => $row['pincode'],
 			"product_name" => $row['product_name'],
-			"product_image" => !empty($row['file_name']) 
-         ? '<img src="../upload_content/upload_img/product_img/' . htmlspecialchars($row['file_name']) . '" style="height:50px;width:auto;" />'
-         : 'No Image',
+			"product_image" => !empty($row['file_name'])
+				? '<img src="../upload_content/upload_img/product_img/' . htmlspecialchars($row['file_name']) . '" style="height:50px;width:auto;" />'
+				: 'No Image',
 			"description" => $row['description'],
 			"brand" => $row['brand'],
 			"quantity_kg" => $row['quantity_kg'],
 			"quantity_pcs" => $row['quantity_pcs'] == 0 ? ' ' : $row['quantity_pcs'],
-			"sale_price" => $row['sale_price'] == 0 ? '' :  $row['sale_price'],
+			"sale_price" => $row['sale_price'] == 0 ? 0 :  $row['sale_price'],
 			"product_status" => $product_status,
-			"closure_remark"=>$row['closure_remark'],
-			 "withdrawal_date" => ($row['withdrawal_date'] == '0000-00-00' || $row['withdrawal_date'] == '0') ? '' : $row['withdrawal_date'],
-			  "purchased_price" => $row['purchased_price'],
-			  "reason" => $row['close_reason'],
 			"no_of_post" => $row['no_of_post'],
+			"closure_remark" => $row['closure_remark'],
+			"withdrawal_date" => ($row['withdrawal_date'] == '0000-00-00' || $row['withdrawal_date'] == '0') ? '' : $row['withdrawal_date'],
+			"purchased_price" => $row['purchased_price'],
+
 			"duration_days" => $duration_days,
 			"active" => $active,
 			"action" => $action,

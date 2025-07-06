@@ -7,7 +7,7 @@ $current_page = $_SERVER['REQUEST_URI'] ?? "";
 $userAgent = $_SERVER['HTTP_USER_AGENT'];
 $isIOS = preg_match('/iPhone|iPad|iPod/i', $userAgent);
 // et UTM parameters from the URL
-$utm_parameters = $_SERVER['QUERY_STRING']; 
+$utm_parameters = $_SERVER['QUERY_STRING'];
 // $main_url = "https://wndy.app/user-login?utm_source=QR_Website&utm_medium=Website&utm_campaign=QR_Code&utm_id=Website_QR";
 $is_qr_scan = strpos($utm_parameters, "utm_source=QR_Website") !== false;
 
@@ -240,13 +240,14 @@ $version = '9.0.3';
         const baseUrl = "<?php echo $baseUrl; ?>";
         const login = "<?php echo $login; ?>";
     </script>
-     <style>
+    <style>
         .btn-primary {
             background-color: #b5753e !important;
         }
-     #loadMore{
-        padding-bottom: 100px !important;
-     }
+
+        #loadMore {
+            padding-bottom: 100px !important;
+        }
     </style>
 
 
@@ -271,15 +272,15 @@ $version = '9.0.3';
         <div class="preloader_inner_text">Wait For File Uploading...</div>
         <div class="preloader_inner"><span class="preloader_inner_number">0</span>%</div>
     </div>
-    
 
- 
- 
+
+
+
 
     <!--Page Wrapper-->
     <div class="page-wrapper">
         <!--Header-->
-        <?php if ($login == 'Yes' && strpos($current_page, "/my-account") === false && strpos($current_page, "/notification") === false && strpos($current_page, "/product-details") === false) { ?>
+        <?php if ($login == 'Yes' && strpos($current_page, "/my-account") === false && strpos($current_page, "/notification") === false && strpos($current_page, "/product-details") === false && strpos($current_page, "/manage_demand_post") === false) { ?>
             <header class="header d-flex align-items-center header-1 header-fixed" style="background-color: f7fbfa;">
                 <div class="container">
                     <div class="row">
@@ -462,28 +463,28 @@ $version = '9.0.3';
                             Help & Support
                         </a>
                         <a href="<?php echo $baseUrl . "/direct_transfer"; ?>" class="action-link">
-                        <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                       <path d="M4 4v6h6M20 20v-6h-6" />
-                        <path d="M4 14a8 8 0 0 1 16-4" />
-                         </svg>
-                         Direct Transfer
-                         </a>
-                       <a href="<?php echo $baseUrl . "/create_post"; ?>" class="action-link">
-                      <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 20h9" />
-                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
-              </svg>
-              Create Post
-</a>
-                     <a href="<?php echo $baseUrl . "/demand_post"; ?>" class="action-link">
-    <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-        <path d="M3 3h18v18H3V3z" />
-        <path d="M8 6h8M8 10h8M8 14h6" />
-    </svg>
-    Demand Post
-</a>
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M4 4v6h6M20 20v-6h-6" />
+                                <path d="M4 14a8 8 0 0 1 16-4" />
+                            </svg>
+                            Direct Transfer
+                        </a>
+                        <a href="<?php echo $baseUrl . "/create_post"; ?>" class="action-link">
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 20h9" />
+                                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                            </svg>
+                            Create Post
+                        </a>
+                        <a href="<?php echo $baseUrl . "/manage_demand_post"; ?>" class="action-link">
+                            <svg class="action-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M3 3h18v18H3V3z" />
+                                <path d="M8 6h8M8 10h8M8 14h6" />
+                            </svg>
+                            Demand Post
+                        </a>
 
-                          
+
                     </div>
                 <?php } ?>
             <?php } ?>
@@ -500,7 +501,7 @@ $version = '9.0.3';
                         Returns, and Refund Policy</a>
                 </div>
             </div>
- <!-- Sign Out Button -->
+            <!-- Sign Out Button -->
             <div class="px-4" style="margin-top:80px;">
                 <button onclick="log_out()" class="btn btn-sign-out w-100">Sign Out</button>
             </div>
@@ -592,13 +593,13 @@ $version = '9.0.3';
     <?php
 
     if (
-        
+
         $login == 'Yes' &&
-    strpos($current_page, "/seller-post") === false &&
-    strpos($current_page, "/demand_post") === false &&
-    strpos($current_page, "/demand_post_new") === false
-        
-        ) {
+        strpos($current_page, "/seller-post") === false &&
+        strpos($current_page, "/demand_post") === false &&
+        strpos($current_page, "/demand_post_new") === false
+
+    ) {
     ?>
 
         <div class="nav-container-footer">
@@ -611,20 +612,27 @@ $version = '9.0.3';
                             <span style="font-size: 11px !important;">Home</span>
                         </a>
                     </div>
-<div class="col-2 text-center">
-    <a href="<?php echo $baseUrl . "/product_list"; ?>"
-        class="nav-item <?php echo $pg_nm == "product_list" ? "active" : ""; ?>"
-        onclick="setFilterAndRedirect(event, 'all')">
-        <i class="bi bi-cart3"></i>
-        <span style="font-size: 11px !important;">My Items</span>
-    </a>
-</div>
+                    <div class="col-2 text-center">
+                        <a href="<?php echo $baseUrl . "/product_list"; ?>"
+                            class="nav-item <?php echo $pg_nm == "product_list" ? "active" : ""; ?>"
+                            onclick="setFilterAndRedirect(event, 'all')">
+                            <i class="bi bi-cart3"></i>
+                            <span style="font-size: 11px !important;">My Items</span>
+                        </a>
+                    </div>
 
 
                     <!-- ✅ Show this only if the user is NOT a Buyer -->
                     <?php if ($session_user_type != "Buyer") { ?>
                         <div class="col-2 text-center">
                             <a href="<?php echo $baseUrl . "/seller-post"; ?>" class="add-button">
+                                <i class="bi bi-plus"></i>
+                            </a>
+                        </div>
+                    <?php } ?>
+                    <?php if ($session_user_type == "Buyer" && strpos($current_page, "/manage_demand_post") !== false) { ?>
+                        <div class="col-2 text-center">
+                            <a href="<?php echo $baseUrl . "/demand_post_new"; ?>" class="add-button">
                                 <i class="bi bi-plus"></i>
                             </a>
                         </div>
@@ -791,19 +799,19 @@ $version = '9.0.3';
         }
     </script>
     <script>
-         function setFilterAndRedirect(event, filter) {
-    event.preventDefault(); 
-    localStorage.setItem("selectedFilter", filter); 
-    window.location.href = "<?php echo $baseUrl . '/product_list'; ?>"; 
-}
+        function setFilterAndRedirect(event, filter) {
+            event.preventDefault();
+            localStorage.setItem("selectedFilter", filter);
+            window.location.href = "<?php echo $baseUrl . '/product_list'; ?>";
+        }
     </script>
-    
+
     <script>
-  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
-  if (isIOS) {
-    document.querySelector('.header-install-bar').style.display = 'none';
-  }
-</script>
+        const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (isIOS) {
+            document.querySelector('.header-install-bar').style.display = 'none';
+        }
+    </script>
     <!-- google modal close end-->
 
     <?php

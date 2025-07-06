@@ -19,18 +19,22 @@ function get_demand_post_list_category() {
 
     // Send AJAX request
     const xhr = new XMLHttpRequest();
-    xhr.open("POST", "templates/manage_demand_post/manage_demand_post_list.php", true);
+    xhr.open("POST", "templates/imran_manage_demand_post/manage_demand_post_list.php", true);
     xhr.setRequestHeader("Content-Type", "application/json");
 
     xhr.onload = function () {
         if (xhr.status === 200) {
             document.getElementById("product-grid").innerHTML = xhr.responseText;
+
+            const sidebar = document.querySelector('.filterbar');
+            sidebar.classList.remove('active');
         } else {
             document.getElementById("product-grid").innerHTML = `
-                <div style="text-align: center; color: red;">Failed to load posts. Please try again later.</div>
-            `;
+        <div style="text-align: center; color: red;">Failed to load posts. Please try again later.</div>
+      `;
         }
     };
+
 
     const data = JSON.stringify({ category_id });
     xhr.send(data);
@@ -40,9 +44,9 @@ function get_demand_post_list_category() {
 function populateEditModal(demandPostId, demandPostName, categoryId, brand, quantity_pcs, quantity_kg) {
     document.getElementById("editDemandPostId").value = demandPostId;
     document.getElementById("editDemandPostName").value = demandPostName;
-    document.getElementById("editCategoryId").value = categoryId; 
+    document.getElementById("editCategoryId").value = categoryId;
     document.getElementById("editBrand").value = brand;
-     document.getElementById('editQuantitypcs').value = quantity_pcs;
+    document.getElementById('editQuantitypcs').value = quantity_pcs;
     document.getElementById('editQuantitykg').value = quantity_kg;
 }
 
@@ -56,72 +60,72 @@ function submitEditForm() {
         method: "POST",
         body: formData,
     })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            toastr.success("Demand post updated successfully!", "SUCCESS!!");
-           
-            location.reload(); 
-        } else {
-            toastr.error("Failed to update demand post.", "ERROR!!");
-        }
-    })
-    .catch(error => {
-        console.error("Error:", error);
-       
-    });
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                toastr.success("Demand post updated successfully!", "SUCCESS!!");
+
+                location.reload();
+            } else {
+                toastr.error("Failed to update demand post.", "ERROR!!");
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+
+        });
 }
 
 
 
 function delete_alert(demand_post_id) {
     Swal.fire({
-      title: "Are You Sure?",
-      text: "You Won't Be Able To Revert This!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, Delete It!",
-      confirmButtonClass: "confirm_btn",
-      cancelButtonClass: "cancel_btn",
+        title: "Are You Sure?",
+        text: "You Won't Be Able To Revert This!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, Delete It!",
+        confirmButtonClass: "confirm_btn",
+        cancelButtonClass: "cancel_btn",
     }).then(function (result) {
-      if (result.isConfirmed) {
-        delete_demand_data(demand_post_id);
-      }
-    });
-  }
-
-
-  function delete_demand_data(demand_post_id) {
-    if (demand_post_id > 0) {
-      _(".background_overlay").style.display = "block";
-  
-      let data = new FormData();
-      const sendData = {
-        demand_post_id: demand_post_id,
-      };
-
-      console.log(sendData);
-      data.append("sendData", JSON.stringify(sendData));
-  
-      let xhr = new XMLHttpRequest();
-      xhr.onreadystatechange = function () {
-        if (xhr.readyState == 4) {
-          _(".background_overlay").style.display = "none";
-          toastr["info"]("Data Deleted Successfully.", "SUCCESS!!");
-          setTimeout(function () {
-            window.location.reload();
-          }, 1500);
+        if (result.isConfirmed) {
+            delete_demand_data(demand_post_id);
         }
-      };
-      xhr.open("POST", "templates/manage_demand_post/delete_demand_post.php", true);
-      xhr.send(data);
+    });
+}
+
+
+function delete_demand_data(demand_post_id) {
+    if (demand_post_id > 0) {
+        _(".background_overlay").style.display = "block";
+
+        let data = new FormData();
+        const sendData = {
+            demand_post_id: demand_post_id,
+        };
+
+        console.log(sendData);
+        data.append("sendData", JSON.stringify(sendData));
+
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState == 4) {
+                _(".background_overlay").style.display = "none";
+                toastr["success"]("Data Deleted Successfully.", "SUCCESS!!");
+                setTimeout(function () {
+                    window.location.reload();
+                }, 1500);
+            }
+        };
+        xhr.open("POST", "templates/manage_demand_post/delete_demand_post.php", true);
+        xhr.send(data);
     } else {
-      toastr["error"](
-        "You Don't Have Permission To Delete Any Data !!",
-        "ERROR!!"
-      );
+        toastr["error"](
+            "You Don't Have Permission To Delete Any Data !!",
+            "ERROR!!"
+        );
     }
-  }
+}
 
 
 
@@ -1000,3 +1004,8 @@ function confirmAction() {
 //         toastr.error("You Don't Have Permission To Update Any Data !!", "ERROR!!");
 //     }
 // }
+
+function createPost() {
+    // alert();
+    window.location.href = `${baseUrl}/demand_post_new`;
+}

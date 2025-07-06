@@ -53,7 +53,7 @@ $buyer_id = $session_user_code;
 								<h2 style="margin: 0;">
 									<strong>Purchased Products</strong>
 								</h2>
-								<button style="background-color: #4eaf52; padding: 4px 8px; align-items:center" class="btn">
+								<button style="background-color: #4eaf52; padding: 4px 8px; align-items:center; margin-right: 14px;" class="btn btn-primary">
 									<a href="<?php echo $baseUrl ?>/transfer_products_for_you" style="color: #FFF;">
 										<!-- <i class="fa fa-plus"></i> -->
 										For You
@@ -69,7 +69,7 @@ $buyer_id = $session_user_code;
 										$fetchData = mysqli_query($con, "SELECT DISTINCT 
     cm.category_id, 
     cm.category_name
-FROM 
+     FROM 
     tbl_user_product_view AS upv
 INNER JOIN 
     tbl_product_master AS pm ON upv.product_id = pm.product_id
@@ -154,7 +154,7 @@ WHERE
 				</div>
 				<!--End Load More Button-->
 				<div id="actionButtonDiv"
-					style="display: none; position: fixed; bottom: 80; left: 0; width: 100%; background-color: #cdd3dd; padding: 10px; box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); z-index: 99; display: flex; justify-content: space-between;">
+					style="display: none; position: fixed; bottom: 80px; left: 0; width: 100%; background-color: #cdd3dd; padding: 10px; box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); z-index: 99; display: flex; justify-content: space-between;">
 					<!-- Previous Button -->
 					<button id="prevButton"
 						style="background-color: #171717; color: white; border: none; border-radius: 5px; padding: 10px 30px; cursor: pointer;"

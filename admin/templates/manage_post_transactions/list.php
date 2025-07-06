@@ -6,11 +6,11 @@ if ($view_permission == "Yes") {
 	## Read value
 	$draw = $_POST['draw'];
 	$row = $_POST['start'];
-	$rowperpage = $_POST['length']; 
-	$columnIndex = $_POST['order'][0]['column']; 
-	$columnName = $_POST['columns'][$columnIndex]['data']; 
-	$columnSortOrder = $_POST['order'][0]['dir']; 
-	$searchValue = mysqli_real_escape_string($con, $_POST['search']['value']); 
+	$rowperpage = $_POST['length'];
+	$columnIndex = $_POST['order'][0]['column'];
+	$columnName = $_POST['columns'][$columnIndex]['data'];
+	$columnSortOrder = $_POST['order'][0]['dir'];
+	$searchValue = mysqli_real_escape_string($con, $_POST['search']['value']);
 	$seller_id = mysqli_real_escape_string($con, $_POST['seller_id']);
 	$category_id = mysqli_real_escape_string($con, $_POST['category_id']);
 	$product_id = mysqli_real_escape_string($con, $_POST['product_id']);
@@ -20,7 +20,7 @@ if ($view_permission == "Yes") {
 	$product_status = mysqli_real_escape_string($con, $_POST['product_status']);
 	$seller_product_status = mysqli_real_escape_string($con, $_POST['seller_post_status']);
 	$from_date = mysqli_real_escape_string($con, $_POST['from_date'] ?? '');
-$to_date = mysqli_real_escape_string($con, $_POST['to_date'] ?? '');
+	$to_date = mysqli_real_escape_string($con, $_POST['to_date'] ?? '');
 
 	$searchQuery = "";
 	if ($searchValue != '') {
@@ -52,7 +52,7 @@ $to_date = mysqli_real_escape_string($con, $_POST['to_date'] ?? '');
 	}
 
 
-$query = "SELECT 
+	$query = "SELECT 
 	tbl_user_product_view.view_id,
 	tbl_user_product_view.trans_id,
 	buyer_table.name AS buyer_name,
@@ -92,6 +92,8 @@ $query = "SELECT
 	tbl_user_product_view.complete_date,
 	tbl_user_product_view.deal_status_history,
 	tbl_user_product_view.assigned_date_for_collector,
+		tbl_user_product_view.tbl_message_history,
+	tbl_user_product_view.tbl_negotation_price_history,
 	-- status_updates.product_status_history AS product_status_history,
 
 	-- Latest messages
@@ -113,6 +115,7 @@ $query = "SELECT
 	buyer_address.pincode AS buyer_pincode,
 
 	tbl_user_product_view.used_credits,
+	tbl_user_product_view.duration_close_time,
 	tbl_user_product_view.product_id,
 	tbl_user_product_view.entry_timestamp,
 	buyer_rating.rating AS buyer_rating_for_seller,
@@ -234,16 +237,16 @@ WHERE 1
 	}
 	if ($seller_product_status != "") {
 		// $query .= " AND tbl_user_product_view.deal_status = '" . $seller_product_status . "'";
-		 $query .= " AND tbl_product_master.product_status = '" . $seller_product_status . "'";
+		$query .= " AND tbl_product_master.product_status = '" . $seller_product_status . "'";
 	}
 
 	if ($from_date && $to_date) {
-    $query .= " AND DATE(tbl_user_product_view.entry_timestamp) BETWEEN '$from_date' AND '$to_date'";
-} elseif ($from_date) {
-    $query .= " AND DATE(tbl_user_product_view.entry_timestamp) >= '$from_date'";
-} elseif ($to_date) {
-    $query .= " AND DATE(tbl_user_product_view.entry_timestamp) <= '$to_date'";
-}
+		$query .= " AND DATE(tbl_user_product_view.entry_timestamp) BETWEEN '$from_date' AND '$to_date'";
+	} elseif ($from_date) {
+		$query .= " AND DATE(tbl_user_product_view.entry_timestamp) >= '$from_date'";
+	} elseif ($to_date) {
+		$query .= " AND DATE(tbl_user_product_view.entry_timestamp) <= '$to_date'";
+	}
 
 	## Total number of records without filtering
 	$sel = mysqli_query($con, $query);
@@ -314,72 +317,72 @@ WHERE 1
 				</div>
 			</div>';
 
-	$raw_deal_status = isset($row['deal_status']) ? trim(strtolower($row['deal_status'])) : '';
-$close_reason_present = !empty($row['close_reason']);
+		$raw_deal_status = isset($row['deal_status']) ? trim(strtolower($row['deal_status'])) : '';
+		$close_reason_present = !empty($row['close_reason']);
 
-if ($close_reason_present || $raw_deal_status === 'withdraw') {
-    $deal_status = '<span class="label font-weight-bold label-lg label-inline bg-danger" style="color: white;">Withdrawal</span>';
-} else {
-    switch ($raw_deal_status) {
-        case 'credit used':
-            $deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: purple; color: white;">Credit Used</span>';
-            break;
-        case 'under negotiation':
-            $deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: orange; color: white;">Under Negotiation</span>';
-            break;
-        case 'offer accepted':
-            $deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #006400; color: white;">Offer Accepted</span>';
-            break;
-        case 'pickup scheduled':
-            $deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: blue; color: white;">Pickup Scheduled</span>';
-            break;
-        case 'offer rejected':
-            $deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: red; color: white;">Offer Rejected</span>';
-            break;
-        case 'completed':
-            $deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: green; color: white;">Completed</span>';
-            break;
-        case 'third-party transaction':
-            $deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: rgb(43, 39, 177); color:white;">Third-Party Transaction</span>';
-            break;
-        default:
-            $deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: gray; color: white;">Unknown</span>';
-            break;
-    }
-}
+		if ($close_reason_present || $raw_deal_status === 'withdraw') {
+			$deal_status = '<span class="label font-weight-bold label-lg label-inline bg-danger" style="color: white;">Withdrawal</span>';
+		} else {
+			switch ($raw_deal_status) {
+				case 'credit used':
+					$deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: purple; color: white;">Credit Used</span>';
+					break;
+				case 'under negotiation':
+					$deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: orange; color: white;">Under Negotiation</span>';
+					break;
+				case 'offer accepted':
+					$deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #006400; color: white;">Offer Accepted</span>';
+					break;
+				case 'pickup scheduled':
+					$deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: blue; color: white;">Pickup Scheduled</span>';
+					break;
+				case 'offer rejected':
+					$deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: red; color: white;">Offer Rejected</span>';
+					break;
+				case 'completed':
+					$deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: green; color: white;">Completed</span>';
+					break;
+				case 'third-party transaction':
+					$deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: rgb(43, 39, 177); color:white;">Third-Party Transaction</span>';
+					break;
+				default:
+					$deal_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: gray; color: white;">Unknown</span>';
+					break;
+			}
+		}
 
 
-switch ($row['product_status']) {
-	case "Active":
-		$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #FFD700; color: white;">Active</span>';
-		break;
-	case "Withdraw":
-		$product_status = '<span class="label font-weight-bold label-lg label-inline bg-danger" style="color: white;">Withdrawal</span>';
-		break;
-	case "Post Viewed":
-		$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: grey; color: white;">Post Viewed</span>';
-		break;
-	case "Under Negotiation":
-		$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: orange; color: white;">Under Negotiation</span>';
-		break;
-	case "Offer Accepted":
-		$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #006400; color: white;">Offer Accepted</span>';
-		break;
-	case "Pickup Scheduled":
-		$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: blue; color: white;">Pickup Scheduled</span>';
-		break;
-	case "Completed":
-		$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: green; color: white;">Completed</span>';
-		break;
-	case "Third-Party Transaction":
-		$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color:rgb(61, 10, 179); color: white;">Third-Party Transaction</span>';
-		$product_id = $row['product_id'];
-		$updateQuery = "UPDATE tbl_user_product_view SET deal_status = 'Third-Party Transaction' WHERE product_id='" . $product_id . "'";
-		mysqli_query($con, $updateQuery);
-		break;
-	default:
-		$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #999; color: white;">Unknown</span>';
-}
+		switch ($row['product_status']) {
+			case "Active":
+				$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #FFD700; color: white;">Active</span>';
+				break;
+			case "Withdraw":
+				$product_status = '<span class="label font-weight-bold label-lg label-inline bg-danger" style="color: white;">Withdrawal</span>';
+				break;
+			case "Post Viewed":
+				$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #B17F4A; color: white;">Post Viewed</span>';
+				break;
+			case "Under Negotiation":
+				$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: orange; color: white;">Under Negotiation</span>';
+				break;
+			case "Offer Accepted":
+				$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #006400; color: white;">Offer Accepted</span>';
+				break;
+			case "Pickup Scheduled":
+				$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: blue; color: white;">Pickup Scheduled</span>';
+				break;
+			case "Completed":
+				$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: green; color: white;">Completed</span>';
+				break;
+			case "Third-Party Transaction":
+				$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color:rgb(61, 10, 179); color: white;">Third-Party Transaction</span>';
+				$product_id = $row['product_id'];
+				$updateQuery = "UPDATE tbl_user_product_view SET deal_status = 'Third-Party Transaction' WHERE product_id='" . $product_id . "'";
+				mysqli_query($con, $updateQuery);
+				break;
+			default:
+				$product_status = '<span class="label font-weight-bold label-lg label-inline" style="background-color: #999; color: white;">Unknown</span>';
+		}
 
 
 
@@ -389,73 +392,51 @@ switch ($row['product_status']) {
 		}
 
 
-$seller_details = !empty($row['seller_name']) ? $row['seller_name'] : ' ';
-$seller_number = !empty($row['seller_ph_num']) ? $row['seller_ph_num'] : ' ';
-$buyer_details = !empty($row['buyer_name']) ? $row['buyer_name'] : ' ';
-$buyer_number = !empty($row['buyer_ph_num']) ? $row['buyer_ph_num'] : ' ';
-$collector_details = !empty($row['collector_name']) ? $row['collector_name'] : ' ';
-$collector_number = !empty($row['collector_ph_num']) ? $row['collector_ph_num'] : ' ';
-		
-// Seller address
-$seller_addressParts = [
-    (!empty($row['product_landmark']) && strtolower(trim($row['product_landmark'])) !== 'no landmark') ? $row['product_landmark'] : ' ',
-    !empty($row['product_city']) ? $row['product_city'] : ' ',
-    !empty($row['product_state']) ? $row['product_state'] : ' ',
-    !empty($row['product_country']) ? $row['product_country'] : ' ',
-];
+		$seller_details = !empty($row['seller_name']) ? $row['seller_name'] : ' ';
+		$seller_number = !empty($row['seller_ph_num']) ? $row['seller_ph_num'] : ' ';
+		$buyer_details = !empty($row['buyer_name']) ? $row['buyer_name'] : ' ';
+		$buyer_number = !empty($row['buyer_ph_num']) ? $row['buyer_ph_num'] : ' ';
+		$collector_details = !empty($row['collector_name']) ? $row['collector_name'] : ' ';
+		$collector_number = !empty($row['collector_ph_num']) ? $row['collector_ph_num'] : ' ';
 
-// Buyer address
-$buyer_addressParts = [
-    (!empty($row['buyer_landmark']) && strtolower(trim($row['buyer_landmark'])) !== 'no landmark') ? $row['buyer_landmark'] : ' ',
-    !empty($row['buyer_city']) ? $row['buyer_city'] : ' ',
-    !empty($row['buyer_state']) ? $row['buyer_state'] : ' ',
-    !empty($row['buyer_country']) ? $row['buyer_country'] : ' ',
-];
+		// Seller address
+		$seller_addressParts = [
+			(!empty($row['product_landmark']) && strtolower(trim($row['product_landmark'])) !== 'no landmark') ? $row['product_landmark'] : ' ',
+			!empty($row['product_city']) ? $row['product_city'] : ' ',
+			!empty($row['product_state']) ? $row['product_state'] : ' ',
+			!empty($row['product_country']) ? $row['product_country'] : ' ',
+		];
 
-// Build final addresses and clean up
-$seller_address = trim(preg_replace('/\s*,\s*/', ', ', implode(', ', $seller_addressParts)), ', ');
-$buyer_address = trim(preg_replace('/\s*,\s*/', ', ', implode(', ', $buyer_addressParts)), ', ');
+		// Buyer address
+		$buyer_addressParts = [
+			(!empty($row['buyer_landmark']) && strtolower(trim($row['buyer_landmark'])) !== 'no landmark') ? $row['buyer_landmark'] : ' ',
+			!empty($row['buyer_city']) ? $row['buyer_city'] : ' ',
+			!empty($row['buyer_state']) ? $row['buyer_state'] : ' ',
+			!empty($row['buyer_country']) ? $row['buyer_country'] : ' ',
+		];
+
+		// Build final addresses and clean up
+		$seller_address = trim(preg_replace('/\s*,\s*/', ', ', implode(', ', $seller_addressParts)), ', ');
+		$buyer_address = trim(preg_replace('/\s*,\s*/', ', ', implode(', ', $buyer_addressParts)), ', ');
 
 
-$buyer_message  = !empty($row['buyer_message']) ? "Buyer → " . $row['buyer_message'] : '';
-$seller_message = !empty($row['seller_message']) ? "Seller → " . $row['mssg'] : '';
-
-$combined_message = '';
-
-if (!empty($buyer_message) && !empty($seller_message)) {
-    $combined_message = $buyer_message . "\n" . $seller_message;
-} elseif (!empty($buyer_message)) {
-    $combined_message = $buyer_message;
-} elseif (!empty($seller_message)) {
-    $combined_message = $seller_message;
-}
+		$buyer_message  = !empty($row['buyer_message']) ? "Buyer → " . $row['buyer_message'] : '';
+		$seller_message = !empty($row['seller_message']) ? "Seller → " . $row['mssg'] : '';
 
 
 
 
-// Some Data Date with AM:PM Format------------
-$assignedDateRaw = $row['assigned_date_for_collector'];
-$assignedDateFormatted = !empty($row['assigned_date_for_collector']) ? date("M d, Y h:i A", strtotime($assignedDateRaw)) : ' ';
 
 
-$negotiation_amount = explode(',', $row['negotiation_amount']);
+		// Some Data Date with AM:PM Format------------
+		$assignedDateRaw = $row['assigned_date_for_collector'];
+		$assignedDateFormatted = !empty($row['assigned_date_for_collector']) ? date("M d, Y h:i A", strtotime($assignedDateRaw)) : ' ';
 
-$buyer_negotiation_price = isset($negotiation_amount[0]) && $negotiation_amount[0] !== '' ? $negotiation_amount[0] : '';
-$seller_negotiation_price = isset($negotiation_amount[1]) && $negotiation_amount[1] !== '' ? $negotiation_amount[1] : '';
 
-$negotiation_price_history = '';
+		$negotiation_amount = explode(',', $row['negotiation_amount']);
 
-if (!empty($buyer_negotiation_price)) {
-    $negotiation_price_history .= "Buyer Negotiation Price: " . $buyer_negotiation_price;
-}
-
-if (!empty($seller_negotiation_price)) {
-    // Add newline if buyer price already exists
-    if (!empty($negotiation_price_history)) {
-        $negotiation_price_history .= "\n";
-    }
-    $negotiation_price_history .= "Seller Negotiation Price: " . $seller_negotiation_price;
-}
+		$buyer_negotiation_price = isset($negotiation_amount[0]) && $negotiation_amount[0] !== '' ? $negotiation_amount[0] : '';
+		$seller_negotiation_price = isset($negotiation_amount[1]) && $negotiation_amount[1] !== '' ? $negotiation_amount[1] : '';
 
 
 
@@ -465,60 +446,123 @@ if (!empty($seller_negotiation_price)) {
 
 
 
-// Calculate duration in days between view_date and complete_date
-$duration_days = '';
-
-if (!empty($row['view_date']) && !empty($row['complete_date'])) {
-    $viewDate = strtotime($row['view_date']);
-    $completeDate = strtotime($row['complete_date']);
-
-    
-    if ($completeDate > $viewDate) {
-        $diffInSeconds = $completeDate - $viewDate;
-
-        
-        $days = floor($diffInSeconds / (60 * 60 * 24));
-        $hours = floor(($diffInSeconds % (60 * 60 * 24)) / (60 * 60));
-        $minutes = floor(($diffInSeconds % (60 * 60)) / 60);
-
-        
-        if ($days > 0) {
-            $duration_days = $days . " days " . $hours . " hrs " . $minutes . " min";
-        } else {
-            $duration_days = $hours . " hrs " . $minutes . " min";
-        }
-    } else {
-        $duration_days = " ";
-    }
-} else {
-    $duration_days = " ";
-}
 
 
 
- $status_history_raw = $row['deal_status_history'] ?? '';
-$formatted_history = '';
-$plain_history = '';
+		// Calculate duration in days between view_date and complete_date
+		$duration_days = '';
 
-if (!empty($status_history_raw)) {
-    $status_data = json_decode($status_history_raw, true);
+		if (!empty($row['view_date']) && !empty($row['duration_close_time'])) {
+			$viewDate = strtotime($row['view_date']);
+			$completeDate = strtotime($row['duration_close_time']);
 
-    $formatted_history = '<ul style="padding-left: 18px; margin: 0;">';
 
-    foreach ($status_data as $entry) {
-        $status = trim($entry['status']);
-        $time = trim($entry['time']);
+			if ($completeDate > $viewDate) {
+				$diffInSeconds = $completeDate - $viewDate;
 
-        $formatted_history .= '<li style="margin-bottom: 4px;">
+
+				$days = floor($diffInSeconds / (60 * 60 * 24));
+				$hours = floor(($diffInSeconds % (60 * 60 * 24)) / (60 * 60));
+				$minutes = floor(($diffInSeconds % (60 * 60)) / 60);
+
+
+				if ($days > 0) {
+					$duration_days = $days . " days " . $hours . " hrs " . $minutes . " min";
+				} else {
+					$duration_days = $hours . " hrs " . $minutes . " min";
+				}
+			} else {
+				$duration_days = " ";
+			}
+		} else {
+			$duration_days = " ";
+		}
+
+
+
+		$status_history_raw = $row['deal_status_history'] ?? '';
+		$formatted_history = '';
+		$plain_history = '';
+
+		if (!empty($status_history_raw)) {
+			$status_data = json_decode($status_history_raw, true);
+
+			$formatted_history = '<ul style="padding-left: 18px; margin: 0;">';
+
+			foreach ($status_data as $entry) {
+				$status = trim($entry['status']);
+				$time = trim($entry['time']);
+
+				$formatted_history .= '<li style="margin-bottom: 4px;">
             <strong style="color:#333;">' . htmlspecialchars($status) . '</strong>
             <span style="display:block; font-size:11px; color:#777;">' . htmlspecialchars($time) . '</span>
         </li>';
 
-        $plain_history .= $status . ' - ' . $time . "\n";
-    }
+				$plain_history .= $status . ' - ' . $time . "\n";
+			}
 
-    $formatted_history .= '</ul>';
-}
+			$formatted_history .= '</ul>';
+		}
+
+		$message_history_raw = $row['tbl_message_history'] ?? '';
+		$formatted_message_history = '';
+		$message_plain_history = '';
+
+		if (!empty($message_history_raw)) {
+			$message_data = json_decode($message_history_raw, true);
+
+			$formatted_message_history = '<ul style="padding-left: 18px; margin: 0;">';
+
+			foreach ((array)$message_data as $entry) {
+				foreach ($entry as $key => $value) {
+					if (strtolower($key) !== 'time') {
+						$user = ucfirst($key); // "Seller" or "Buyer"
+						$msg = htmlspecialchars($value);
+						$time = isset($entry['time']) ? htmlspecialchars($entry['time']) : '';
+
+						$formatted_message_history .= '<li style="margin-bottom: 4px;">
+                    <strong style="color:#333;">' . $user . ' → ' . $msg . '</strong>
+                    <span style="display:block; font-size:11px; color:#777;">' . $time . '</span>
+                </li>';
+
+						$message_plain_history .= $user . ' → ' . $msg . ' (' . $time . ')' . "\n";
+					}
+				}
+			}
+
+			$formatted_message_history .= '</ul>';
+		}
+
+		// 
+
+		$price_history_raw = $row['tbl_negotation_price_history'] ?? '';
+		$formatted_price_history = '';
+		$price_plain_history = '';
+
+		if (!empty($price_history_raw)) {
+			$price_data = json_decode($price_history_raw, true);
+
+			$formatted_price_history = '<ul style="padding-left: 18px; margin: 0;">';
+
+			foreach ((array)$price_data as $entry) {
+				foreach ($entry as $key => $value) {
+					if (strtolower($key) !== 'time') {
+						$user = ucfirst($key); // "Seller" or "Buyer"
+						$amount = htmlspecialchars($value);
+						$time = isset($entry['time']) ? htmlspecialchars($entry['time']) : '';
+
+						$formatted_price_history .= '<li style="margin-bottom: 4px;">
+                    <strong style="color:#333;">' . $user . ' → ₹' . $amount . '</strong>
+                    <span style="display:block; font-size:11px; color:#777;">' . $time . '</span>
+                </li>';
+
+						$price_plain_history .= $user . ' → ₹' . $amount . ' (' . $time . ')' . "\n";
+					}
+				}
+			}
+
+			$formatted_price_history .= '</ul>';
+		}
 
 
 
@@ -535,63 +579,66 @@ if (!empty($status_history_raw)) {
 
 
 
-$data[] = array(
-    "entry_timestamp" => $row['entry_timestamp'],
-    "post_id" => $post_id,
-    "seller_details" => $seller_details,
-    "seller_number" => $seller_number,
-    "seller_address" => $seller_address,
-    "seller_pincode" => $row['product_pincode'],
-    "category_name" => $row['category_name'],
-    "product_name" => $row['product_name'],
-	"product_image" => !empty($row['file_name']) 
-    ? '<img src="../upload_content/upload_img/product_img/' . htmlspecialchars($row['file_name']) . '" style="height:50px;width:auto;" />'
-    : 'No Image',
+		$data[] = array(
+			"entry_timestamp" => $row['entry_timestamp'],
+			"post_id" => $post_id,
+			"seller_details" => $seller_details,
+			"seller_number" => $seller_number,
+			"seller_address" => $seller_address,
+			"seller_pincode" => $row['product_pincode'],
+			"category_name" => $row['category_name'],
+			"product_name" => $row['product_name'],
+			"product_image" => !empty($row['file_name'])
+				? '<img src="../upload_content/upload_img/product_img/' . htmlspecialchars($row['file_name']) . '" style="height:50px;width:auto;" />'
+				: 'No Image',
 
 
-    "description" => $row['description'],
-    "brand" => $row['brand'],
-    "quantity_kg" => $row['quantity_kg'],
-    "quantity_pcs" => $row['quantity_pcs']  == 0 ? '' : $row['quantity_pcs'],
-    "product_price" => $row['sale_price'],
-    "product_status" => $product_status,
-    "closure_remark" => $row['closure_remark'],
-	 "withdrawal_date" => ($row['withdrawal_date'] == '0000-00-00' || $row['withdrawal_date'] == '0') ? '' : $row['withdrawal_date'],
-    "close_reason" => $row['close_reason'],
-    "no_of_post" => $row['no_of_post'],
-    "buyer_action_time" => $row['buyer_action_time'],
-    "product_status_history" => $formatted_history,
-    "buyer_details" => $buyer_details,
-    "buyer_number" => $buyer_number,
-    "buyer_address" => $buyer_address,
-    "buyer_pincode" => $row['buyer_pincode'],
-    "trans_id" => $row['trans_id'],
-    "deal_status" => $deal_status,
-    "used_credits" => $row['used_credits'],
-   "purchased_price" => ($row['purchased_price'] == 0) ? '' : (intval($row['purchased_price']) == $row['purchased_price'] ? intval($row['purchased_price']) : $row['purchased_price']),
+			"description" => $row['description'],
+			"brand" => $row['brand'],
+			"quantity_kg" => $row['quantity_kg'],
+			"quantity_pcs" => $row['quantity_pcs']  == 0 ? '' : $row['quantity_pcs'],
+			"product_price" => $row['sale_price'],
+			"product_status" => $product_status,
+			"closure_remark" => $row['closure_remark'],
+			"withdrawal_date" => ($row['withdrawal_date'] == '0000-00-00' || $row['withdrawal_date'] == '0') ? '' : $row['withdrawal_date'],
+			"close_reason" => $row['close_reason'],
+			"no_of_post" => $row['no_of_post'],
+			"buyer_action_time" => $row['buyer_action_time'],
+			"product_status_history" => $formatted_history,
+			"buyer_details" => $buyer_details,
+			"buyer_number" => $buyer_number,
+			"buyer_address" => $buyer_address,
+			"buyer_pincode" => $row['buyer_pincode'],
+			"trans_id" => $row['trans_id'],
+			"deal_status" => $deal_status,
+			"used_credits" => $row['used_credits'],
+			"purchased_price" => ($row['purchased_price'] == 0) ? '' : (intval($row['purchased_price']) == $row['purchased_price'] ? intval($row['purchased_price']) : $row['purchased_price']),
 
-   "negotiation_amount" => $row['last_negotiation_amount'],
+			"negotiation_amount" => $row['last_negotiation_amount'],
 
-    "mssg" => $row['mssg'],
-    "message_history" => $combined_message !== '' ? $combined_message : ' ',
-	"negotiation_price_history" => $negotiation_price_history,
-    "negotiation_by" => $row['negotiation_by'],
-    "negotiation_date" => ($row['negotiation_date'] == '0000-00-00' || $row['negotiation_date'] == '0') ? '' : $row['negotiation_date'],
-    "accept_date" => ($row['accept_date'] == '0000-00-00' || $row['accept_date'] == '0') ? '' : $row['accept_date'],
-    "pickup_date" => ($row['pickup_date'] == '0000-00-00' || $row['pickup_date'] == '0') ? '' : $row['pickup_date'],
-   "complete_date" => (
-    !empty($row['complete_date']) && 
-    $row['complete_date'] !== '0000-00-00' && 
-    $row['complete_date'] !== '0'
-) ? date('Y-m-d', strtotime($row['complete_date'])) : '',
-    "duration_for_post_completion" => $duration_days,
-    "collector_details" => $collector_details,
-    "assigned_date_for_collector" => $assignedDateFormatted,
-    "view_date" => !empty($row['view_date']) ? date('Y-m-d', strtotime($row['view_date'])) : '',
-    "seller_rating_for_buyer" => $row['seller_rating_for_buyer'],
-    "buyer_rating_for_seller" => $row['buyer_rating_for_seller'],
-    "action" => $action
-);
+			"mssg" => $row['mssg'],
+			"tbl_message_history" => $formatted_message_history,
+			"tbl_negotation_price_history" => $formatted_price_history,
+			"negotiation_by" => $row['negotiation_by'],
+			"negotiation_date" => ($row['negotiation_date'] == '0000-00-00' || $row['negotiation_date'] == '0') ? '' : $row['negotiation_date'],
+			"accept_date" => ($row['accept_date'] == '0000-00-00' || $row['accept_date'] == '0') ? '' : $row['accept_date'],
+			"pickup_date" => ($row['pickup_date'] == '0000-00-00' || $row['pickup_date'] == '0') ? '' : $row['pickup_date'],
+			"complete_date" => (
+				!empty($row['complete_date']) &&
+				$row['complete_date'] !== '0000-00-00' &&
+				$row['complete_date'] !== '0' &&
+				strtotime($row['complete_date']) !== false
+			) ? date('Y-m-d', strtotime($row['complete_date'])) : null,
+
+
+			"duration_for_post_completion" => $duration_days,
+			"collector_details" => $collector_details,
+			"assigned_date_for_collector" => $assignedDateFormatted,
+			"view_date" => !empty($row['view_date']) ? date('Y-m-d', strtotime($row['view_date'])) : '',
+			"seller_rating_for_buyer" => $row['seller_rating_for_buyer'],
+			"buyer_rating_for_seller" => $row['buyer_rating_for_seller'],
+			"action" => $action
+		);
 
 
 		$i++;

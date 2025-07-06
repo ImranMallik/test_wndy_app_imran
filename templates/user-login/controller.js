@@ -91,10 +91,10 @@ function checkPhoneNumber() {
     phoneNumberInput.focus();
     return false;
   }
-  
-   const fakePattern = /^(\d)\1{9}$/;
+
+  const fakePattern = /^(\d)\1{9}$/;
   if (fakePattern.test(phoneNumber)) {
-    toastr.error("Please enter a valid phone number","Error");
+    toastr.error("Please enter a valid phone number", "Error");
     // showInputAlert("ph_num", "error", "Please enter a real phone number");
     phoneNumberInput.focus();
     return false;
@@ -332,7 +332,7 @@ function signIn() {
         } else if (status == "Match") {
           toastr["success"]("User Logged In Successfully.", "SUCCESS!!");
           setTimeout(function () {
-             if (response["user_type"] === "Seller") {
+            if (response["user_type"] === "Seller") {
               window.location.href = "./dashboard";
             } else if (response["user_type"] === "Buyer") {
               window.location.href = "./dashboard";
@@ -463,7 +463,7 @@ document.addEventListener('DOMContentLoaded', function () {
       buyerNextButton.disabled = false;
       selectedBuyerType = this.dataset.type;
       if (hiddenBuyerInput) {
-        hiddenSellerInput.value = hiddenBuyerInput;
+        hiddenBuyerInput.value = selectedBuyerType;
       }
       console.log("Selected User Type:", selectedBuyerType);
     });
@@ -492,7 +492,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Show the referral section
-    
+
     document.getElementById("referral_div").style.display = "block";
 
     // Open the referral modal automatically
@@ -501,8 +501,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     console.log(`Selected Type from ${modalId}:`, modalId === "sellerTypeModal" ? selectedSellerType : selectedBuyerType);
   }
-  
-    function handleModalTransitionSeller(modalId) {
+
+  function handleModalTransitionSeller(modalId) {
     const modal = document.getElementById(modalId);
     const bootstrapModal = bootstrap.Modal.getInstance(modal);
     if (bootstrapModal) {
@@ -515,7 +515,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // Show the referral section
-    
+
     // document.getElementById("referral_div").style.display = "block";
 
     // // Open the referral modal automatically
@@ -622,7 +622,7 @@ function save_user_details() {
     seller_type: seller_type,
     referral_code: _("#referral_code").value,
   };
-  // console.log(sendData);
+  console.log(sendData);
   data.append("sendData", JSON.stringify(sendData));
 
   save_data = new XMLHttpRequest();

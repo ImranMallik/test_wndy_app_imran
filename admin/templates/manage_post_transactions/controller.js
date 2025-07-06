@@ -41,37 +41,37 @@ function clear_input() {
 }
 
 function onStartDateChange() {
-    const startInput = document.getElementById('start_date');
-    const endInput = document.getElementById('end_date');
-    const toLabel = document.getElementById('to_label');
+	const startInput = document.getElementById('start_date');
+	const endInput = document.getElementById('end_date');
+	const toLabel = document.getElementById('to_label');
 
-    if (startInput.value) {
-        toLabel.style.display = 'inline';
-        endInput.style.display = 'inline';
-        endInput.min = startInput.value; 
-    } else {
-        toLabel.style.display = 'none';
-        endInput.style.display = 'none';
-        endInput.value = '';
-        document.getElementById('custom_date_range').value = '';
-    }
+	if (startInput.value) {
+		toLabel.style.display = 'inline';
+		endInput.style.display = 'inline';
+		endInput.min = startInput.value;
+	} else {
+		toLabel.style.display = 'none';
+		endInput.style.display = 'none';
+		endInput.value = '';
+		document.getElementById('custom_date_range').value = '';
+	}
 }
 
 function onEndDateChange() {
-    const start = document.getElementById('start_date').value;
-    const end = document.getElementById('end_date').value;
-    const hiddenField = document.getElementById('custom_date_range');
+	const start = document.getElementById('start_date').value;
+	const end = document.getElementById('end_date').value;
+	const hiddenField = document.getElementById('custom_date_range');
 
-    if (!start || !end) return;
+	if (!start || !end) return;
 
-    if (start > end) {
-        toastr.warning("End date cannot be before start date", "Date Range Error");
-        hiddenField.value = '';
-        return;
-    }
+	if (start > end) {
+		toastr.warning("End date cannot be before start date", "Date Range Error");
+		hiddenField.value = '';
+		return;
+	}
 
-    hiddenField.value = `${start} to ${end}`;
-    reload_table();
+	hiddenField.value = `${start} to ${end}`;
+	reload_table();
 }
 
 function chngMode(mode) {
@@ -124,16 +124,16 @@ function make_select2_ajx(id) {
 			};
 			break;
 
-			case 'filter_seller_pincode':
+		case 'filter_seller_pincode':
 			fileName = 'select_seller_pincode_list';
 			break;
-			case 'filter_buyer_pincode':
+		case 'filter_buyer_pincode':
 			fileName = 'select_buyer_pincode_list';
 			break;
-			case 'product_status':
+		case 'product_status':
 			fileName = 'get_product_status';
 			break;
-			case 'seller_post_status':
+		case 'seller_post_status':
 			fileName = 'get_seller_product_status';
 			break;
 	}
@@ -164,7 +164,7 @@ function make_select2_ajx(id) {
 }
 
 function show_list() {
-    // alert();
+	// alert();
 	if (view_per == "Yes") {
 		$('#data_table').DataTable({
 			'processing': true,
@@ -182,12 +182,12 @@ function show_list() {
 					d.product_status = $('#product_status').val();
 					d.seller_post_status = $('#seller_post_status').val();
 
-					  const range = $('#custom_date_range').val();
-                    if (range.includes(' to ')) {
-                        const [from, to] = range.split(' to ');
-                        d.from_date = from.trim();
-                        d.to_date = to.trim();
-                    }
+					const range = $('#custom_date_range').val();
+					if (range.includes(' to ')) {
+						const [from, to] = range.split(' to ');
+						d.from_date = from.trim();
+						d.to_date = to.trim();
+					}
 				},
 			},
 			'drawCallback': function (data) {
@@ -195,89 +195,89 @@ function show_list() {
 				// var response = data.json;
 				// console.log(response);
 			},
-  'columns': [
-    { data: 'entry_timestamp' },
-    { data: 'post_id' },
-    { data: 'seller_details' },
-    { data: 'seller_number' },
-    { data: 'seller_address' },
-    { data: 'seller_pincode' },
-    { data: 'category_name' },
-    { data: 'product_name' },
-	{data:'product_image'},
-    { data: 'description' },
-    { data: 'brand' },
-    { data: 'quantity_kg' },
-    { data: 'quantity_pcs' },
-    { data: 'product_price' },
-    { data: 'product_status' },
-    { data: 'closure_remark' },
-    { data: 'withdrawal_date' },
-    { data: 'close_reason' },
-    { data: 'no_of_post' },
-    { data: 'buyer_action_time' },
-    { data: 'product_status_history' },
-    { data: 'buyer_details' },
-    { data: 'buyer_number' },
-    { data: 'buyer_address' },
-    { data: 'buyer_pincode' },
-    { data: 'trans_id' },
-    { data: 'deal_status' },
-    { data: 'used_credits' },
-    { data: 'purchased_price' },
-    { data: 'negotiation_amount' },
-    { data: 'mssg' },
-    { data: 'message_history' },
-	{data:'negotiation_price_history'},
-    { data: 'negotiation_by' },
-    { data: 'negotiation_date' },
-    { data: 'accept_date' },
-    { data: 'pickup_date' },
-    { data: 'complete_date' },
-    { data: 'duration_for_post_completion' },
-    { data: 'collector_details' },
-    { data: 'assigned_date_for_collector' },
-    { data: 'view_date' },
-    { data: 'seller_rating_for_buyer' },
-    { data: 'buyer_rating_for_seller' },
-    { data: 'action' }
-  ],
+			'columns': [
+				{ data: 'entry_timestamp' },
+				{ data: 'post_id' },
+				{ data: 'seller_details' },
+				{ data: 'seller_number' },
+				{ data: 'seller_address' },
+				{ data: 'seller_pincode' },
+				{ data: 'category_name' },
+				{ data: 'product_name' },
+				{ data: 'product_image' },
+				{ data: 'description' },
+				{ data: 'brand' },
+				{ data: 'quantity_kg' },
+				{ data: 'quantity_pcs' },
+				{ data: 'product_price' },
+				{ data: 'product_status' },
+				{ data: 'closure_remark' },
+				{ data: 'withdrawal_date' },
+				{ data: 'close_reason' },
+				{ data: 'no_of_post' },
+				{ data: 'buyer_action_time' },
+				{ data: 'product_status_history' },
+				{ data: 'buyer_details' },
+				{ data: 'buyer_number' },
+				{ data: 'buyer_address' },
+				{ data: 'buyer_pincode' },
+				{ data: 'trans_id' },
+				{ data: 'deal_status' },
+				{ data: 'used_credits' },
+				{ data: 'purchased_price' },
+				{ data: 'negotiation_amount' },
+				{ data: 'mssg' },
+				{ data: 'tbl_message_history' },
+				{ data: 'tbl_negotation_price_history' },
+				{ data: 'negotiation_by' },
+				{ data: 'negotiation_date' },
+				{ data: 'accept_date' },
+				{ data: 'pickup_date' },
+				{ data: 'complete_date' },
+				{ data: 'duration_for_post_completion' },
+				{ data: 'collector_details' },
+				{ data: 'assigned_date_for_collector' },
+				{ data: 'view_date' },
+				{ data: 'seller_rating_for_buyer' },
+				{ data: 'buyer_rating_for_seller' },
+				{ data: 'action' }
+			],
 
 			dom: 'lBfrtip',
 			lengthMenu: [50, 100, 250, 500, 1000, { label: 'All', value: -1 }],
-				buttons: [
+			buttons: [
 				{ extend: 'print', className: 'btn dark btn-outline', exportOptions: { columns: ':visible' } },
 				{ extend: 'copy', className: 'btn red btn-outline', exportOptions: { columns: ':visible' } },
 				{ extend: 'pdf', className: 'btn green btn-outline', exportOptions: { columns: ':visible' } },
 				{
-  extend: 'excel',
-  className: 'btn yellow btn-outline',
-  exportOptions: {
-    columns: ':visible',
-    format: {
-      body: function (data, row, column, node) {
-        if (column === 20) { // column index of Status Update Date
-          if (typeof data === 'string') {
-            const html = $('<div>').html(data);
-            let output = '';
-            html.find('li').each(function () {
-              const status = $(this).find('strong').text().trim();
-              const time = $(this).find('span').text().trim();
-              // ✅ Use ASCII line break (char code 10)
-              output += `• ${status} ${time}${String.fromCharCode(10)}`;
-            });
-            return output.trim();
-          }
-        }
+					extend: 'excel',
+					className: 'btn yellow btn-outline',
+					exportOptions: {
+						columns: ':visible',
+						format: {
+							body: function (data, row, column, node) {
+								if (column === 20) { // column index of Status Update Date
+									if (typeof data === 'string') {
+										const html = $('<div>').html(data);
+										let output = '';
+										html.find('li').each(function () {
+											const status = $(this).find('strong').text().trim();
+											const time = $(this).find('span').text().trim();
+											// ✅ Use ASCII line break (char code 10)
+											output += `• ${status} ${time}${String.fromCharCode(10)}`;
+										});
+										return output.trim();
+									}
+								}
 
-        // Strip HTML for other columns
-        return typeof data === 'string'
-          ? data.replace(/<[^>]*>/g, '').trim()
-          : data;
-      }
-    }
-  }
-},
+								// Strip HTML for other columns
+								return typeof data === 'string'
+									? data.replace(/<[^>]*>/g, '').trim()
+									: data;
+							}
+						}
+					}
+				},
 
 				{ extend: 'csv', className: 'btn purple btn-outline', exportOptions: { columns: ':visible' } },
 				{ extend: 'colvis', className: 'btn dark btn-outline', text: 'Columns' },
@@ -370,9 +370,9 @@ function save_details() {
 			pickup_date: _("#pickup_date").value,
 			complete_date: _("#complete_date").value,
 			quantity_pcs: _("#quantity_pcs").value,
-	        quantity_kg: _("#quantity_kg").value,
-	        withdrawal_date: _("#withdrawn_date").value,
-	       close_reason: _("#widthdrawn_reason").value 
+			quantity_kg: _("#quantity_kg").value,
+			withdrawal_date: _("#withdrawn_date").value,
+			close_reason: _("#widthdrawn_reason").value
 		};
 
 		console.log(sendData)

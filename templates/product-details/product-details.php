@@ -109,7 +109,7 @@ WHERE tbl_product_master.product_id = '$product_id'
         if (empty($product_images)) {
             $product_images[] = "no_image.png";
         }
-        ?>
+?>
 
         <script>
             product_id = <?php echo json_encode($product_id); ?>;
@@ -150,91 +150,93 @@ WHERE tbl_product_master.product_id = '$product_id'
             <div class="mt-1">
                 <p><strong>Category:</strong> <?php echo htmlspecialchars($category_name); ?>
                     <?php if ($session_user_type == "Seller" && $product_status == "Active") { ?>
-   <a href="<?php echo "./seller-post-edit/" . $product_id; ?>" class="edit-right" style="font-size:10px !important; width:42px; text-align:center; color: #fff; border-radius:5px; margin-top: -25px;">
+                        <a href="<?php echo "./seller-post-edit/" . $product_id; ?>" class="edit-right" style="font-size:10px !important; width:42px; text-align:center; color: #fff; border-radius:5px; margin-top: -25px;">
                             <div style="border-radius:5px;">
                                 <p style="margin: 0 0 5px;"></p>
-                            <i class="bi bi-pencil-square" style="font-size:13px !important; margin-top:15px; padding-top:9px;"></i> <br><p style="font-weight: normal; margin-bottom:5px;">Edit</p></div>
-                            
+                                <i class="bi bi-pencil-square" style="font-size:13px !important; margin-top:15px; padding-top:9px;"></i> <br>
+                                <p style="font-weight: normal; margin-bottom:5px;">Edit</p>
+                            </div>
+
                         </a>
                     <?php } ?>
                 </p>
 
 
                 <p><strong>Brand:</strong> <?php echo htmlspecialchars($brand); ?></p>
-<p><strong>Quantity:</strong>
-    <?php
-    function formatNumber($value) {
-        return rtrim(rtrim(number_format((float)$value, 2, '.', ''), '0'), '.');
-    }
+                <p><strong>Quantity:</strong>
+                    <?php
+                    function formatNumber($value)
+                    {
+                        return rtrim(rtrim(number_format((float)$value, 2, '.', ''), '0'), '.');
+                    }
 
-    $pcs = isset($quantity_pcs) && is_numeric($quantity_pcs) && $quantity_pcs > 0 ? formatNumber($quantity_pcs) . ' pcs' : '';
-    // print_r($pcs);
-    $kg  = isset($quantity_kg) && is_numeric($quantity_kg) && $quantity_kg > 0 ? formatNumber($quantity_kg) . ' kg' : '';
+                    $pcs = isset($quantity_pcs) && is_numeric($quantity_pcs) && $quantity_pcs > 0 ? formatNumber($quantity_pcs) . ' pcs' : '';
+                    // print_r($pcs);
+                    $kg  = isset($quantity_kg) && is_numeric($quantity_kg) && $quantity_kg > 0 ? formatNumber($quantity_kg) . ' kg' : '';
 
-    if ($pcs && $kg) {
-        echo $pcs . ', ' . $kg;
-    } elseif ($pcs) {
-        echo $pcs;
-    } elseif ($kg) {
-        echo $kg;
-    } else {
-        echo 'N/A';
-    }
-    ?>
-</p>
+                    if ($pcs && $kg) {
+                        echo $pcs . ', ' . $kg;
+                    } elseif ($pcs) {
+                        echo $pcs;
+                    } elseif ($kg) {
+                        echo $kg;
+                    } else {
+                        echo 'N/A';
+                    }
+                    ?>
+                </p>
 
                 <p><strong>Description:</strong><?php echo nl2br(htmlspecialchars($description)); ?></p>
-<p><strong>Location:</strong>
-    <?php
-    $address_parts = array_filter([
-        $landmark ?? '',
-        $address_line_1 ?? '',
-        $city ?? '',
-        $state ?? '',
-        $pincode ?? '',
-        $country ?? ''
-    ]);
+                <p><strong>Location:</strong>
+                    <?php
+                    $address_parts = array_filter([
+                        $landmark ?? '',
+                        $address_line_1 ?? '',
+                        $city ?? '',
+                        $state ?? '',
+                        $pincode ?? '',
+                        $country ?? ''
+                    ]);
 
-    echo htmlspecialchars(implode(', ', $address_parts)) ?: ' ';
-    ?>
-</p>
+                    echo htmlspecialchars(implode(', ', $address_parts)) ?: ' ';
+                    ?>
+                </p>
 
             </div>
-<?php if($session_user_type == "Buyer"){ 
-    // Step 1: Get seller ID from current product
-    $getSellerQuery = mysqli_query($con, "SELECT user_id FROM tbl_product_master WHERE product_id = '$product_id' LIMIT 1");
-    $sellerRow = mysqli_fetch_assoc($getSellerQuery);
-    $product_user_id = $sellerRow['user_id'];
+            <?php if ($session_user_type == "Buyer") {
+                // Step 1: Get seller ID from current product
+                $getSellerQuery = mysqli_query($con, "SELECT user_id FROM tbl_product_master WHERE product_id = '$product_id' LIMIT 1");
+                $sellerRow = mysqli_fetch_assoc($getSellerQuery);
+                $product_user_id = $sellerRow['user_id'];
 
-    // Step 2: Count seller's products with valid status
-$productCountQuery = mysqli_query($con, "
+                // Step 2: Count seller's products with valid status
+                $productCountQuery = mysqli_query($con, "
     SELECT COUNT(*) 
     FROM tbl_product_master 
     WHERE user_id = '$product_user_id' 
     AND is_draft = 0
     AND product_status IN ('Active', 'Post Viewed', 'Under Negotiation')
 ");
+                $totalProducts = mysqli_fetch_row($productCountQuery)[0];
 
-    $totalProducts = mysqli_fetch_row($productCountQuery)[0];
+                // Step 3: Exclude current product
+                $otherProducts = $totalProducts > 0 ? $totalProducts - 1 : 0;
 
-    // Step 3: Exclude current product
-    $otherProducts = $totalProducts > 0 ? $totalProducts - 1 : 0;
-
-    // Step 4: Show button only if seller has more than 1 product (i.e., at least one more)
-    if ($otherProducts > 0) {
-?>
-    <div class="mt-3 text-center">
-        <button 
-            data-product-id="<?= $product_id; ?>"
-            onclick="redirectWithProductId(this)"
-            style="padding:12px 28px !important; background-color:#c17533; border:none; font-size:12px; color:#fff; font-weight:400; border-radius:8px;">
-            View More Items from this seller +<?= $otherProducts; ?>
-        </button>
-    </div>
-<?php 
-    } 
-} 
-?>
+                // Step 4: Show button only if seller has more than 1 product (i.e., at least one more)
+                if ($otherProducts > 0) {
+            ?>
+                    <div class="mt-3 text-center">
+                        <button
+                            data-product-id="<?= $product_id; ?>"
+                            onclick="redirectWithProductId(this)"
+                            style="padding:12px 28px !important; background-color:#c17533; border:none; font-size:12px; color:#fff; font-weight:400; border-radius:8px;">
+                            View More Items from this seller +<?= $otherProducts; ?>
+                        </button>
+                    </div>
+            <?php
+                }
+            }
+            ?>
 
 
 
@@ -315,25 +317,28 @@ $productCountQuery = mysqli_query($con, "
             if ($session_user_type === "Buyer") {
                 $product_view_dataget = mysqli_query($con, "select view_id, assigned_collecter, seller_id, view_date, deal_status, purchased_price, negotiation_amount, negotiation_by, mssg, negotiation_date, accept_date, pickup_date, pickup_time, complete_date from tbl_user_product_view where buyer_id='" . $session_user_code . "' and product_id='" . $product_id . "' ");
                 $product_view_data = mysqli_fetch_assoc($product_view_dataget);
-                ?>
+            ?>
                 <?php if (empty($close_reason)) { ?>
                     <div class="mt-4">
                         <h5 id="seller_info" style="color:#b5753e !important;">Seller Contact Info</h5>
-                        <p id="seller_name"><strong>Name:
-                            </strong><?php echo $product_view_data ? $name : substr($name, 0, 2) . "***"; ?></p>
-                        <p id="seller_num"><strong>Number:</strong>
-                            <?php echo $product_view_data ? '<a href="tel:' . $country_code . $ph_num . '">' . $country_code . " " . $ph_num . '</a>' : $country_code . " " . substr($ph_num, 0, 3) . "***"; ?>
-                        <p id="seller_num">
-                            <strong>Address:</strong>
-                            <?php
-                            echo $product_view_data
-                                ? $address_line_1 . ", " . $landmark . ", " . $city . ", " . $state . " - " . $pincode . ", " . $country
-                                : $landmark . ", " . $city . ", ***";
-                            ?>
+
+                        <p id="seller_name">
+                            <strong>Name:</strong> <?php echo $name; ?>
                         </p>
 
+                        <p id="seller_num">
+                            <strong>Number:</strong>
+                            <a href="tel:<?php echo $country_code . $ph_num; ?>">
+                                <?php echo $country_code . " " . $ph_num; ?>
+                            </a>
+                        </p>
 
+                        <p id="seller_address">
+                            <strong>Address:</strong>
+                            <?php echo $address_line_1 . ", " . $landmark . ", " . $city . ", " . $state . " - " . $pincode . ", " . $country; ?>
+                        </p>
                     </div>
+
 
 
                     <?php if (!$product_view_data) { ?>
@@ -362,7 +367,7 @@ $productCountQuery = mysqli_query($con, "
                                 <input type="hidden" id="user_id" value="<?php echo $session_user_code; ?>">
                             </div>
                         </div>
-                        <?php
+                    <?php
                     } else {
                         // Extract deal details when the product view data is available
                         $view_id = $product_view_data['view_id'];
@@ -379,7 +384,7 @@ $productCountQuery = mysqli_query($con, "
                         $pickup_date = $product_view_data['pickup_date'];
                         $pickup_time = $product_view_data['pickup_time'];
                         $complete_date = $product_view_data['complete_date'];
-                        ?>
+                    ?>
 
                         <div class="row">
                             <div class="col-md-6">
@@ -388,7 +393,7 @@ $productCountQuery = mysqli_query($con, "
 
                                     <?php
                                     if ($deal_status == "Credit Used" || $deal_status == "Under Negotiation") {
-                                        ?>
+                                    ?>
                                         <p class="mt-3 mb-3" style="color: #000; font-weight: 500;">
                                             This deal opened on <?php echo dateFormat($view_date); ?> for you.<br> Or, You can also close the
                                             deal.
@@ -447,18 +452,28 @@ $productCountQuery = mysqli_query($con, "
                                             <div class="buyer_confirm_box confirm-option-div animate__animated animate__backInUp">
                                                 <h2>What do you want?</h2>
                                                 <p style="font-weight: 600;">
-                                                    The seller requested a negotiation price of <?php echo (int) $negotiation_amount; ?>.
+                                                    <?php
+
+                                                    $last_price = '';
+                                                    if (!empty($negotiation_amount) && strpos($negotiation_amount, ',') !== false) {
+                                                        $last_price = substr(strrchr($negotiation_amount, ','), 1);
+                                                    } else {
+                                                        $last_price = $negotiation_amount;
+                                                    }
+                                                    ?>
+                                                    The seller requested a negotiation price of <?php echo $last_price; ?>.
+
                                                     <?php if (!empty($mssg)) { ?>
                                                         <br>Message From Seller: <?php echo $mssg; ?>
                                                     <?php } ?>
                                                 </p>
                                                 <div style="width:100%; justify-content:center; text-align:center;">
-                                                <button style="padding: 10px 45px;" type="button" onclick="buyerNegotiate()" class="btn btn-warning">
-                                                    Negotiate
-                                                </button>
-                                                <button style="padding: 10px 45px;" type="button" onclick="buyerAcceptPrice()" class="btn btn-success">
-                                                    Accept
-                                                </button>
+                                                    <button style="padding: 10px 45px;" type="button" onclick="buyerNegotiate()" class="btn btn-warning">
+                                                        Negotiate
+                                                    </button>
+                                                    <button style="padding: 10px 45px;" type="button" onclick="buyerAcceptPrice()" class="btn btn-success">
+                                                        Accept
+                                                    </button>
                                                 </div>
                                             </div>
 
@@ -493,7 +508,7 @@ $productCountQuery = mysqli_query($con, "
 
                                                 </button>
 
-                                                <button type=" button" onclick="buyerSendRequest()" class="btn btn-success"
+                                                <button type=" button" onclick="buyerSendRequest(event)" class="btn btn-success"
                                                     style="background-color: #C17533 !important; border:none;">
 
                                                     Send Request To Seller
@@ -531,7 +546,7 @@ $productCountQuery = mysqli_query($con, "
                                             style="width: 100% !important;">
                                             <h2>Waiting for Pickup</h2>
                                             <p style="font-weight: 600;">
-                                                Pickup Date: <?php echo dateFormat($pickup_date); ?>,
+                                                Pickup Date: <?php echo dateFormat($pickup_date); ?>
                                             </p>
 
                                             <button type="button" onclick="buyerPickupComplete(<?php echo $view_id; ?>)"
@@ -552,7 +567,7 @@ $productCountQuery = mysqli_query($con, "
                                             <?php
                                             $dataget = mysqli_query($con, "SELECT * FROM tbl_ratings WHERE give_user_id='$session_user_code' AND to_user_id='$seller_id' AND rating_from='Buyer' AND view_id='$view_id'");
                                             if (!mysqli_fetch_row($dataget)) {
-                                                ?>
+                                            ?>
                                                 <?php if (empty($close_reason)): ?>
                                                     <button type="button" data-bs-toggle="modal" data-bs-target="#seller_ratings_modal"
                                                         class="btn btn-warning">
@@ -582,7 +597,7 @@ $productCountQuery = mysqli_query($con, "
                                         <?php
                                         // if collector not asigned
                                         if ($assigned_collecter == "") {
-                                            ?>
+                                        ?>
                                             <p style="color: #C17533; font-weight: 500;">
                                                 This deal opened on <?php echo dateFormat($view_date); ?> for you.<br> Either, Assign a collector to
                                                 close the deal.
@@ -629,7 +644,7 @@ $productCountQuery = mysqli_query($con, "
                                                 </button>
                                             <?php } ?>
 
-                                            <?php
+                                        <?php
                                         }
                                         // if collector asigned then show collector details
                                         else {
@@ -639,7 +654,7 @@ $productCountQuery = mysqli_query($con, "
                                             $country_code = $assigned_collector_data[1];
                                             $ph_num = $assigned_collector_data[2];
                                             $user_img = $assigned_collector_data[3];
-                                            ?>
+                                        ?>
                                             <div style="margin-bottom: 40px;">
                                                 <p style="margin-top: 10px; color: red; font-weight: 600; margin-bottom: 5px;">You already
                                                     assigned a
@@ -652,7 +667,7 @@ $productCountQuery = mysqli_query($con, "
                                                     </a>]
                                                 </h3>
                                             </div>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                     </form>
@@ -712,67 +727,67 @@ $productCountQuery = mysqli_query($con, "
 
                     <!--    <p style="color:#fff;">This Post has been withdrawn by the seller due to  <?php echo htmlspecialchars($close_reason); ?> </p>-->
                     <!--</div>-->
-<!--                    <center><button style="font-size:12px; background-color: #ffeedf; color:#000;" type="button" class="btn mt-3" data-bs-toggle="modal" data-bs-target="#withdrawModal">-->
-<!--  Withdrawal Reason-->
-<!--</button> <a style="font-size:12px; color:#000;" href="product_list" class="btn btn-warning mt-3">-->
-<!-- View More Items-->
-<!--</a></center>-->
+                    <!--                    <center><button style="font-size:12px; background-color: #ffeedf; color:#000;" type="button" class="btn mt-3" data-bs-toggle="modal" data-bs-target="#withdrawModal">-->
+                    <!--  Withdrawal Reason-->
+                    <!--</button> <a style="font-size:12px; color:#000;" href="product_list" class="btn btn-warning mt-3">-->
+                    <!-- View More Items-->
+                    <!--</a></center>-->
                     <div class="modal fade" id="withdrawModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content border-0" style="border-radius: 10px; overflow: hidden;">
-      <!-- Close Button -->
-    
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0" style="border-radius: 10px; overflow: hidden;">
+                                <!-- Close Button -->
 
-      <!-- No header/footer to keep your design intact -->
-      <div class="text-center p-3 pt-4" style="background-color:#c17533; border-radius:5px;">
-        <p style="color:#fff; margin: 0;">
-          This Post has been withdrawn by the seller <a style="font-size:12px; color:#000; background-color:#ffeedf !important;" href="product_list" class="btn btn-warning mt-3">
- View More Items
-</a>
-        </p>
-      </div>
 
-    </div>
-  </div>
-</div>
+                                <!-- No header/footer to keep your design intact -->
+                                <div class="text-center p-3 pt-4" style="background-color:#c17533; border-radius:5px;">
+                                    <p style="color:#fff; margin: 0;">
+                                        This Post has been withdrawn by the seller <a style="font-size:12px; color:#000; background-color:#ffeedf !important;" href="product_list" class="btn btn-warning mt-3">
+                                            View More Items
+                                        </a>
+                                    </p>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
 
                 <?php } ?>
 
 
-<?php } elseif ($session_user_type == "Seller") {
+                <?php } elseif ($session_user_type == "Seller") {
 
-    if (!empty($close_reason)) {
-        ?>
-        <!-- Modal HTML -->
-        <div class="modal fade" id="SellerwithdrawModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content border-0" style="border-radius: 10px; overflow: hidden;">
-                    <div class="text-center p-3 pt-4" style="background-color:#c17533; border-radius:5px;">
-                        <p style="color:#fff; margin: 0;">
-                            This post has been withdrawn by you <br>
-                            <a style="font-size:12px; color:#000; background-color:#ffeedf !important;" href="product_list" class="btn btn-warning mt-3">
-                                Go Back
-                            </a>
-                        </p>
+                if (!empty($close_reason)) {
+                ?>
+                    <!-- Modal HTML -->
+                    <div class="modal fade" id="SellerwithdrawModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content border-0" style="border-radius: 10px; overflow: hidden;">
+                                <div class="text-center p-3 pt-4" style="background-color:#c17533; border-radius:5px;">
+                                    <p style="color:#fff; margin: 0;">
+                                        This post has been withdrawn by you <br>
+                                        <a style="font-size:12px; color:#000; background-color:#ffeedf !important;" href="product_list" class="btn btn-warning mt-3">
+                                            Go Back
+                                        </a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
-        </div>
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function () {
-                var myModal = new bootstrap.Modal(document.getElementById('SellerwithdrawModal'));
-                myModal.show();
-            });
-        </script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            var myModal = new bootstrap.Modal(document.getElementById('SellerwithdrawModal'));
+                            myModal.show();
+                        });
+                    </script>
 
-        <?php
-        // STOP execution after modal
-        return;
-    }
+                <?php
+                    // STOP execution after modal
+                    return;
+                }
 
-    // ELSE: $close_reason is empty, continue with your SQL
-    $dataget = mysqli_query($con, "SELECT 
+                // ELSE: $close_reason is empty, continue with your SQL
+                $dataget = mysqli_query($con, "SELECT 
         tbl_user_product_view.view_id,
         tbl_user_product_view.buyer_id,
         tbl_user_master.name, 
@@ -797,335 +812,338 @@ $productCountQuery = mysqli_query($con, "
               tbl_user_product_view.deal_status <> 'Credit Used' 
         ORDER BY tbl_user_product_view.entry_timestamp DESC");
 
-    if (mysqli_num_rows($dataget) > 0) {
-        // Your normal content rendering goes here
-?>
+                if (mysqli_num_rows($dataget) > 0) {
+                    // Your normal content rendering goes here
+                ?>
 
 
                     <?php
                     ?>
                     <?php if (empty($close_reason)) { ?>
 
-                    <form class="product-form product-form-border hidedropdown">
-                        <h2 style="color: #C17533; font-weight: 400;">Make Your Offer : </h2>
-                        <div class="request-list-div">
-                            <div class="row">
-                                <?php
-                                // get this product's buyer view
-                                $i = 1;
+                        <form class="product-form product-form-border hidedropdown">
+                            <h2 style="color: #C17533; font-weight: 400;">Make Your Offer : </h2>
+                            <div class="request-list-div">
+                                <div class="row">
+                                    <?php
+                                    // get this product's buyer view
+                                    $i = 1;
 
-                                while ($rw = mysqli_fetch_array($dataget)) {
+                                    while ($rw = mysqli_fetch_array($dataget)) {
 
-                                    if ($rw['deal_status'] == "Offer Accepted" || $rw['deal_status'] == "Completed") {
-                                        $badgesClass = "success-badge";
-                                    } elseif ($rw['deal_status'] == "Credit Used" || $rw['deal_status'] == "Under Negotiation") {
-                                        $badgesClass = "info-badge";
-                                    } elseif ($rw['deal_status'] == "Pickup Scheduled") {
-                                        $badgesClass = "warning-badge";
-                                    } else {
-                                        $badgesClass = "danger-badge";
-                                    }
+                                        if ($rw['deal_status'] == "Offer Accepted" || $rw['deal_status'] == "Completed") {
+                                            $badgesClass = "success-badge";
+                                        } elseif ($rw['deal_status'] == "Credit Used" || $rw['deal_status'] == "Under Negotiation") {
+                                            $badgesClass = "info-badge";
+                                        } elseif ($rw['deal_status'] == "Pickup Scheduled") {
+                                            $badgesClass = "warning-badge";
+                                        } else {
+                                            $badgesClass = "danger-badge";
+                                        }
                                     ?>
-                                    <div class="col-md-4">
-                                        <div class="buyer-request-div">
+                                        <div class="col-md-4">
+                                            <div class="buyer-request-div">
 
-                                            <?php
+                                                <?php
 
 
-                                            if (!empty($close_reason)) {
-                                                // Product was closed by the seller
-                                                echo '<span class="badges ' . $badgesClass . '" style="background-color:#dc362e !important;">Closed By Seller</span>';
-                                            } else {
-                                                // Show deal status from your result
-                                                echo '<span class="badges ' . $badgesClass . '">' . $rw['deal_status'] . '</span>';
-                                            }
-                                            ?>
+                                                if (!empty($close_reason)) {
+                                                    // Product was closed by the seller
+                                                    echo '<span class="badges ' . $badgesClass . '" style="background-color:#dc362e !important;">Closed By Seller</span>';
+                                                } else {
+                                                    // Show deal status from your result
+                                                    echo '<span class="badges ' . $badgesClass . '">' . $rw['deal_status'] . '</span>';
+                                                }
+                                                ?>
 
-                                            <h4 class="heading">Buyer Details :</h4>
-                                            <div class="user-info-div">
-                                                <!-- <img
+                                                <h4 class="heading">Buyer Details :</h4>
+                                                <div class="user-info-div">
+                                                    <!-- <img
                                                     src="./upload_content/upload_img/user_img/<?php echo $rw['user_img'] == "" ? "default.png" : $rw['user_img']; ?>" /> -->
-                                                <i class="bi bi-person uicon-u"></i>
-                                                <?php echo $rw['name']; ?>
-                                                <br />
-                                                <a href="tel:<?php echo $rw['country_code'] . $rw['ph_num']; ?>"><i
-                                                        class="bi bi-telephone uicon"></i>
-                                                    : <?php echo $rw['country_code'] . " " . $rw['ph_num']; ?></a>
-                                            </div>
-
-                                            <?php
-                                            if ($rw['assigned_collecter'] != "") {
-                                                $collector_dataget = mysqli_query($con, "select name, country_code, ph_num, user_img from tbl_user_master where user_id='" . $rw['assigned_collecter'] . "' ");
-                                                $collector_data = mysqli_fetch_assoc($collector_dataget);
-
-                                                if ($collector_data) {
-                                                    ?>
-                                                    <h4 class="heading">Collector Details :</h4>
-                                                    <div class="user-info-div">
-                                                        <i class="bi bi-person-circle" style="font-size: 18px; color:#000;"></i>
-                                                        <?php echo $collector_data['name']; ?>
-                                                        <br />
-                                                        <a href="tel:<?php echo $collector_data['country_code'] . $collector_data['ph_num']; ?>"><i
-                                                                class="bi bi-telephone" style="font-size: 18px;"></i> :
-                                                            <?php echo $collector_data['country_code'] . " " . $collector_data['ph_num']; ?></a>
-                                                    </div>
-                                                    <?php
-                                                }
-                                            }
-                                            ?>
-
-                                            <h4 class="heading">Offer Details :</h4>
-                                            <div class="user-info-div">
-                                                <label>Offered Price : <?php echo $rw['negotiation_amount']; ?> /-</label>
-                                                <?php
-                                                if ($rw['mssg'] != "") {
-                                                    echo '<label>Message : ' . $rw['mssg'] . '</label>';
-                                                }
-                                                ?>
-                                            </div>
-
-                                            <!-- Deal status wise action  -->
-
-                                            <?php
-                                            if ($rw['deal_status'] == "Offer Accepted") {
-                                                ?>
-                                                <button type="button" onclick="sellerAcceptPrice(<?php echo $rw['view_id']; ?>)" class="btn"
-                                                    style="padding: 6px 40px; border-radius: 6px; background-color: #00aa49; border-color: #016a2e;">
-                                                    Schedule Pickup
-                                                </button>
-                                                <?php
-                                            } elseif ($rw['deal_status'] == "Pickup Scheduled") {
-                                                ?>
-                                                <p>Pickup Date : <?php echo dateFormat($rw['pickup_date']); ?></p>
+                                                    <i class="bi bi-person uicon-u"></i>
+                                                    <?php echo $rw['name']; ?>
+                                                    <br />
+                                                    <a href="tel:<?php echo $rw['country_code'] . $rw['ph_num']; ?>"><i
+                                                            class="bi bi-telephone uicon"></i>
+                                                        : <?php echo $rw['country_code'] . " " . $rw['ph_num']; ?></a>
+                                                </div>
 
                                                 <?php
-                                            } elseif ($rw['deal_status'] == "Completed") {
+                                                if ($rw['assigned_collecter'] != "") {
+                                                    $collector_dataget = mysqli_query($con, "select name, country_code, ph_num, user_img from tbl_user_master where user_id='" . $rw['assigned_collecter'] . "' ");
+                                                    $collector_data = mysqli_fetch_assoc($collector_dataget);
+
+                                                    if ($collector_data) {
                                                 ?>
-                                                <p>The Deal is Completed on <?php echo dateFormat($rw['complete_date']); ?> date</p>
-
+                                                        <h4 class="heading">Collector Details :</h4>
+                                                        <div class="user-info-div">
+                                                            <i class="bi bi-person-circle" style="font-size: 18px; color:#000;"></i>
+                                                            <?php echo $collector_data['name']; ?>
+                                                            <br />
+                                                            <a href="tel:<?php echo $collector_data['country_code'] . $collector_data['ph_num']; ?>"><i
+                                                                    class="bi bi-telephone" style="font-size: 18px;"></i> :
+                                                                <?php echo $collector_data['country_code'] . " " . $collector_data['ph_num']; ?></a>
+                                                        </div>
                                                 <?php
-                                                if ($product_status != "Completed") {
-                                                    ?>
-                                                    <button type="button" onclick="sellerCloseProduct(<?php echo $rw['view_id'] ?>)" class="btn"
-                                                        style="padding: 6px 40px; border-radius: 6px; background-color: #b5753e; border-color: #a34600;">
-                                                        Close Product
-                                                    </button>
-                                                    <?php
-                                                }
-                                                ?>
-
-                                                <?php
-                                                if ($product_status == "Completed") {
-                                                    // check seller already give ratings to buyer
-                                                    $dataget = mysqli_query($con, "select * from tbl_ratings where give_user_id='" . $session_user_code . "' and to_user_id='" . $rw['buyer_id'] . "' and rating_from='Seller' and view_id='" . $rw['view_id'] . "' ");
-                                                    $data = mysqli_fetch_row($dataget);
-                                                    if (!$data) {
-                                                        ?>
-
-                                                        <?php if (empty($close_reason)): ?>
-                                                            <button type="button"
-                                                                onclick="openRatingModal(<?php echo (int) $rw['buyer_id']; ?>, <?php echo (int) $rw['view_id']; ?>)"
-                                                                data-bs-toggle="modal" data-bs-target="#buyer_ratings_modal" class="btn"
-                                                                style="padding: 6px 40px; border-radius: 6px; background-color: #C17533; border-color: #a34600;">
-                                                                Give Ratings to Buyer
-                                                            </button>
-                                                        <?php endif; ?>
-
-                                                        <?php
                                                     }
                                                 }
                                                 ?>
 
-                                                <?php
-                                            } elseif ($rw['deal_status'] == "Under Negotiation") {
-
-                                                if ($rw['negotiation_by'] == "Seller") {
-
-                                                    echo '<p>Requested By You</p>';
-                                                } else {
-                                                    ?>
-                                                    <div class="text-center">
-                                                        <button type="button" onclick="sellerNegotiate(<?php echo $rw['view_id']; ?>)" class="btn"
-                                                            style="padding: 10px 40px; border-radius: 6px; background-color: #b5753e; border-color: #a34600;">
-                                                            Negotiate
-                                                        </button>
-                                                        <button type="button" onclick="sellerAcceptPrice(<?php echo $rw['view_id']; ?>)" class="btn"
-                                                            style="padding: 10px 40px; border-radius: 6px; background-color: #198754; color:#fff; border-color: none;">
-                                                            Accept
-                                                        </button>
-                                                    </div>
+                                                <h4 class="heading">Offer Details :</h4>
+                                                <div class="user-info-div">
                                                     <?php
+                                                    // Get the last value from negotiation_amount
+                                                    $negotiation_values = explode(',', $rw['negotiation_amount']);
+                                                    $last_negotiation_price = end($negotiation_values); // gets the last element (e.g., 40)
+
+                                                    echo '<label>Offered Price : ' . $last_negotiation_price . ' /-</label>';
+
+                                                    if (!empty($rw['mssg'])) {
+                                                        echo '<label>Message : ' . $rw['mssg'] . '</label>';
+                                                    }
+                                                    ?>
+                                                </div>
+
+                                                <!-- Deal status wise action  -->
+
+                                                <?php
+                                                if ($rw['deal_status'] == "Offer Accepted") {
+                                                ?>
+                                                    <button type="button" onclick="sellerAcceptPrice(<?php echo $rw['view_id']; ?>)" class="btn"
+                                                        style="padding: 6px 40px; border-radius: 6px; background-color: #00aa49; border-color: #016a2e;">
+                                                        Schedule Pickup
+                                                    </button>
+                                                <?php
+                                                } elseif ($rw['deal_status'] == "Pickup Scheduled") {
+                                                ?>
+                                                    <p>Pickup Date : <?php echo dateFormat($rw['pickup_date']); ?></p>
+
+                                                <?php
+                                                } elseif ($rw['deal_status'] == "Completed") {
+                                                ?>
+                                                    <p>The Deal is Completed on <?php echo dateFormat($rw['complete_date']); ?></p>
+
+                                                    <?php
+                                                    if ($product_status != "Completed") {
+                                                    ?>
+                                                        <button type="button" onclick="sellerCloseProduct(<?php echo $rw['view_id'] ?>)" class="btn"
+                                                            style="padding: 6px 40px; border-radius: 6px; background-color: #b5753e; border-color: #a34600;">
+                                                            Close Product
+                                                        </button>
+                                                    <?php
+                                                    }
+                                                    ?>
+
+                                                    <?php
+                                                    if ($product_status == "Completed") {
+                                                        // check seller already give ratings to buyer
+                                                        $dataget = mysqli_query($con, "select * from tbl_ratings where give_user_id='" . $session_user_code . "' and to_user_id='" . $rw['buyer_id'] . "' and rating_from='Seller' and view_id='" . $rw['view_id'] . "' ");
+                                                        $data = mysqli_fetch_row($dataget);
+                                                        if (!$data) {
+                                                    ?>
+
+                                                            <?php if (empty($close_reason)): ?>
+                                                                <button type="button"
+                                                                    onclick="openRatingModal(<?php echo (int) $rw['buyer_id']; ?>, <?php echo (int) $rw['view_id']; ?>)"
+                                                                    data-bs-toggle="modal" data-bs-target="#buyer_ratings_modal" class="btn"
+                                                                    style="padding: 6px 40px; border-radius: 6px; background-color: #C17533; border-color: #a34600;">
+                                                                    Give Ratings to Buyer
+                                                                </button>
+                                                            <?php endif; ?>
+
+                                                    <?php
+                                                        }
+                                                    }
+                                                    ?>
+
+                                                    <?php
+                                                } elseif ($rw['deal_status'] == "Under Negotiation") {
+
+                                                    if ($rw['negotiation_by'] == "Seller") {
+
+                                                        echo '<p>Requested By You</p>';
+                                                    } else {
+                                                    ?>
+                                                        <div class="text-center">
+                                                            <button type="button" onclick="sellerNegotiate(<?php echo $rw['view_id']; ?>)" class="btn"
+                                                                style="padding: 10px 40px; border-radius: 6px; background-color: #b5753e; border-color: #a34600;">
+                                                                Negotiate
+                                                            </button>
+                                                            <button type="button" onclick="sellerAcceptPrice(<?php echo $rw['view_id']; ?>)" class="btn"
+                                                                style="padding: 10px 40px; border-radius: 6px; background-color: #198754; color:#fff; border-color: none;">
+                                                                Accept
+                                                            </button>
+                                                        </div>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                <?php
+                                                } else {
+                                                    echo '<p>The deal was cancelled</p>';
                                                 }
                                                 ?>
-                                                <?php
-                                            } else {
-                                                echo '<p>The deal was cancelled</p>';
-                                            }
-                                            ?>
-                                        </div>
-                                    </div>
-                                    <?php
-                                    $i++;
-                                }
-                                ?>
-                            </div>
-                        </div>
-                        <?php
-                        if ($i == 1) {
-                            ?>
-                            <center>
-                                <h3>No Items Found</h3>
-                            </center>
-                            <?php
-                        }
-                        ?>
-
-                    </form>
-
-                    <!-- Price Request Modal -->
-                    <div class="modal fade" id="price_request_modal" tabindex="-1" aria-labelledby="priceRequestModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h2 class="modal-title" id="priceRequestModalLabel">Send Your Price Request</h2>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                                            class="bi bi-x f-20"></i></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="nego_view_id" value="" />
-                                    <form class="add-address-from" method="post" action="#">
-                                        <div class="form-group">
-                                            <label for="negotiation_amount">Negotiate Price <span class="required">*</span></label>
-                                            <input type="text" value="" id="negotiation_amount" class="form-control"
-                                                placeholder="Enter Negotiate Price" step="any" required min="1" />
-                                            <label data-default-mssg="" class="input_alert negotiation_amount-inp-alert"></label>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="mssg">Want to sent any message ?</label>
-                                            <textarea id="mssg" class="form-control" placeholder="Type your message here ...."
-                                                maxlength="500"></textarea>
-                                            <label data-default-mssg="" class="input_alert mssg-inp-alert"></label>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer justify-content-center">
-                                    <button type="submit" onclick="sellerSendRequest();" class="btn btn-primary m-0">
-                                        <span class="f-15">Send Request To Buyer/Collector</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Pickup Schedule Modal -->
-                    <div class="modal fade" id="pickup_schedule_modal" tabindex="-1" aria-labelledby="pickupScheduleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered"> <!-- Ensures Centering -->
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h2 class="modal-title" id="pickupScheduleModalLabel">Send Your Pickup Request</h2>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                                            class="bi bi-x f-20"></i></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="pickup_view_id" value="" />
-                                    <form class="add-address-from" method="post" action="#">
-                                        <div class="form-group">
-                                            <label for="pickup_date">Pickup Date <span class="required">*</span></label>
-                                            <input type="date" id="pickup_date" class="form-control" placeholder="Enter Pickup Date"
-                                                required min="<?php echo date('Y-m-d'); ?>" />
-                                            <label data-default-mssg="" class="input_alert pickup_date-inp-alert"></label>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer justify-content-center">
-                                    <button type="submit" onclick="updatePickupDate();" class="btn btn-primary m-0">
-                                        <span class="f-15">Update Pickup Date</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <!-- Give Buyer Ratings Modal -->
-                    <div class="modal fade" id="buyer_ratings_modal" tabindex="-1" aria-labelledby="buyerRatingsModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h2 class="modal-title" id="buyerRatingsModalLabel">Ratings For Buyer</h2>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
-                                            class="bi bi-x f-20"></i></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="rating_buyer_id" value="" />
-                                    <input type="hidden" id="rating_view_id" value="" />
-                                    <form>
-
-                                        <div class="form-group mb-3">
-                                            <label for="rating">How many ratings would you like to give the buyer? <span
-                                                    class="required">*</span></label>
-                                            <div class="rating-stars">
-                                                <i class="fa fa-star star-1" onclick="ratingStar(1)"></i>
-                                                <i class="fa fa-star star-2" onclick="ratingStar(2)"></i>
-                                                <i class="fa fa-star star-3" onclick="ratingStar(3)"></i>
-                                                <i class="fa fa-star star-4" onclick="ratingStar(4)"></i>
-                                                <i class="fa fa-star star-5" onclick="ratingStar(5)"></i>
                                             </div>
-                                            <input type="number" value="" id="rating" required min="1" max="5" class="d-none" />
-                                            <label data-default-mssg="" class="input_alert rating-inp-alert"></label>
                                         </div>
-                                        <div class="form-group">
-                                            <label for="review">Review</label>
-                                            <textarea id="review" class="form-control" placeholder="Write a Review"
-                                                maxlength="500"></textarea>
-                                            <label data-default-mssg="" class="input_alert review-inp-alert"></label>
-                                        </div>
-                                    </form>
+                                    <?php
+                                        $i++;
+                                    }
+                                    ?>
                                 </div>
-                                <div class="modal-footer justify-content-center">
-                                    <button type="submit" onclick="sellerSaveRatings();" class="btn btn-primary m-0">
-                                        <span>Submit</span>
-                                    </button>
+                            </div>
+                            <?php
+                            if ($i == 1) {
+                            ?>
+                                <center>
+                                    <h3>No Items Found</h3>
+                                </center>
+                            <?php
+                            }
+                            ?>
+
+                        </form>
+
+                        <!-- Price Request Modal -->
+                        <div class="modal fade" id="price_request_modal" tabindex="-1" aria-labelledby="priceRequestModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title" id="priceRequestModalLabel">Send Your Price Request</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                                                class="bi bi-x f-20"></i></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" id="nego_view_id" value="" />
+                                        <form class="add-address-from" method="post" action="#">
+                                            <div class="form-group">
+                                                <label for="negotiation_amount">Negotiate Price <span class="required">*</span></label>
+                                                <input type="text" value="" id="negotiation_amount" class="form-control"
+                                                    placeholder="Enter Negotiate Price" step="any" required min="1" />
+                                                <label data-default-mssg="" class="input_alert negotiation_amount-inp-alert"></label>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="mssg">Want to sent any message ?</label>
+                                                <textarea id="mssg" class="form-control" placeholder="Type your message here ...."
+                                                    maxlength="500"></textarea>
+                                                <label data-default-mssg="" class="input_alert mssg-inp-alert"></label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="submit" onclick="sellerSendRequest();" class="btn btn-primary m-0">
+                                            <span class="f-15">Send Request To Buyer/Collector</span>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+
+                        <!-- Pickup Schedule Modal -->
+                        <div class="modal fade" id="pickup_schedule_modal" tabindex="-1" aria-labelledby="pickupScheduleModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered"> <!-- Ensures Centering -->
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title" id="pickupScheduleModalLabel">Send Your Pickup Request</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                                                class="bi bi-x f-20"></i></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" id="pickup_view_id" value="" />
+                                        <form class="add-address-from" method="post" action="#">
+                                            <div class="form-group">
+                                                <label for="pickup_date">Pickup Date <span class="required">*</span></label>
+                                                <input type="date" id="pickup_date" class="form-control" placeholder="Enter Pickup Date"
+                                                    required min="<?php echo date('Y-m-d'); ?>" />
+                                                <label data-default-mssg="" class="input_alert pickup_date-inp-alert"></label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="submit" onclick="updatePickupDate();" class="btn btn-primary m-0">
+                                            <span class="f-15">Update Pickup Date</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Give Buyer Ratings Modal -->
+                        <div class="modal fade" id="buyer_ratings_modal" tabindex="-1" aria-labelledby="buyerRatingsModalLabel"
+                            aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h2 class="modal-title" id="buyerRatingsModalLabel">Ratings For Buyer</h2>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                                                class="bi bi-x f-20"></i></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <input type="hidden" id="rating_buyer_id" value="" />
+                                        <input type="hidden" id="rating_view_id" value="" />
+                                        <form>
+
+                                            <div class="form-group mb-3">
+                                                <label for="rating">How many ratings would you like to give the buyer? <span
+                                                        class="required">*</span></label>
+                                                <div class="rating-stars">
+                                                    <i class="fa fa-star star-1" onclick="ratingStar(1)"></i>
+                                                    <i class="fa fa-star star-2" onclick="ratingStar(2)"></i>
+                                                    <i class="fa fa-star star-3" onclick="ratingStar(3)"></i>
+                                                    <i class="fa fa-star star-4" onclick="ratingStar(4)"></i>
+                                                    <i class="fa fa-star star-5" onclick="ratingStar(5)"></i>
+                                                </div>
+                                                <input type="number" value="" id="rating" required min="1" max="5" class="d-none" />
+                                                <label data-default-mssg="" class="input_alert rating-inp-alert"></label>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="review">Review</label>
+                                                <textarea id="review" class="form-control" placeholder="Write a Review"
+                                                    maxlength="500"></textarea>
+                                                <label data-default-mssg="" class="input_alert review-inp-alert"></label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer justify-content-center">
+                                        <button type="submit" onclick="sellerSaveRatings();" class="btn btn-primary m-0">
+                                            <span>Submit</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
                     <?php } else { ?>
 
-    
-    
+
+
                         <div class="modal fade" id="SellerwithdrawModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
-                  <div class="modal-dialog modal-dialog-centered">
-                  <div class="modal-content border-0" style="border-radius: 10px; overflow: hidden;">
-      <!-- Close Button -->
-    
-
-      <!-- No header/footer to keep your design intact -->
-      <div class="text-center p-3 pt-4" style="background-color:#c17533; border-radius:5px;">
-        <p style="color:#fff; margin: 0;">
-     This post has been withdrawn by you <a style="font-size:12px; color:#000; background-color:#ffeedf !important;" href="product_list" class="btn btn-warning mt-3">
-     Go Back
-    </a>
-        </p>
-      </div>
-
-    </div>
-  </div>
-</div>
-    
-    
-<?php } ?>
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content border-0" style="border-radius: 10px; overflow: hidden;">
+                                    <!-- Close Button -->
 
 
-                    <?php
+                                    <!-- No header/footer to keep your design intact -->
+                                    <div class="text-center p-3 pt-4" style="background-color:#c17533; border-radius:5px;">
+                                        <p style="color:#fff; margin: 0;">
+                                            This post has been withdrawn by you <a style="font-size:12px; color:#000; background-color:#ffeedf !important;" href="product_list" class="btn btn-warning mt-3">
+                                                Go Back
+                                            </a>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    <?php } ?>
+
+
+                <?php
                 }
-                
-                
             } else {
 
                 $product_view_dataget = mysqli_query($con, "select view_id, view_date, deal_status, purchased_price, negotiation_amount, negotiation_by, mssg, negotiation_date, accept_date, pickup_date, pickup_time, complete_date from tbl_user_product_view where assigned_collecter='" . $session_user_code . "' and product_id='" . $product_id . "' ");
@@ -1162,13 +1180,13 @@ $productCountQuery = mysqli_query($con, "
                             </p>
                             <?php
                             if ($email != "") {
-                                ?>
+                            ?>
                                 <p class="product-sku"><b>Email:</b>
                                     <span class="text">
                                         <?php echo $product_view_data ? '<a href="mailto:' . $email . '">' . $email . '</a>' : substr($email, 0, 2) . "***"; ?>
                                     </span>
                                 </p>
-                                <?php
+                            <?php
                             }
                             ?>
                         </div>
@@ -1179,7 +1197,7 @@ $productCountQuery = mysqli_query($con, "
 
                             <?php
                             if ($deal_status == "Offer Made" || $deal_status == "Under Negotiation") {
-                                ?>
+                            ?>
                                 <p style="text-align: center; color: #0088ff; font-weight: 500;">
                                     This deal opened on <?php echo dateFormat($view_date); ?> for you.<br> Or, You can also close the
                                     deal.
@@ -1187,7 +1205,7 @@ $productCountQuery = mysqli_query($con, "
                                 <?php
                                 // if any request not inserted
                                 if ($negotiation_by == "") {
-                                    ?>
+                                ?>
                                     <div class="buyer_confirm_box confirm-option-div animate__animated animate__backInUp">
                                         <h2>What do you want ?</h2>
                                         <p style="font-weight: 600;">
@@ -1222,17 +1240,17 @@ $productCountQuery = mysqli_query($con, "
                                             style="background: #9d1111; border: 0px; border-radius: 5px;">
                                             <span>Cancel</span>
                                         </button>
-                                        <button type="button" onclick="buyerSendRequest()"
+                                        <button type="button" onclick="buyerSendRequest(event)"
                                             class="btn btn-secondary product-form-cart-submit"
                                             style="background: #c17533; border: 0px; border-radius: 5px;">
                                             <span>Send Request To Seller</span>
                                         </button>
                                     </div>
-                                    <?php
+                                <?php
                                 }
                                 // if request submitted from seller end
                                 elseif ($negotiation_by == "Seller") {
-                                    ?>
+                                ?>
                                     <div class="buyer_confirm_box confirm-option-div animate__animated animate__backInUp">
                                         <h2>What do you want ?</h2>
                                         <p style="font-weight: 600;">
@@ -1240,9 +1258,9 @@ $productCountQuery = mysqli_query($con, "
                                             seller side. Do you want to negotiate or accept the price ?
                                             <?php
                                             if ($mssg != "") {
-                                                ?>
+                                            ?>
                                                 Message From Seller : <?php echo $mssg; ?>
-                                                <?php
+                                            <?php
                                             }
                                             ?>
                                         </p>
@@ -1274,17 +1292,17 @@ $productCountQuery = mysqli_query($con, "
                                             style="background: #9d1111; border: 0px; border-radius: 5px;">
                                             <span>Cancel</span>
                                         </button>
-                                        <button type="button" onclick="buyerSendRequest()"
+                                        <button type="button" onclick="buyerSendRequest(event)"
                                             class="btn btn-secondary product-form-cart-submit"
                                             style="background: #00954f; border: 0px; border-radius: 5px;">
                                             <span>Send Request To Seller</span>
                                         </button>
                                     </div>
-                                    <?php
+                                <?php
                                 }
                                 // if request send from buyer or collector side
                                 else {
-                                    ?>
+                                ?>
                                     <div class="buyer_confirm_box confirm-option-div animate__animated animate__backInUp">
                                         <h2>Your request has been sent! Waiting for seller's confirmation.</h2>
                                         <p style="font-weight: 600;">
@@ -1292,14 +1310,14 @@ $productCountQuery = mysqli_query($con, "
                                             wait for the seller's response.
                                             <?php
                                             if ($mssg != "") {
-                                                ?>
+                                            ?>
                                                 Message From You : <?php echo $mssg; ?>
-                                                <?php
+                                            <?php
                                             }
                                             ?>
                                         </p>
                                     </div>
-                                    <?php
+                                <?php
                                 }
                             } elseif ($deal_status == "offer Accepted") {
                                 ?>
@@ -1310,21 +1328,21 @@ $productCountQuery = mysqli_query($con, "
                                         seller's confirmation and pickup details
                                         <?php
                                         if ($mssg != "") {
-                                            ?>
+                                        ?>
                                             Message From You : <?php echo $mssg; ?>
-                                            <?php
+                                        <?php
                                         }
                                         ?>
                                     </p>
                                 </div>
-                                <?php
+                            <?php
                             } elseif ($deal_status == "Pickup Schedule") {
-                                ?>
+                            ?>
                                 <div class="buyer_confirm_box confirm-option-div animate__animated animate__backInUp"
                                     style="width: 100% !important;">
                                     <h2>Waiting for pickup</h2>
                                     <p style="font-weight: 600;">
-                                        Pickup Date : <?php echo dateFormat($pickup_date); ?>,
+                                        Pickup Date : <?php echo dateFormat($pickup_date); ?>
 
                                     </p>
                                     <!-- <p style="font-weight: 600;">
@@ -1337,9 +1355,9 @@ $productCountQuery = mysqli_query($con, "
                                     </button>
 
                                 </div>
-                                <?php
+                            <?php
                             } elseif ($deal_status == "Completed") {
-                                ?>
+                            ?>
                                 <div class="buyer_confirm_box confirm-option-div animate__animated animate__backInUp"
                                     style="width:100%;">
                                     <h2>Deal completed</h2>
@@ -1347,38 +1365,38 @@ $productCountQuery = mysqli_query($con, "
                                         Completion date : <?php echo dateFormat($complete_date); ?>
                                     </p>
                                 </div>
-                                <?php
+                            <?php
                             } else {
-                                ?>
+                            ?>
                                 <div class="buyer_confirm_box confirm-option-div animate__animated animate__backInUp">
                                     <h2>Deal was cancelled </h2>
                                     <p style="font-weight: 600;">
                                         Some other buyer crack the deal
                                     </p>
                                 </div>
-                                <?php
+                            <?php
                             }
                             ?>
                         </form>
                     </div>
                 </div>
 
-                <?php
+            <?php
             }
             ?>
 
 
         </div>
 
-        <?php
+    <?php
     } else {
-        ?>
+    ?>
         <div class="container">
             <div class="product-single">
                 <h2 class="text-center">No Product Found</h2>
             </div>
         </div>
-        <?php
+    <?php
     }
 } else { // If product_id is empty or invalid
     ?>
@@ -1387,7 +1405,7 @@ $productCountQuery = mysqli_query($con, "
             <h2 class="text-center">Invalid Product ID</h2>
         </div>
     </div>
-    <?php
+<?php
 }
 ?>
 
