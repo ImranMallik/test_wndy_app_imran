@@ -65,85 +65,113 @@ $totalItems = mysqli_num_rows($result);
     <div class="container">
         <div class="row">
             <?php while ($row = mysqli_fetch_assoc($result)) { ?>
-                <div class="col-4 col-sm-4 col-md-3 col-lg-3 mb-4">
-                    <a href="<?php echo "./create_post_details/" . $row['product_id']; ?>" class="card" style="border: none; border-radius: 15px; overflow: hidden; position: relative; max-width: 100%;">
-                        <div class="product-image" style="height: 130px; background-image: url('upload_content/upload_img/product_img/<?php echo htmlspecialchars($row['create_post_img']); ?>'); background-repeat: no-repeat; background-position: center; background-size: cover; border-radius: 15px 15px 0 0; background-color: #e0e0e0; position: relative;">
-                            <?php
-                            if ($rw['product_status'] == "Active") {
+
+                <div class="list-item d-flex gap-3">
+                    <a href="<?php echo "./create_post_details/" . $row['product_id']; ?>" class="product-img rounded-0">
+                        <img style="width: 110px !important;
+  height: 100px !important; border-radius: 8px;"
+                            src="upload_content/upload_img/product_img/<?php echo $row['create_post_img'] ?: 'no_image.png'; ?>"
+                            alt="product_img" class="flex-shrink-0 lazyloaded">
+                    </a>
+
+                    <div class="flex-grow-1">
+                        <?php
+                        if ($rw['product_status'] == "Active") {
                             ?>
-                                <img src="frontend_assets/img-icon/status-open.png" class="product-status-img" />
+                            <img src="frontend_assets/img-icon/status-open.png" class="product-status-img" />
                             <?php
-                            } else if ($rw['product_status'] == "Completed") {
+                        } else if ($rw['product_status'] == "Completed") {
                             ?>
                                 <img src="frontend_assets/img-icon/status-close.png" class="product-status-img" />
                             <?php
-                            } else {
+                        } else {
                             ?>
                                 <img src="frontend_assets/img-icon/unlocked.png" class="product-status-img open_deal" />
                             <?php
-                            }
+                        }
 
-                            ?>
+                        ?><br><br>
+                        <span
+                            class="text-secondary"><?php echo htmlspecialchars($row['create_post_name'] ?: 'null'); ?></span><br>
+                        <div class="d-flex align-items-center" style="justify-content: flex-end; margin-top: -40px;">
+                            <!-- Edit button with modal trigger -->
+
+
+                            <a href="#" class="bottom-btn btn-sm pb-2" style="background-color:#c17f59 !important; border:none;"
+                                data-bs-toggle="modal" data-bs-target="#editModal<?php echo $row['product_id']; ?>"
+                                style="color: #2f415d; margin-right: 10px;" title="Edit">
+                                <i class="bi bi-pencil-square" style="font-size:18px; color:#fff; padding-top:15px;"></i>
+                            </a> &nbsp;
+                            <br>
+                            <!-- Delete button -->
+                            <a href="javascript:void(0);" class="bottom-btn btn-sm pb-2"
+                                style="background-color:#c17f59 !important; border:none;" title="Delete"
+                                onclick="delete_alert(<?php echo htmlspecialchars($row['create_post_id']); ?>, event);">
+                                <i class="bi bi-trash" style="font-size:18px; color:#fff; padding-top:15px;"></i>
+                            </a>
                         </div>
-                        <div class="card-body text-center" style="background-color: #2f415d; color: #fff; padding: 5px; position: relative; bottom: 0; width: 100%; border-radius: 0 0 15px 15px;">
-                            <p class="card-text text-truncate" style="font-size: 12px; font-weight: 500; margin: 0; line-height: 1.4;">
-                                <?php echo htmlspecialchars($row['create_post_name'] ?: 'null'); ?>
-                            </p>
 
-
-                        </div>
-                    </a>
-                    <div class="card-actions text-center mt-2" style="padding: 5px; background-color: transparent;">
-                        <!-- Edit button with modal trigger -->
-                        <a href="#" data-bs-toggle="modal" data-bs-target="#editModal<?php echo $row['product_id']; ?>"
-                            style="color: #2f415d; margin-right: 10px;" title="Edit">
-                            <img src="frontend_assets/img-icon/edit.png" alt="Edit">
-                        </a>
-
-                        <!-- Delete button -->
-                        <a href="javascript:void(0);" style="color: #ff4d4d;" title="Delete" onclick="delete_alert(<?php echo htmlspecialchars($row['create_post_id']); ?>, event);">
-                            <img src="frontend_assets/img-icon/bin.png" alt="Delete">
-                        </a>
                     </div>
                 </div>
 
+
+
+
                 <!-- Modal for Editing Product -->
-                <div class="modal fade" id="editModal<?php echo $row['product_id']; ?>" tabindex="-1" aria-labelledby="editModalLabel<?php echo $row['product_id']; ?>" aria-hidden="true">
+                <div class="modal fade" id="editModal<?php echo $row['product_id']; ?>" tabindex="-1"
+                    aria-labelledby="editModalLabel<?php echo $row['product_id']; ?>" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <section class="fxt-template-animation fxt-template-layout2">
                                 <div class="container py-4">
                                     <div class="row justify-content-center">
                                         <div class="col-lg-8 col-md-10 col-12 bg-form-color">
-                                            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
+                                            <div
+                                                class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
                                                 <h5 class="title-text f-w-550">Edit Your Post</h5>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
                                             </div>
 
                                             <!-- Hidden Product ID -->
-                                            <input type="hidden" value="<?php echo $row['create_post_id']; ?>" id="product_id" />
+                                            <input type="hidden" value="<?php echo $row['create_post_id']; ?>"
+                                                id="product_id" />
 
                                             <!-- Post Details -->
                                             <div class="mb-3">
-                                                <label for="product_name" class="form-label">Item Name <span class="text-danger">*</span></label>
-                                                <input type="text" value="<?php echo htmlspecialchars($row['create_post_name']); ?>" class="form-control" id="product_name" placeholder="e.g: Waste" required maxlength="100" />
+                                                <label for="product_name" class="form-label">Item Name <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text"
+                                                    value="<?php echo htmlspecialchars($row['create_post_name']); ?>"
+                                                    class="form-control" id="product_name" placeholder="e.g: Waste" required
+                                                    maxlength="100" />
                                             </div>
                                             <div class="mb-3">
-                                                <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
-                                                <textarea class="form-control" id="description" placeholder="e.g: Description" required><?php echo htmlspecialchars(isset($row['description']) ? $row['description'] : ''); ?></textarea>
+                                                <label for="description" class="form-label">Description <span
+                                                        class="text-danger">*</span></label>
+                                                <textarea class="form-control" id="description" placeholder="e.g: Description"
+                                                    required><?php echo htmlspecialchars(isset($row['description']) ? $row['description'] : ''); ?></textarea>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="brand" class="form-label">Brand</label>
-                                                <input type="text" value="<?php echo htmlspecialchars(isset($row['brand']) ? $row['brand'] : ''); ?>" class="form-control" id="brand" placeholder="e.g: WM" maxlength="100" />
+                                                <input type="text"
+                                                    value="<?php echo htmlspecialchars(isset($row['brand']) ? $row['brand'] : ''); ?>"
+                                                    class="form-control" id="brand" placeholder="e.g: WM" maxlength="100" />
                                             </div>
                                             <div class="mb-3">
-                                                <label for="sale_price" class="form-label">Expected Price <span class="text-danger">*</span></label>
-                                                <input type="text" value="<?php echo htmlspecialchars(isset($row['create_post_sale_price']) ? $row['create_post_sale_price'] : ''); ?>" class="form-control" id="sale_price" placeholder="e.g: 100, 200" required maxlength="8">
+                                                <label for="sale_price" class="form-label">Expected Price <span
+                                                        class="text-danger">*</span></label>
+                                                <input type="text"
+                                                    value="<?php echo htmlspecialchars(isset($row['create_post_sale_price']) ? $row['create_post_sale_price'] : ''); ?>"
+                                                    class="form-control" id="sale_price" placeholder="e.g: 100, 200" required
+                                                    maxlength="8">
                                             </div>
 
                                             <!-- Submit Button -->
                                             <div class="fxt-form-btn fxt-transformY-50 fxt-transition-delay-4">
-                                                <button type="button" class="fxt-btn-fill disabled" onclick="update_details(<?php echo htmlspecialchars($row['create_post_id']); ?>, event);">Update Post <i class="fa fa-arrow-right"></i></button>
+                                                <button type="button" class="fxt-btn-fill disabled"
+                                                    onclick="update_details(<?php echo htmlspecialchars($row['create_post_id']); ?>, event);">Update
+                                                    Post <i class="fa fa-arrow-right"></i></button>
                                             </div>
                                         </div>
                                     </div>

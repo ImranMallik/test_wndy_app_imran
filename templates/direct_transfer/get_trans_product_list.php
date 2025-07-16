@@ -53,8 +53,8 @@ $totalItems = mysqli_num_rows($productData);
 <?php } else { ?>
     <div class="container-fluid">
         <div class="row" id="transferredProductList">
-      
-     
+
+
             <?php while ($row = mysqli_fetch_assoc($productData)) { ?>
                 <div class="col-4 col-sm-12 col-md-4 mb-1">
                     <div class="product-box position-relative"
@@ -66,7 +66,7 @@ $totalItems = mysqli_num_rows($productData);
                         </div>
 
                         <div class="product-details text-center"
-                            style="background-color: #2f415d; color: #fff; padding: 7px; position: absolute; bottom: 0; width: 100%;">
+                            style="background-color: #b17f4a; color: #fff; padding: 7px; position: absolute; bottom: 0; width: 100%;">
                             <div class="product-name" style="font-size: 14px; font-weight: 500; margin: 0; line-height: 1.5;">
                                 <?php
                                 echo !empty($row['product_name'])
@@ -77,23 +77,23 @@ $totalItems = mysqli_num_rows($productData);
                                 ?>
                             </div>
                         </div>
-               
-      
-                     
-					</div>
-				</div>
-               
 
-				<?php } ?>
-        
+
+
+                    </div>
+                </div>
+
+
+            <?php } ?>
+
         </div>
-       
-        
+
+
     </div>
     <input type="hidden" id="buyer_id" value="<?php echo $session_user_code; ?>">
-    <button id="acceptButton" onclick="acceptProduct()" 
-            style="position:relative; background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 10px 30px; cursor: pointer; margin-right: auto; float: left;">
+    <button id="acceptButton" onclick="acceptProduct()"
+        style="position:relative; background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 10px 30px; cursor: pointer; margin-right: auto; float: left;">
         Accept
         <i class="fa fa-check-circle"></i>
     </button>
-	<?php } ?>
+<?php } ?>

@@ -10,18 +10,23 @@ include("../db/db.php");
                 <div class="col-12 text-left filters-toolbar-item d-flex justify-content-start">
                     <div class="filters-item d-flex align-items-center">
                         <div class="grid-options view-mode d-flex flex-wrap justify-content-between">
-                            <a class="icon-mode credit-add-on grid-2 d-block active" href="<?php echo $baseUrl . '/direct_transfer'; ?>" data-col="1">
-                                <img src="frontend_assets/img-icon/purchased_products.png" height="15px" width="15px">
+                            <a class="icon-mode credit-add-on grid-2 d-block active"
+                                href="<?php echo $baseUrl . '/direct_transfer'; ?>" data-col="1"
+                                style="border:none; border-radius: 50px; background-color:#b5753e !important; color:#fff; border: 0px solid #07153d;">
+                                <img src="frontend_assets/img-icon/purchased_products.png" height="27px" width="27px">
                                 <span class="purchased-products"> Material Received</span>
                             </a>
-                            <a class="icon-mode credit-history d-block" href="<?php echo $baseUrl . '/transferred_products'; ?>" data-col="2">
-                                <img src="frontend_assets/img-icon/transferred_products.png" height="15px" width="15px">
+                            <a class="icon-mode credit-history d-block"
+                                href="<?php echo $baseUrl . '/transferred_products'; ?>" data-col="2"
+                                style="border:none; border-radius: 50px; background-color:#ffeedf !important; color:#b5753e; border: 0px solid #07153d;">
+                                <img src="frontend_assets/img-icon/transferred_products.png" height="27px" width="27px">
                                 <span class="transferred-products">Material Sold</span>
                             </a>
+
                             <!-- <a class="icon-mode credit-history d-block" href="<?php echo $baseUrl . '/transferred_items_for_you'; ?>" data-col="3">
-								<img src="frontend_assets/img-icon/transfer_product_for_you.png" height="15px" width="15px">
-								<span class="transferred-products">Transferred Items For You</span>
-							</a> -->
+                                <img src="frontend_assets/img-icon/transfer_product_for_you.png" height="15px" width="15px">
+                                <span class="transferred-products">Transferred Items For You</span>
+                            </a> -->
                         </div>
                     </div>
                 </div>
@@ -42,7 +47,8 @@ include("../db/db.php");
                     <div>
                         <div class="form-group">
                             <label class="control-label"><strong>Filter Category</strong></label>
-                            <select class="form-control" id="trans_category_id" onchange="getTransProductList();" required>
+                            <select class="form-control" id="trans_category_id" onchange="getTransProductList();"
+                                required>
                                 <option value="">Choose Category</option>
                                 <?php
                                 $fetchData = mysqli_query($con, "SELECT 

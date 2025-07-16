@@ -12,7 +12,8 @@ $product_status = $arr[2];
                     <div class="widget-title" style="background-color: #f8f9fa !important;">
                         <h2>Choose Categories</h2>
                     </div>
-                    <div class="col-12 col-sm-12 col-md-10 col-lg-10 text-right filters-toolbar-item order-2 order-sm-2" style="padding:10px;">
+                    <div class="col-12 col-sm-12 col-md-10 col-lg-10 text-right filters-toolbar-item order-2 order-sm-2"
+                        style="padding:10px;">
                         <div class="row">
                             <div class="col-12">
                                 <div class="custom-select-wrapper">
@@ -20,7 +21,8 @@ $product_status = $arr[2];
                                     <span class="dropdown-icon"><i class="bi bi-chevron-down f-500"></i></span>
 
                                     <div class="custom-options" id="customCategoryOptions">
-                                        <input type="text" class="custom-search" placeholder="Search..." onkeyup="filterCategoryOptions(this.value)">
+                                        <input type="text" class="custom-search" placeholder="Search..."
+                                            onkeyup="filterCategoryOptions(this.value)">
                                         <div onclick="selectCategoryOption(this, 'All')">All Categories</div>
                                         <?php
                                         $fetchData = mysqli_query($con, "
@@ -36,10 +38,13 @@ $product_status = $arr[2];
                                             echo "<div onclick=\"selectCategoryOption(this, '$catId')\">$catName</div>";
                                         }
                                         ?>
-                                        <div id="noCategoryResult" style="display: none; padding: 10px; color: #999; font-style: italic;">No results found</div>
+                                        <div id="noCategoryResult"
+                                            style="display: none; padding: 10px; color: #999; font-style: italic;">No
+                                            results found</div>
                                     </div>
 
-                                    <select id="category_id" style="display:none;" onchange="get_demand_post_list_category()">
+                                    <select id="category_id" style="display:none;"
+                                        onchange="get_demand_post_list_category()">
                                         <option value="All">All Categories</option>
                                         <?php
                                         mysqli_data_seek($fetchData, 0);
@@ -48,7 +53,8 @@ $product_status = $arr[2];
                                         }
                                         ?>
                                     </select>
-                                    <div id="errorToast" style="color: red; font-size: 12px; display: none; padding: 3px 0;">
+                                    <div id="errorToast"
+                                        style="color: red; font-size: 12px; display: none; padding: 3px 0;">
                                         Please select a category.
                                     </div>
                                 </div>
@@ -127,7 +133,7 @@ $product_status = $arr[2];
 
     <div class="d-flex align-items-start gap-2">
       <!-- Edit Button -->
-      <a href="#"
+      <a class="bottom-btn btn-sm pb-2" style="background-color:#c17f59 !important; border:none;" href="#"
         data-bs-toggle="modal"
         data-bs-target="#editModal"
         onclick="populateEditModal(
@@ -139,12 +145,12 @@ $product_status = $arr[2];
           \'' . htmlspecialchars($rw['quantity_kg'], ENT_QUOTES) . '\'
         )"
         title="Edit">
-        <img src="frontend_assets/img-icon/edit.png" alt="Edit" class="icon-btn">
+        <i class="bi bi-pencil-square" style="font-size:18px; color:#fff; padding-top:15px;"></i>
       </a>
 
       <!-- Delete Button -->
-      <a href="javascript:void(0);" title="Delete" onclick="delete_alert(' . $rw['demand_post_id'] . ', event);">
-        <img src="frontend_assets/img-icon/bin.png" alt="Delete" class="icon-btn">
+      <a class="bottom-btn btn-sm pb-2" style="background-color:#c17f59 !important; border:none;" href="javascript:void(0);" title="Delete" onclick="delete_alert(' . $rw['demand_post_id'] . ', event);">
+        <i class="bi bi-trash" style="font-size:18px; color:#fff; padding-top:15px;"></i>
       </a>
     </div>
   </div>
@@ -158,24 +164,28 @@ $product_status = $arr[2];
 
                         <!-- Injected Product Grid Ends Here -->
                     </div>
-                    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+                    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel"
+                        aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="editModalLabel">Edit Demand Post</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <form id="editForm">
                                         <!-- Demand Post Name -->
                                         <div class="mb-3">
                                             <label for="editDemandPostName" class="form-label">Demand Post Name</label>
-                                            <input type="text" class="form-control" id="editDemandPostName" name="demand_post_name" required>
+                                            <input type="text" class="form-control" id="editDemandPostName"
+                                                name="demand_post_name" required>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="editCategoryId" class="form-label">Category</label>
-                                            <select class="form-control" id="editCategoryId" name="category_id" required>
+                                            <select class="form-control" id="editCategoryId" name="category_id"
+                                                required>
                                                 <option value="">Choose Category</option>
                                                 <?php
                                                 // Fetch unique categories from tbl_category_master
@@ -196,24 +206,29 @@ $product_status = $arr[2];
                                         <!-- Brand -->
                                         <div class="mb-3">
                                             <label for="editBrand" class="form-label">Brand</label>
-                                            <input type="text" class="form-control" id="editBrand" name="brand" required>
+                                            <input type="text" class="form-control" id="editBrand" name="brand"
+                                                required>
                                         </div>
 
                                         <div class="mb-3">
                                             <label for="editQuantity" class="form-label">Quantity(Pieces)</label>
-                                            <input type="text" class="form-control" id="editQuantitypcs" name="quantity_pcs" required>
+                                            <input type="text" class="form-control" id="editQuantitypcs"
+                                                name="quantity_pcs" required>
                                         </div>
                                         <div class="mb-3">
                                             <label for="editQuantity" class="form-label">Quantity(Kg)</label>
-                                            <input type="text" class="form-control" id="editQuantitykg" name="quantity_kg" required>
+                                            <input type="text" class="form-control" id="editQuantitykg"
+                                                name="quantity_kg" required>
                                         </div>
 
                                         <input type="hidden" id="editDemandPostId" name="demand_post_id">
                                     </form>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" onclick="submitEditForm()">Save Changes</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" onclick="submitEditForm()">Save
+                                        Changes</button>
                                 </div>
                             </div>
                         </div>

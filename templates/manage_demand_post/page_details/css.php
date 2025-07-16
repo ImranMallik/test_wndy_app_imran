@@ -105,12 +105,10 @@
     }
 
     .demand-card {
-        border: 1px solid #ddd;
-        border-radius: 8px;
+        border-bottom: 1px solid #dee2e6;
         padding: 15px;
         margin-bottom: 15px;
         background-color: #fff;
-        box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
     }
 
     .icon-btn {

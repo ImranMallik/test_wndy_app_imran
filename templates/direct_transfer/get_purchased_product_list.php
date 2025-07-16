@@ -83,157 +83,159 @@ $totalItems = mysqli_num_rows($productData);
     </div>
     <p></p>
 <?php } else { ?>
-    <div class="container-fluid">
+    <div class="container-fluid product-list-main-div">
         <div class="row g-3">
-            <?php while ($row = mysqli_fetch_assoc($productData)) {
 
-                if ($row['transferred_status'] === 'Direct Transfer') {
-                    continue;
-                }
+
+        <?php } ?>
+
+        <?php while ($row = mysqli_fetch_assoc($productData)) {
+
+            if ($row['transferred_status'] === 'Direct Transfer') {
+                continue;
+            }
             ?>
-                <div class="col-4 col-sm-12 col-md-4  product-card-column">
-                    <div class="product-box position-relative"
-                        style="border-radius: 10px; background-color: #f9f9f9; box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); overflow: hidden; height:150px;">
-                        <!-- Product Image as Background -->
-                        <div class="product-image"
-                            style="height: 140px; background: url('upload_content/upload_img/product_img/<?php echo $row['file_name']; ?>') no-repeat center center/cover;">
-                        </div>
-                        <!-- Product Details with Blue Background -->
-                        <div class="product-details text-center"
-                            style="background-color: #845834; color: #fff; padding: 7px; position: absolute; bottom: 0; width: 100%;">
-                            <div class="product-name" style="font-size: 14px; font-weight: 500; margin: 0; line-height: 1.5;">
-                                <?php
-                                echo !empty($row['product_name'])
-                                    ? (mb_strlen($row['product_name']) > 6
-                                        ? htmlspecialchars(mb_substr($row['product_name'], 0, 6)) . '..'
-                                        : htmlspecialchars($row['product_name']))
-                                    : 'NA';
-                                ?>
-                            </div>
-                        </div>
+            <div class="list-item d-flex gap-3" onclick="userViewSellerDetails(event, '1964')">
+                <a href="./product-details/1964" class="product-img rounded-0">
+                    <img style="width: 110px !important;
+  height: 100px !important; border-radius: 8px;"
+                        src="upload_content/upload_img/product_img/<?php echo $row['file_name']; ?>" alt="product_img"
+                        class="flex-shrink-0 lazyloaded">
+                </a>
 
-                        <!-- Product Checkbox -->
-                        <div class="product-checkbox position-absolute"
-                            style="bottom: 3px; right: 5px;">
-                            <input
-                                type="checkbox"
-                                id="product_id_<?php echo $row['product_id']; ?>"
-                                name="select[]"
-                                value="<?php echo htmlspecialchars($row['product_id']); ?>"
-                                class="product_id"
-                                onclick="showAlert(this)"
-                                onchange="getAllProductIds()"
-                                style="transform: scale(1.2); cursor: pointer;" />
-                        </div>
+                <div class="flex-grow-1">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a class="product-name h5 mb-1" href="./product-details/1964">
+                            <h3 class="h5 mb-1"><?php
+                            echo !empty($row['product_name'])
+                                ? (mb_strlen($row['product_name']) > 6
+                                    ? htmlspecialchars(mb_substr($row['product_name'], 0, 100)) . '..'
+                                    : htmlspecialchars($row['product_name']))
+                                : 'NA';
+                            ?></h3>
+                        </a>
+                        <span class="fw-bold mb-0" style="text-align: end !important;">
+                            <div class="product-checkbox" style="bottom: 3px; right: 5px;">
+                                <input type="checkbox" id="product_id_<?php echo $row['product_id']; ?>" name="select[]"
+                                    value="<?php echo htmlspecialchars($row['product_id']); ?>" class="product_id"
+                                    onclick="showAlert(this)" onchange="getAllProductIds()"
+                                    style="transform: scale(1.2); cursor: pointer;" />
+                            </div>
+                        </span>
                     </div>
+                    <span class="text-secondary">E waste</span><br><span class="text-secondary">20.00 (kg)</span>
                 </div>
-            <?php } ?>
-        </div>
-
-        <!-- Next Button Div -->
-        <div id="nextButtonDiv"
-            style="display: none; position: fixed; bottom: 80px; left: 0; width: 100%; background-color: #cdd3dd; padding: 10px; box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); z-index: 99;">
-            <!-- Create Post Button -->
-            <button id="createPostButton" data-bs-toggle="modal" data-bs-target="#createPostModal"
-                style="position:relative; background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 10px 30px; cursor: pointer; margin-right: auto; float: left;">
-                Create Post
-                <i class="fa fa-plus-circle"></i>
-            </button>
-
-            <button id="nextButton" onclick="nextAction()"
-                style="position:relative; background-color: #0571ae; color: white; border: none; border-radius: 5px; padding: 10px 30px; cursor: pointer; margin-left: auto; float: right;">
-                Next
-                <i class="fa fa-chevron-circle-right"></i>
-            </button>
-        </div>
-    <?php } ?>
-
-    <!-- create post modal starts here -->
-    <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <section class="fxt-template-animation fxt-template-layout2">
-                    <div class="container py-4">
-
-                        <div class="row justify-content-center">
-                            <div class="col-lg-8 col-md-10 col-12 bg-form-color">
-
-                                <!-- Modal Header -->
-                                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
-                                    <h5 class="title-text f-w-550">Create Your Post</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                </div>
-
-                                <input type="hidden" value="<?php echo $product_id_list; ?>" id="product_id" />
-                                <!-- Post Details -->
-                                <div class="mb-3">
-                                    <label for="product_name" class="form-label">
-                                        Item Name <span class="text-danger">*</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        value="<?php echo isset($row_value['product_name_new']) && !empty($row_value['product_name_new']) ? $row_value['product_name_new'] : 'null'; ?>"
-                                        class="form-control"
-                                        id="product_name"
-                                        placeholder="e.g: Waste"
-                                        required
-                                        maxlength="100" />
-                                    <label class="input_alert product_name-inp-alert"></label>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="description" class="form-label">Description <span class="text-danger">*</span></label>
-                                    <textarea class="form-control" id="description" placeholder="e.g: Description" required><?php echo isset($row_value['brand']) && !empty($row_value['brand']) ? $row_value['brand'] : 'null'; ?></textarea>
-                                    <label class="input_alert description-inp-alert"></label>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="brand" class="form-label">Brand</label>
-                                    <input
-                                        type="text"
-                                        value="<?php echo isset($row_value['brand']) && !empty($row_value['brand']) ? $row_value['brand'] : 'null'; ?>"
-                                        class="form-control"
-                                        id="brand"
-                                        placeholder="e.g: WM"
-                                        maxlength="100" />
-                                    <label class="input_alert brand-inp-alert"></label>
-                                </div>
-
-                                <div class="mb-3">
-                                    <label for="sale_price" class="form-label">Expected Price <span class="text-danger">*</span></label>
-                                    <input type="text" value="" class="form-control" id="sale_price" placeholder="e.g: 100, 200" required maxlength="8">
-                                    <label class="input_alert sale_price-inp-alert"></label>
-                                </div>
+            </div>
 
 
 
-                                <?php if ($product_data) { ?>
-                                    <div class="scroll-container">
-                                        <?php
-                                        $product_file_dataget = mysqli_query($con, "SELECT create_post_product_file_id, file_name FROM tbl_create_post_file WHERE file_type='Photo' AND product_id='$product_id'");
-                                        while ($rw = mysqli_fetch_array($product_file_dataget)) {
-                                        ?>
-                                            <div class="scroll-item">
-                                                <img src="upload_content/upload_img/product_img/<?php echo $rw['file_name']; ?>" class="img-fluid" />
-                                                <button onclick="show_del_data_confirm_box(<?php echo $rw['create_post_product_file_id']; ?>)" class="btn btn-danger btn-sm mt-2">
-                                                    <i class="fa fa-trash"></i> Delete
-                                                </button>
-                                            </div>
-                                        <?php } ?>
+            <!-- Next Button Div -->
+            <div id="nextButtonDiv"
+                style="display: none; position: fixed; bottom: 68px; left: 0; width: 100%; background-color: #cdd3dd; padding: 10px; background-color:#b5753e; z-index: 99;">
+                <!-- Create Post Button -->
+                <button id="createPostButton" data-bs-toggle="modal" data-bs-target="#createPostModal"
+                    style="position:relative; background-color: #28a745; color: white; border: none; border-radius: 5px; padding: 10px 30px; cursor: pointer; margin-right: auto; float: left;">
+                    Create Post
+                    <i class="fa fa-plus-circle"></i>
+                </button>
+
+                <button id="nextButton" onclick="nextAction()"
+                    style="position:relative; background-color: #0571ae; color: white; border: none; border-radius: 5px; padding: 10px 30px; cursor: pointer; margin-left: auto; float: right;">
+                    Next
+                    <i class="fa fa-chevron-circle-right"></i>
+                </button>
+            </div>
+        <?php } ?>
+
+        <!-- create post modal starts here -->
+        <div class="modal fade" id="createPostModal" tabindex="-1" aria-labelledby="createPostModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <section class="fxt-template-animation fxt-template-layout2">
+                        <div class="container py-4">
+
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 col-md-10 col-12 bg-form-color">
+
+                                    <!-- Modal Header -->
+                                    <div
+                                        class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-4">
+                                        <h5 class="title-text f-w-550">Create Your Post</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
                                     </div>
-                                <?php } ?>
 
-                                <!-- Submit Button -->
-                                <div class="text-end mt-4">
-                                    <button type="button" class="btn btn-primary" onclick="save_details()">Continue <i class="fa fa-arrow-right"></i></button>
+                                    <input type="hidden" value="<?php echo $product_id_list; ?>" id="product_id" />
+                                    <!-- Post Details -->
+                                    <div class="mb-3">
+                                        <label for="product_name" class="form-label">
+                                            Item Name <span class="text-danger">*</span>
+                                        </label>
+                                        <input type="text"
+                                            value="<?php echo isset($row_value['product_name_new']) && !empty($row_value['product_name_new']) ? $row_value['product_name_new'] : 'null'; ?>"
+                                            class="form-control" id="product_name" placeholder="e.g: Waste" required
+                                            maxlength="100" />
+                                        <label class="input_alert product_name-inp-alert"></label>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="description" class="form-label">Description <span
+                                                class="text-danger">*</span></label>
+                                        <textarea class="form-control" id="description" placeholder="e.g: Description"
+                                            required><?php echo isset($row_value['brand']) && !empty($row_value['brand']) ? $row_value['brand'] : 'null'; ?></textarea>
+                                        <label class="input_alert description-inp-alert"></label>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="brand" class="form-label">Brand</label>
+                                        <input type="text"
+                                            value="<?php echo isset($row_value['brand']) && !empty($row_value['brand']) ? $row_value['brand'] : 'null'; ?>"
+                                            class="form-control" id="brand" placeholder="e.g: WM" maxlength="100" />
+                                        <label class="input_alert brand-inp-alert"></label>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="sale_price" class="form-label">Expected Price <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" value="" class="form-control" id="sale_price"
+                                            placeholder="e.g: 100, 200" required maxlength="8">
+                                        <label class="input_alert sale_price-inp-alert"></label>
+                                    </div>
+
+
+
+                                    <?php if ($product_data) { ?>
+                                        <div class="scroll-container">
+                                            <?php
+                                            $product_file_dataget = mysqli_query($con, "SELECT create_post_product_file_id, file_name FROM tbl_create_post_file WHERE file_type='Photo' AND product_id='$product_id'");
+                                            while ($rw = mysqli_fetch_array($product_file_dataget)) {
+                                                ?>
+                                                <div class="scroll-item">
+                                                    <img src="upload_content/upload_img/product_img/<?php echo $rw['file_name']; ?>"
+                                                        class="img-fluid" />
+                                                    <button
+                                                        onclick="show_del_data_confirm_box(<?php echo $rw['create_post_product_file_id']; ?>)"
+                                                        class="btn btn-danger btn-sm mt-2">
+                                                        <i class="fa fa-trash"></i> Delete
+                                                    </button>
+                                                </div>
+                                            <?php } ?>
+                                        </div>
+                                    <?php } ?>
+
+                                    <!-- Submit Button -->
+                                    <div class="text-end mt-4">
+                                        <button type="button" class="btn btn-primary" onclick="save_details()">Continue
+                                            <i class="fa fa-arrow-right"></i></button>
+                                    </div>
+
                                 </div>
-
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
+                </div>
             </div>
         </div>
-    </div>
 
     </div>

@@ -97,6 +97,7 @@
         }
 
     }
+
     .filter-result-text-content {
         width: 100%;
         text-wrap: nowrap;
@@ -389,6 +390,11 @@
         font-weight: bold;
         color: #c1c1c1;
     }
-    
+
+    .product-list-main-div {
+        padding-bottom: 140px;
+        overflow: auto;
+        height: 90vh;
+    }
 </style>
 <!--end::Page Vendors Styles-->

@@ -8,12 +8,13 @@ $user_type_data = mysqli_fetch_row($user_type_data_get);
 $user_type = $user_type_data[0];
 
 ?>
-<div class="product-listview-loadmore" id="product-listview-loadmore" style="padding: 20px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+<div class="product-listview-loadmore" id="product-listview-loadmore"
+    style="padding: 20px; background-color: #f8f9fa; border-radius: 8px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
     <div class="row ">
         <div class="col-md-5">
             <div class="form-group">
                 <label class="control-label" style="font-weight: bold; color: #333; font-size: 16px;">
-                    <strong>Filter Your Post Category</strong>
+                    Filter Your Post Category
                 </label>
                 <select class="form-control" id="category_id" onchange="get_create_post_list()" required>
                     <option value="">Choose Category</option>
@@ -33,7 +34,7 @@ $user_type = $user_type_data[0];
         </div>
     </div>
     <!-- Product Grid -->
-    <div class="" style="height: 500px; overflow-y: auto; overflow-x: hidden;">
+    <div class="manage_post_list">
         <div class="" id="manage_post_list">
             <!-- Dynamic Products will be appended here -->
         </div>

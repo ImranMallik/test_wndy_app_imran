@@ -21,12 +21,16 @@ $buyer_id = $session_user_code;
 				<div class="col-12 text-left filters-toolbar-item d-flex justify-content-start">
 					<div class="filters-item d-flex align-items-center">
 						<div class="grid-options view-mode d-flex flex-wrap justify-content-between">
-							<a class="icon-mode credit-add-on grid-2 d-block active" href="<?php echo $baseUrl . '/direct_transfer'; ?>" data-col="1">
-								<img src="frontend_assets/img-icon/purchased_products.png" height="15px" width="15px">
+							<a class="icon-mode credit-add-on grid-2 d-block active"
+								href="<?php echo $baseUrl . '/direct_transfer'; ?>" data-col="1"
+								style="background-color:#b5753e !important; border:none; border-radius: 50px;">
+								<img src="frontend_assets/img-icon/purchased_products.png" height="27px" width="27px">
 								<span class="purchased-products"> Material Received</span>
 							</a>
-							<a class="icon-mode credit-history d-block" href="<?php echo $baseUrl . '/transferred_products'; ?>" data-col="2">
-								<img src="frontend_assets/img-icon/transferred_products.png" height="15px" width="15px">
+							<a class="icon-mode credit-history d-block"
+								href="<?php echo $baseUrl . '/transferred_products'; ?>" data-col="2"
+								style="border:none; border-radius: 50px; background-color:#ffeedf !important; color:#b5753e; border: 0px solid #07153d;">
+								<img src="frontend_assets/img-icon/transferred_products.png" height="27px" width="27px">
 								<span class="transferred-products">Material Sold</span>
 							</a>
 							<!-- <a class="icon-mode credit-history d-block" href="<?php echo $baseUrl . '/transferred_items_for_you'; ?>" data-col="3">
@@ -42,7 +46,7 @@ $buyer_id = $session_user_code;
 
 
 
-		<div class="row">
+		<div class="row" style="padding-left: 15px; padding-right:15px;">
 			<!--Products-->
 			<div class="col-12 col-sm-12 col-md-12 col-lg-12 main-col">
 				<!--Product Infinite-->
@@ -53,7 +57,9 @@ $buyer_id = $session_user_code;
 								<h2 style="margin: 0;">
 									<strong>Purchased Products</strong>
 								</h2>
-								<button style="background-color: #4eaf52; padding: 4px 8px; align-items:center; margin-right: 14px;" class="btn btn-primary">
+								<button
+									style="background-color: #4eaf52; padding: 4px 8px; align-items:center; margin-right: 14px;"
+									class="btn btn-primary">
 									<a href="<?php echo $baseUrl ?>/transfer_products_for_you" style="color: #FFF;">
 										<!-- <i class="fa fa-plus"></i> -->
 										For You
@@ -63,7 +69,8 @@ $buyer_id = $session_user_code;
 							<div>
 								<div class="form-group">
 									<label class="control-label"><strong>Filter Category</strong></label>
-									<select class="form-control" id="category_id" onchange="getPurchasedProductList();" required>
+									<select class="form-control" id="category_id" onchange="getPurchasedProductList();"
+										required>
 										<option value="">Choose Category</option>
 										<?php
 										$fetchData = mysqli_query($con, "SELECT DISTINCT 
@@ -88,15 +95,19 @@ WHERE
 										}
 										?>
 									</select>
-									<div id="errorToast" style="color: red; font-size: 12px; display: none; padding:3px;">Please select a category.</div>
+									<div id="errorToast"
+										style="color: red; font-size: 12px; display: none; padding:3px;">Please select a
+										category.</div>
 								</div>
-								<div class="grid-products grid-view-items mt-5 " style="height: 500px; overflow-y: auto; overflow-x: hidden;">
+								<div class="grid-products grid-view-items mt-5 "
+									style=" overflow-y: auto; overflow-x: hidden;">
 									<div class="product-options row-cols-2" id="purchased_product_list">
 
 									</div>
 								</div>
 							</div>
-							<div class="grid-products grid-view-items mt-5 " style="height: 500px; overflow-y: auto; overflow-x: hidden;">
+							<div class="grid-products grid-view-items mt-5 "
+								style=" overflow-y: auto; overflow-x: hidden;">
 								<div class="product-options row-cols-2" id="purchased_product_list">
 
 								</div>
@@ -116,37 +127,49 @@ WHERE
 								<option value="" selected disabled>Choose Buyer</option>
 							</select>
 							</select>
-							<div id="doneErrorToast" style="color: red; font-size: 12px; display: none;">Please Select a buyer.</div>
+							<div id="doneErrorToast" style="color: red; font-size: 12px; display: none;">Please Select a
+								buyer.</div>
 						</div>
 					</div>
 					<div class="form-group mt-3">
 						<label for="price" style="font-size: 14px; font-weight: 600; color: #333;">
-							<img src="./frontend_assets/img-icon/Quan.png" alt="Referral" style="height: 14px; width: 14px; vertical-align: middle; margin-right: 10px; text-align:center" />
+							<img src="./frontend_assets/img-icon/Quan.png" alt="Referral"
+								style="height: 14px; width: 14px; vertical-align: middle; margin-right: 10px; text-align:center" />
 							Enter Quantity
 						</label>
-						<input type="text" class="form-control font-bold" id="quantity" name="quantity" placeholder="Enter Quantity "
+						<input type="text" class="form-control font-bold" id="quantity" name="quantity"
+							placeholder="Enter Quantity "
 							style="width: 100%; height: 35px; border-radius: 8px; border: 1px solid #d1d1d1; padding: 8px; font-size: 14px; transition: all 0.3s ease;">
-						<div id="quantityError" style="color: red; font-size: 12px; display: none;">Please enter Quantity.</div>
+						<div id="quantityError" style="color: red; font-size: 12px; display: none;">Please enter
+							Quantity.</div>
 					</div>
 					<div class="form-group mt-3">
 						<label for="price" style="font-size: 14px; font-weight: 600; color: #333;">
-							<img src="./frontend_assets/img-icon/price-icon2.png" alt="Referral" style="height: 14px; width: 14px; vertical-align: middle; margin-right: 10px; text-align:center" />
+							<img src="./frontend_assets/img-icon/price-icon2.png" alt="Referral"
+								style="height: 14px; width: 14px; vertical-align: middle; margin-right: 10px; text-align:center" />
 							Enter Expected Price
 						</label>
-						<input type="number" class="form-control font-bold" id="price" name="price" placeholder="Enter Total Price "
+						<input type="number" class="form-control font-bold" id="price" name="price"
+							placeholder="Enter Total Price "
 							style="width: 100%; height: 35px; border-radius: 8px; border: 1px solid #d1d1d1; padding: 8px; font-size: 14px; transition: all 0.3s ease;">
-						<div id="priceError" style="color: red; font-size: 12px; display: none;">Please enter the price.</div>
+						<div id="priceError" style="color: red; font-size: 12px; display: none;">Please enter the price.
+						</div>
 					</div>
 
 				</div>
 
 
 				<!--Product Grid-->
-				<div class="grid-products grid-view-items mt-5">
-					<div class="product-options row-cols-2" id="purchased_buyer_list">
+				<div class="pt-2 mt-5 pb-3 px-3">
+					<div class="list-items" id="purchased_buyer_list">
 
 					</div>
 				</div>
+				<!-- <div class="grid-products grid-view-items mt-5">
+					<div class="product-options row-cols-2" id="purchased_buyer_list">
+
+					</div>
+				</div> -->
 				<!--End Product Grid-->
 				<!--Load More Button-->
 				<div class="infinitpaginOuter text-center mt-5">
