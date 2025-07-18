@@ -1,4 +1,10 @@
 <style>
+    .manage_post_list {
+        padding-bottom: 280px;
+        overflow: auto;
+        height: 90vh;
+    }
+
     .no-products-found {
         display: flex;
         justify-content: center;
@@ -53,9 +59,13 @@
     }
 
     .product-status-img {
-        width: 40px !important;
-        position: absolute;
+        width: 30px !important;
         left: 7px;
         top: 0;
+    }
+
+    .list-item {
+        border-bottom: 1px solid #dee2e6;
+        padding: 1rem;
     }
 </style>

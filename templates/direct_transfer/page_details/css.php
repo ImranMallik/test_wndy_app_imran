@@ -325,8 +325,10 @@
         /* Optional: uniform height */
     }
 
-    .container-fluid {
-        padding-bottom: 120px;
+    .product-list-main-div {
+        padding-bottom: 280px;
+        overflow: auto;
+        height: 90vh;
     }
 
     /* Buyer Form Section Styling */

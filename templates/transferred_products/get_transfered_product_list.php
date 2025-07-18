@@ -69,58 +69,51 @@ $totalItems = mysqli_num_rows($result);
 <?php } else { ?>
     <?php while ($row = mysqli_fetch_assoc($result)) { ?>
         <!-- Card for each product -->
-        <div class="col-6 col-sm-4 col-md-3 col-lg-2"> <!-- Wrap this around every card -->
-            <div class="card shadow-sm"
-                style="
-            border: none;
-            border-radius: 15px;
-            overflow: hidden;
-            margin: 10px;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        "
-                onmouseover="this.style.transform='scale(1.03)'; this.style.boxShadow='0 8px 20px rgba(0,0,0,0.1)'"
-                onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='0 4px 8px rgba(0,0,0,0.05)'">
-                <!-- Product Image -->
-                <div class="product-image"
-                    data-bs-toggle="modal"
-                    data-bs-target="#productModal<?php echo $row['product_id']; ?>"
-                    style="
-                height: 130px;
-                background-image: url('upload_content/upload_img/product_img/<?php echo $row['product_image'] ?: 'no_image.png'; ?>');
-                background-repeat: no-repeat;
-                background-position: center;
-                background-size: cover;
-                border-radius: 15px 15px 0 0;
-                background-color: #e0e0e0;
-            ">
-                </div>
 
-                <!-- Product Details -->
-                <div class="card-body text-center"
-                    style="
-                background-color: #2f415d;
-                color: #fff;
-                padding: 5px 8px;
-                border-radius: 0 0 15px 15px;
-        ">
-                    <p class="card-text text-truncate"
-                        style="font-size: 12px; font-weight: 500; margin: 0;">
-                        <?php echo htmlspecialchars($row['category_name']); ?>
-                    </p>
+
+        <div class="list-item d-flex gap-3 mb-2" onclick="userViewSellerDetails(event, '1964')">
+            <a href="./product-details/1964" class="product-img rounded-0">
+                <img style="width: 110px !important;
+  height: 100px !important; border-radius: 8px;"
+                    src="upload_content/upload_img/product_img/<?php echo $row['product_image'] ?: 'no_image.png'; ?>"
+                    alt="product_img" class="flex-shrink-0 lazyloaded">
+            </a>
+
+            <div class="flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center">
+                    <a class="product-name h5 mb-1" href="./product-details/1964">
+                        <h3 class="h5 mb-1"><?php echo htmlspecialchars($row['category_name']); ?></h3>
+                    </a>
+                    <span class="fw-bold mb-0" style="text-align: end !important;">
+                        <div data-bs-toggle="modal" data-bs-target="#productModal<?php echo $row['product_id']; ?>"
+                            class="product-checkbox" style="bottom: 3px; right: 5px;">
+                            <input type="checkbox" name="select[]" class="product_id"
+                                style="transform: scale(1.2); cursor: pointer;" />
+                        </div>
+                    </span>
                 </div>
+                <span class="text-secondary"><?php echo htmlspecialchars($row['product_name']); ?></span><br>
+                <strong>Quantity:</strong> <span
+                    class="text-secondary"><?php echo htmlspecialchars($row['transferred_quantity']); ?></span>
             </div>
         </div>
 
 
 
+
+
+
         <!-- Modal for product details -->
-        <div class="modal fade" id="productModal<?php echo $row['product_id']; ?>" tabindex="-1" aria-labelledby="productModalLabel<?php echo $row['product_id']; ?>" aria-hidden="true">
+        <div class="modal fade" id="productModal<?php echo $row['product_id']; ?>" tabindex="-1"
+            aria-labelledby="productModalLabel<?php echo $row['product_id']; ?>" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <!-- Modal Header -->
-                    <div class="modal-header" style="background-color: #2f415d;">
-                        <h3 class="modal-title" id="productModalLabel<?php echo $row['product_id']; ?>" style="color: white;">Transferred Items List</h3>
-                        <span style="color: white;">Transfer Date: <?php echo date('d.m.Y', strtotime($row['entry_timestamp'])); ?></span>
+                    <div class="modal-header" style="background-color: #b17f4a;">
+                        <h3 class="modal-title" id="productModalLabel<?php echo $row['product_id']; ?>" style="color: white;">
+                            Transferred Items List</h3>
+                        <span style="color: white;">Transfer Date:
+                            <?php echo date('d.m.Y', strtotime($row['entry_timestamp'])); ?></span>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
 
@@ -130,8 +123,7 @@ $totalItems = mysqli_num_rows($result);
                             <!-- Product Image -->
                             <div>
                                 <img src="upload_content/upload_img/product_img/<?php echo $row['product_image'] ?: 'no_image.png'; ?>"
-                                    alt="Product Image"
-                                    class="rounded shadow img-fluid"
+                                    alt="Product Image" class="rounded shadow img-fluid"
                                     style="width: 90px; height: 100px; object-fit: cover;">
                             </div>
                             <!-- Product Details -->
@@ -139,7 +131,8 @@ $totalItems = mysqli_num_rows($result);
                                 <h3><?php echo htmlspecialchars($row['product_name']); ?></h3>
                                 <p class="text-muted"><?php echo htmlspecialchars($row['category_name']); ?></p>
                                 <p><strong>Quantity:</strong> <?php echo htmlspecialchars($row['transferred_quantity']); ?></p>
-                                <p><strong>Transferred to:</strong> <?php echo htmlspecialchars($row['transferred_to_buyer']); ?></p>
+                                <p><strong>Transferred to:</strong>
+                                    <?php echo htmlspecialchars($row['transferred_to_buyer']); ?></p>
                                 <p><strong>Price:</strong> ₹<?php echo htmlspecialchars($row['transferred_price']); ?></p>
                             </div>
                         </div>
@@ -148,8 +141,10 @@ $totalItems = mysqli_num_rows($result);
                     <!-- Modal Footer -->
                     <div class="modal-footer justify-content-between border-top border-3">
                         <div>
-                            <span class="text-muted">Total Quantity: <?php echo htmlspecialchars($row['transferred_quantity']); ?></span><br>
-                            <span class="fw-bold">Expected Price: ₹<?php echo htmlspecialchars($row['transferred_price']); ?></span>
+                            <span class="text-muted">Total Quantity:
+                                <?php echo htmlspecialchars($row['transferred_quantity']); ?></span><br>
+                            <span class="fw-bold">Expected Price:
+                                ₹<?php echo htmlspecialchars($row['transferred_price']); ?></span>
                         </div>
                     </div>
                 </div>

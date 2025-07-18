@@ -4,7 +4,7 @@ include("../db/db.php");
 $requestData = json_decode(file_get_contents("php://input"), true);
 
 if (isset($requestData['category_id']) && !empty($requestData['category_id'])) {
-    $category_id = (int)$requestData['category_id']; // Cast to int for safety
+    $category_id = (int) $requestData['category_id']; // Cast to int for safety
 
     $query = "
         SELECT 
@@ -45,7 +45,7 @@ if (isset($requestData['category_id']) && !empty($requestData['category_id'])) {
                         </div>
                         <div class="d-flex align-items-start gap-2">
                             <!-- Edit Button -->
-                            <a href="#"
+                            <a class="bottom-btn btn-sm pb-2" style="background-color:#c17f59 !important; border:none;" href="#"
                                 data-bs-toggle="modal"
                                 data-bs-target="#editModal"
                                 onclick="populateEditModal(
@@ -57,12 +57,12 @@ if (isset($requestData['category_id']) && !empty($requestData['category_id'])) {
                                     \'' . htmlspecialchars($row['quantity_kg'], ENT_QUOTES) . '\'
                                 )"
                                 title="Edit">
-                                <img src="frontend_assets/img-icon/edit.png" alt="Edit" class="icon-btn">
+                                <i class="bi bi-pencil-square" style="font-size:18px; color:#fff; padding-top:15px;"></i>
                             </a>
 
                             <!-- Delete Button -->
-                            <a href="javascript:void(0);" title="Delete" onclick="delete_alert(' . $row['demand_post_id'] . ', event);">
-                                <img src="frontend_assets/img-icon/bin.png" alt="Delete" class="icon-btn">
+                            <a class="bottom-btn btn-sm pb-2" style="background-color:#c17f59 !important; border:none;" href="javascript:void(0);" title="Delete" onclick="delete_alert(' . $row['demand_post_id'] . ', event);">
+                                <i class="bi bi-trash" style="font-size:18px; color:#fff; padding-top:15px;"></i>
                             </a>
                         </div>
                     </div>

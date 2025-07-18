@@ -1,6 +1,6 @@
 <?php
 ## local foldername
-$folderName = '/test_wndy_app';
+$folderName = '/test_wndy_app_imran';
 
 ## server foldername
 // $folderName = '';
